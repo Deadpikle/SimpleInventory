@@ -17,7 +17,7 @@ namespace SimpleInventory.ViewModels
 
         public ICommand GoToMainMenu
         {
-            get { return new RelayCommand(o => PopToMainMenu()); }
+            get { return new RelayCommand(PopToMainMenu); }
         }
 
         private void PopToMainMenu()
