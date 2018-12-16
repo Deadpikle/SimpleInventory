@@ -27,7 +27,9 @@ namespace SimpleInventory.Helpers
 
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException("Execute parameter cannot be null");
+            if (execute == null)
+                throw new ArgumentNullException("Execute parameter cannot be null");
+            _execute = execute;
             _canExecute = canExecute;
         }
 
