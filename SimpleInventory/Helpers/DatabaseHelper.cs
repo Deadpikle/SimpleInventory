@@ -85,10 +85,12 @@ namespace SimpleInventory.Helpers
                         "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                         "DateTimeSold TEXT," +
                         "QuantitySold INTEGER DEFAULT 1," +
-                        "DollarsPaid TEXT," +
-                        "RielPaid INTEGER," +
-                        "DollarsChange TEXT," +
-                        "RielChange INTEGER," +
+                        "CostDollars TEXT," +
+                        "CostRiel INTEGER," +
+                        "PaidDollars TEXT," +
+                        "PaidRiel INTEGER," +
+                        "ChangeDollars TEXT," +
+                        "ChangeRiel INTEGER," +
                         "InventoryItemID INTEGER REFERENCES InventoryItems(ID)," +
                         "SoldByUserID INTEGER REFERENCES Users(ID) )";
                     command.CommandText = createItemSoldInfoTable;
