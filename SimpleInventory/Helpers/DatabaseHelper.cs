@@ -100,6 +100,7 @@ namespace SimpleInventory.Helpers
                         "GeneratedByUserID INTEGER REFERENCES Users(ID) )";
                     command.CommandText = createGeneratedBarcodesTable;
                     command.ExecuteNonQuery();
+                    conn.Close();
                 }
             }
         }
