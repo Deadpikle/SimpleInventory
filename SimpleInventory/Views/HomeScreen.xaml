@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <Label Content="Simple Inventory" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0 5 0 0"/>
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <Button Content="Manage Inventory" Margin="0 0 0 10" Width="200"/>
+            <Button Content="Manage Inventory" Margin="0 0 0 10" Width="200" Command="{Binding MoveToManageItemsScreen}"/>
             <Button Content="Scan Items" Margin="0 0 0 10" Width="200"/>
             <Rectangle Fill="Gray" Width="250" Height="10" Margin="0 0 0 10"/>
             <Button Content="Generate Barcodes" Margin="0 0 0 10" Width="200"/>

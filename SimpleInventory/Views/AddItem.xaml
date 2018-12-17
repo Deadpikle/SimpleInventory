@@ -9,9 +9,36 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Add Item" FontWeight="Bold"></Label>
-        <Button Grid.Row="1" Content="Back to Main Menu" Width="200" Margin="0,35,0,0" Height="100" Command="{Binding GoToMainMenu}"/>
+        <Label Grid.Row="0" Content="Add Item" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                Content="Cancel" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToMainMenu}"/>
+        <StackPanel Margin="15,0,0,0" Grid.Row="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Name" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="300"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Description" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="300"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Cost (Riel)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200"/>
+                <Label Content="Cost ($, USD)" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="250"/>
+            </StackPanel>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToMainMenu}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
