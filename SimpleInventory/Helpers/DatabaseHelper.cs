@@ -59,6 +59,14 @@ namespace SimpleInventory.Helpers
             {
                 using (var command = GetSQLiteCommand(conn))
                 {
+                    string createUsersTable = "CREATE TABLE Users (" +
+                        "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                        "Name TEXT," +
+                        "Username TEXT," +
+                        "PasswordHash TEXT)";
+                    command.CommandText = createUsersTable;
+                    command.ExecuteNonQuery();
+
                     string createInventoryItemTable = "CREATE TABLE InventoryItems (" +
                         "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                         "Name TEXT," +
@@ -68,16 +76,9 @@ namespace SimpleInventory.Helpers
                         "CostRiel INTEGER," +
                         "Quantity INTEGER," +
                         "BarcodeNumber TEXT," +
-                        "WasDeleted INTEGER)";
+                        "WasDeleted INTEGER," +
+                        "CreatedByUserID INTEGER REFERENCES Users(ID))";
                     command.CommandText = createInventoryItemTable;
-                    command.ExecuteNonQuery();
-
-                    string createUsersTable = "CREATE TABLE Users (" +
-                        "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                        "Name TEXT," +
-                        "Username TEXT," +
-                        "PasswordHash TEXT)";
-                    command.CommandText = createUsersTable;
                     command.ExecuteNonQuery();
 
                     string createItemSoldInfoTable = "CREATE TABLE ItemsSoldInfo (" +
