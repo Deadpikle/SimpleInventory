@@ -29,16 +29,24 @@ namespace SimpleInventory.Models
         {
             var items = new List<InventoryItem>();
             string query = "" +
-                "SELECT ii.ID, Name, Description, PicturePath, CostDollars, CostDollars, CostRiel, Quantity, BarcodeNumber, CreatedByUserID" +
-                "FROM InventoryItems ii JOIN Users u ON ii.CreatedByUserID = u.ID" +
-                (string.IsNullOrEmpty(whereClause) ? "" : whereClause) +
-                "ORDER BY Name, CostRiel, Description, CostRiel, CostDollars";
+                "SELECT ii.ID, ii.Name, Description, PicturePath, CostDollars, CostDollars, CostRiel, Quantity, BarcodeNumber, CreatedByUserID " +
+                "FROM InventoryItems ii LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
+                (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
+                "ORDER BY ii.Name, CostRiel, Description, CostRiel, CostDollars";
 
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
+                    command.CommandText = query;
+                    if (!string.IsNullOrEmpty(whereClause) && whereParams != null)
+                    {
+                        foreach (Tuple<string, string> keyValuePair in whereParams)
+                        {
+                            command.Parameters.AddWithValue(keyValuePair.Item1, keyValuePair.Item2);
+                        }
+                    }
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())

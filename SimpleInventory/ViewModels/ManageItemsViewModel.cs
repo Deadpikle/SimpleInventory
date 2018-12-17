@@ -1,5 +1,6 @@
 ﻿using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
+using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,17 @@ namespace SimpleInventory.ViewModels
 {
     class ManageItemsViewModel : BaseViewModel
     {
+        private List<InventoryItem> _items;
+
         public ManageItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
+            Items = InventoryItem.LoadItems();
+        }
+
+        public List<InventoryItem> Items
+        {
+            get { return _items; }
+            set { _items = value; NotifyPropertyChanged(); }
         }
 
         public ICommand MoveToAddItemScreen

@@ -50,23 +50,20 @@ namespace SimpleInventory.Helpers
 
         public int ReadInt(SQLiteDataReader reader, string columnName)
         {
-            return (int)reader[columnName];
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? 0 : reader.GetInt32(ordinal);
         }
 
         public string ReadString(SQLiteDataReader reader, string columnName)
         {
-            return (string)reader[columnName];
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? "" : reader.GetString(ordinal);
         }
 
         public decimal ReadDecimal(SQLiteDataReader reader, string columnName)
         {
-            string value = ReadString(reader, columnName);
-            decimal decValue = 0.0m;
-            if (Decimal.TryParse(value, out decValue))
-            {
-                return decValue;
-            }
-            return 0.0m;
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? 0.0m : reader.GetDecimal(ordinal);
         }
 
         private void CreateDatabase()
