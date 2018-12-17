@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data.SQLite;
+using System.Security.Cryptography;
+using SimpleInventory.Models;
 
 namespace SimpleInventory.Helpers
 {
@@ -23,7 +25,7 @@ namespace SimpleInventory.Helpers
             return File.Exists(GetFilePath());
         }
 
-        SQLiteConnection GetDatabaseConnection()
+        public SQLiteConnection GetDatabaseConnection()
         {
             if (!DoesDatabaseExist())
             {
@@ -37,7 +39,7 @@ namespace SimpleInventory.Helpers
         /// </summary>
         /// <param name="conn"></param>
         /// <returns></returns>
-        SQLiteCommand GetSQLiteCommand(SQLiteConnection conn)
+        public SQLiteCommand GetSQLiteCommand(SQLiteConnection conn)
         {
             var command = new SQLiteCommand(conn);
             conn.Open();
@@ -76,7 +78,7 @@ namespace SimpleInventory.Helpers
                         "CostRiel INTEGER," +
                         "Quantity INTEGER," +
                         "BarcodeNumber TEXT," +
-                        "WasDeleted INTEGER," +
+                        "WasDeleted INTEGER DEFAULT 0," +
                         "CreatedByUserID INTEGER REFERENCES Users(ID))";
                     command.CommandText = createInventoryItemTable;
                     command.ExecuteNonQuery();
@@ -103,6 +105,17 @@ namespace SimpleInventory.Helpers
                         "GeneratedByUserID INTEGER REFERENCES Users(ID) )";
                     command.CommandText = createGeneratedBarcodesTable;
                     command.ExecuteNonQuery();
+
+                    // add an initial user
+                    string addInitialUser = "" +
+                        "INSERT INTO Users (Name, Username, PasswordHash) VALUES (@name, @username, @passwordHash)";
+                    command.CommandText = addInitialUser;
+                    command.Parameters.AddWithValue("@name", "Administrator");
+                    command.Parameters.AddWithValue("@username", "admin");
+                    command.Parameters.AddWithValue("@passwordHash", User.HashPassword("changeme"));
+                    command.ExecuteNonQuery();
+
+                    // close the connection
                     conn.Close();
                 }
             }

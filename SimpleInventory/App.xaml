@@ -6,8 +6,8 @@
              xmlns:views="clr-namespace:SimpleInventory.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:AddItemViewModel}">
-            <views:AddItem/>
+        <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemViewModel}">
+            <views:CreateOrEditItem/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:ManageItemsViewModel}">
             <views:ManageItems/>

@@ -16,6 +16,5 @@ namespace SimpleInventory.Helpers
             // BarcodeLib.Barcode b = new BarcodeLib.Barcode();
             // Image img = b.Encode(BarcodeLib.TYPE.UPCA, "038000356216", Color.Black, Color.White, 290, 120);
         }
-        
     }
 }

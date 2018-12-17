@@ -18,9 +18,9 @@ namespace SimpleInventory.Views
     /// <summary>
     /// Interaction logic for AddItem.xaml
     /// </summary>
-    public partial class AddItem : UserControl
+    public partial class CreateOrEditItem : UserControl
     {
-        public AddItem()
+        public CreateOrEditItem()
         {
             InitializeComponent();
         }
