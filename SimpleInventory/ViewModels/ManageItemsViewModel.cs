@@ -13,6 +13,8 @@ namespace SimpleInventory.ViewModels
     class ManageItemsViewModel : BaseViewModel
     {
         private List<InventoryItem> _items;
+        private int _selectedIndex = 0;
+        private InventoryItem _selectedItem;
 
         public ManageItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
@@ -23,6 +25,18 @@ namespace SimpleInventory.ViewModels
         {
             get { return _items; }
             set { _items = value; NotifyPropertyChanged(); }
+        }
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set { _selectedIndex = value; NotifyPropertyChanged(); }
+        }
+
+        public InventoryItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value; NotifyPropertyChanged(); }
         }
 
         public ICommand MoveToAddItemScreen
