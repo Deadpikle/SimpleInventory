@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SimpleInventory"
         xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Simple Inventory" Height="450" Width="800" MinHeight="480" MinWidth="680">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
