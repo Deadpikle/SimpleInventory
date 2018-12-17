@@ -8,9 +8,9 @@ namespace SimpleInventory.Models
 {
     class User
     {
-        public string ID;
-        public string Name;
-        public string Username;
-        public string PasswordHash;
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
     }
 }
