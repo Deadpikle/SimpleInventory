@@ -24,7 +24,8 @@
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Items}" d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
-                  SelectionUnit="FullRow" SelectedIndex="{Binding SelectedIndex}" SelectedItem="{Binding SelectedItem}">
+                  SelectionUnit="FullRow" SelectedIndex="{Binding SelectedIndex}" SelectedItem="{Binding SelectedItem}"
+                  AlternatingRowBackground="Gainsboro">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>

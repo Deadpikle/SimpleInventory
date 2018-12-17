@@ -22,9 +22,9 @@ namespace SimpleInventory.ViewModels
         private int _quantity;
         private string _barcodeNumber;
 
-        public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger, bool isCreating) : base(viewModelChanger)
+        public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
-            _isCreating = isCreating;
+            _isCreating = true;
             Name = "";
             Description = "";
             CostRiel = 0;
@@ -33,13 +33,19 @@ namespace SimpleInventory.ViewModels
             BarcodeNumber = "";
         }
 
-        public User CurrentUser { get; set; }
-
-        public int InventoryItemID
+        public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
-            get { return _inventoryItemID; }
-            set { _inventoryItemID = value; NotifyPropertyChanged(); }
+            _isCreating = false;
+            _inventoryItemID = item.ID;
+            Name = item.Name;
+            Description = item.Description;
+            CostRiel = item.CostRiel;
+            CostDollars = item.CostDollars.ToString();
+            Quantity = item.Quantity;
+            BarcodeNumber = item.BarcodeNumber;
         }
+
+        public User CurrentUser { get; set; }
 
         public string Name
         {
@@ -117,7 +123,7 @@ namespace SimpleInventory.ViewModels
             }
             else
             {
-                item.ID = InventoryItemID;
+                item.ID = _inventoryItemID;
                 item.SaveItemUpdates(userID);
             }
             PopViewModel();
