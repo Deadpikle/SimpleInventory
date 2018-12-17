@@ -39,7 +39,7 @@
         </DataGrid>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" >
             <Button Content="Add Item" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAddItemScreen}"/>
-            <Button Content="Edit Item" Margin="5,35,5,0" Padding="10" Height="40"/>
+            <Button Content="Edit Item" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToEditItemScreen}"/>
             <Button Content="Delete Item" Margin="5,35,5,0" Padding="10" Height="40"/>
         </StackPanel>
     </Grid>

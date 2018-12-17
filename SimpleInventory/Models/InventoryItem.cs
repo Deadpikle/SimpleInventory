@@ -105,7 +105,31 @@ namespace SimpleInventory.Models
 
         public void SaveItemUpdates(int userID)
         {
-
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "UPDATE InventoryItems SET Name = @name, Description = @description, PicturePath = @picturePath, " +
+                        "CostDollars = @costDollars, CostRiel = @costRiel, Quantity = @quantity, BarcodeNumber = @barcodeNumber, " +
+                        "CreatedByUserID = @createdByUserID, ProfitPerItemDollars = @profitPerItemDollars, ProfitPerItemRiel = @profitPerItemRiel" +
+                        " WHERE ID = @id";
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue("@name", Name);
+                    command.Parameters.AddWithValue("@description", Description);
+                    command.Parameters.AddWithValue("@picturePath", PicturePath);
+                    command.Parameters.AddWithValue("@costDollars", CostDollars.ToString());
+                    command.Parameters.AddWithValue("@costRiel", CostRiel);
+                    command.Parameters.AddWithValue("@quantity", Quantity);
+                    command.Parameters.AddWithValue("@barcodeNumber", BarcodeNumber);
+                    command.Parameters.AddWithValue("@createdByUserID", userID);
+                    command.Parameters.AddWithValue("@profitPerItemDollars", ProfitPerItemDollars.ToString());
+                    command.Parameters.AddWithValue("@profitPerItemRiel", ProfitPerItemRiel);
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
         }
     }
 }

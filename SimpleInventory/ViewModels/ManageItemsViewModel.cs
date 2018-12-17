@@ -1,11 +1,7 @@
 ﻿using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
@@ -51,7 +47,7 @@ namespace SimpleInventory.ViewModels
 
         public ICommand MoveToEditItemScreen
         {
-            get { return new RelayCommand(LoadAddItemScreen); }
+            get { return new RelayCommand(LoadEditItemScreen); }
         }
 
         private void LoadEditItemScreen()
