@@ -48,6 +48,27 @@ namespace SimpleInventory.Helpers
             return command;
         }
 
+        public int ReadInt(SQLiteDataReader reader, string columnName)
+        {
+            return (int)reader[columnName];
+        }
+
+        public string ReadString(SQLiteDataReader reader, string columnName)
+        {
+            return (string)reader[columnName];
+        }
+
+        public decimal ReadDecimal(SQLiteDataReader reader, string columnName)
+        {
+            string value = ReadString(reader, columnName);
+            decimal decValue = 0.0m;
+            if (Decimal.TryParse(value, out decValue))
+            {
+                return decValue;
+            }
+            return 0.0m;
+        }
+
         private void CreateDatabase()
         {
             // create directory (if needed) and sqlite file 

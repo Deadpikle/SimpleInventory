@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,42 @@ namespace SimpleInventory.Models
         /// BarcodeNumber is a string just in case we need to change from #'s later or it's really long or something
         public string BarcodeNumber { get; set; }
         public bool WasDeleted { get; set; }
+
+        public static List<InventoryItem> LoadItems(string whereClause = "", List<Tuple<string, string>> whereParams = null)
+        {
+            var items = new List<InventoryItem>();
+            string query = "" +
+                "SELECT ii.ID, Name, Description, PicturePath, CostDollars, CostDollars, CostRiel, Quantity, BarcodeNumber, CreatedByUserID" +
+                "FROM InventoryItems ii JOIN Users u ON ii.CreatedByUserID = u.ID" +
+                (string.IsNullOrEmpty(whereClause) ? "" : whereClause) +
+                "ORDER BY Name, CostRiel, Description, CostRiel, CostDollars";
+
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var item = new InventoryItem();
+                            item.ID = dbHelper.ReadInt(reader, "ID");
+                            item.Name = dbHelper.ReadString(reader, "Name");
+                            item.Description = dbHelper.ReadString(reader, "Description");
+                            item.PicturePath = dbHelper.ReadString(reader, "PicturePath");
+                            item.CostDollars = dbHelper.ReadDecimal(reader, "CostDollars");
+                            item.CostRiel = dbHelper.ReadInt(reader, "CostRiel");
+                            item.Quantity = dbHelper.ReadInt(reader, "Quantity");
+                            item.BarcodeNumber = dbHelper.ReadString(reader, "BarcodeNumber");
+                            item.CreatedByUserID = dbHelper.ReadInt(reader, "CreatedByUserID");
+                            items.Add(item);
+                        }
+                    }
+                }
+            }
+            return items;
+        }
 
         public void CreateNewItem(int userID)
         {
