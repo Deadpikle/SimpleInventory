@@ -29,9 +29,11 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding CostDollars}"/>
                 <DataGridTextColumn Header="Cost (Riel)" Binding="{Binding CostRiel}"/>
                 <DataGridTextColumn Header="Cost ($)" Binding="{Binding CostDollars}"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding CostDollars}"/>
+                <DataGridTextColumn Header="Profit/item (Riel)" Binding="{Binding ProfitPerItemDollars}"/>
+                <DataGridTextColumn Header="Profit/item ($)" Binding="{Binding ProfitPerItemRiel}"/>
                 <DataGridTextColumn Header="Barcode" Binding="{Binding BarcodeNumber}"/>
             </DataGrid.Columns>
         </DataGrid>

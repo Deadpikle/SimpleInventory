@@ -31,7 +31,15 @@ namespace SimpleInventory.Helpers
             {
                 CreateDatabase();
             }
-            return new SQLiteConnection("data source=" + GetFilePath());
+            var conn = new SQLiteConnection("data source=" + GetFilePath());
+            conn.Open();
+            using (var command = new SQLiteCommand(conn))
+            {
+                command.CommandText = "PRAGMA foreign_keys = 1";
+                command.ExecuteNonQuery();
+                PerformMigrationsAsNecessary(command);
+            }
+            return conn;
         }
 
         /// <summary>
@@ -41,11 +49,7 @@ namespace SimpleInventory.Helpers
         /// <returns></returns>
         public SQLiteCommand GetSQLiteCommand(SQLiteConnection conn)
         {
-            var command = new SQLiteCommand(conn);
-            conn.Open();
-            command.CommandText = "PRAGMA foreign_keys = 1";
-            command.ExecuteNonQuery();
-            return command;
+            return new SQLiteCommand(conn);
         }
 
         public int ReadInt(SQLiteDataReader reader, string columnName)
@@ -64,6 +68,43 @@ namespace SimpleInventory.Helpers
         {
             int ordinal = reader.GetOrdinal(columnName);
             return reader.IsDBNull(ordinal) ? 0.0m : reader.GetDecimal(ordinal);
+        }
+
+        private void PerformMigrationsAsNecessary(SQLiteCommand command)
+        {
+            command.CommandText = "PRAGMA user_version";
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    var userVersion = reader.GetInt32(0); // initial version is 0
+                    switch (userVersion + 1)
+                    {
+                        case 1:
+                            // need to add profit per item to InventoryItems & ItemsSoldInfo
+                            string updateInventoryItems = "" +
+                                "ALTER TABLE InventoryItems ADD ProfitPerItemDollars INTEGER DEFAULT 0;" +
+                                "ALTER TABLE InventoryItems ADD ProfitPerItemRiel INTEGER DEFAULT 0;";
+                            command.CommandText = updateInventoryItems;
+                            command.ExecuteNonQuery();
+                            string updateItemsSoldInfo = "" +
+                                "ALTER TABLE ItemsSoldInfo ADD ProfitPerItemDollars INTEGER DEFAULT 0;" +
+                                "ALTER TABLE ItemsSoldInfo ADD ProfitPerItemRiel INTEGER DEFAULT 0;";
+                            command.CommandText = updateItemsSoldInfo;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 1";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
+                    }
+                    reader.Close();
+                }
+                else
+                {
+                    reader.Close();
+                }
+            }
         }
 
         private void CreateDatabase()
@@ -128,9 +169,14 @@ namespace SimpleInventory.Helpers
                     string addInitialUser = "" +
                         "INSERT INTO Users (Name, Username, PasswordHash) VALUES (@name, @username, @passwordHash)";
                     command.CommandText = addInitialUser;
+                    command.Parameters.Clear();
                     command.Parameters.AddWithValue("@name", "Administrator");
                     command.Parameters.AddWithValue("@username", "admin");
                     command.Parameters.AddWithValue("@passwordHash", User.HashPassword("changeme"));
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "PRAGMA user_version = 0";
+                    command.Parameters.Clear();
                     command.ExecuteNonQuery();
 
                     // close the connection

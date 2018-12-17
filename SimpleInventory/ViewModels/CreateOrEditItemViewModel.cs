@@ -19,6 +19,8 @@ namespace SimpleInventory.ViewModels
         private string _description;
         private int _costRiel;
         private string _costDollars;
+        private int _profitPerItemRiel;
+        private string _profitPerItemDollars;
         private int _quantity;
         private string _barcodeNumber;
 
@@ -29,6 +31,8 @@ namespace SimpleInventory.ViewModels
             Description = "";
             CostRiel = 0;
             CostDollars = "0.0";
+            ProfitPerItemRiel = 0;
+            ProfitPerItemDollars = "0.0";
             Quantity = 0;
             BarcodeNumber = "";
         }
@@ -41,6 +45,8 @@ namespace SimpleInventory.ViewModels
             Description = item.Description;
             CostRiel = item.CostRiel;
             CostDollars = item.CostDollars.ToString();
+            ProfitPerItemRiel = item.ProfitPerItemRiel;
+            ProfitPerItemDollars = item.ProfitPerItemDollars.ToString();
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
         }
@@ -69,6 +75,18 @@ namespace SimpleInventory.ViewModels
         {
             get { return _costDollars; }
             set { _costDollars = value; NotifyPropertyChanged(); }
+        }
+
+        public int ProfitPerItemRiel
+        {
+            get { return _profitPerItemRiel; }
+            set { _profitPerItemRiel = value; NotifyPropertyChanged(); }
+        }
+
+        public string ProfitPerItemDollars
+        {
+            get { return _profitPerItemDollars; }
+            set { _profitPerItemDollars = value; NotifyPropertyChanged(); }
         }
 
         public int Quantity
@@ -113,6 +131,12 @@ namespace SimpleInventory.ViewModels
             bool didParse = Decimal.TryParse(CostDollars, out dollarCost);
             item.CostDollars = didParse ? dollarCost : 0m;
             item.CostRiel = CostRiel;
+
+            decimal dollarProfit = 0m;
+            didParse = Decimal.TryParse(ProfitPerItemDollars, out dollarProfit);
+            item.ProfitPerItemDollars = didParse ? dollarProfit : 0m;
+            item.ProfitPerItemRiel = ProfitPerItemRiel;
+
             item.BarcodeNumber = BarcodeNumber;
             item.PicturePath = "";
             item.Quantity = Quantity;

@@ -18,7 +18,9 @@ namespace SimpleInventory.Models
 
         public decimal CostDollars { get; set; }
         public int CostRiel { get; set; }
-        
+        public decimal ProfitPerItemDollars { get; set; }
+        public int ProfitPerItemRiel { get; set; }
+
         public int Quantity { get; set; }
 
         /// BarcodeNumber is a string just in case we need to change from #'s later or it's really long or something
@@ -29,7 +31,8 @@ namespace SimpleInventory.Models
         {
             var items = new List<InventoryItem>();
             string query = "" +
-                "SELECT ii.ID, ii.Name, Description, PicturePath, CostDollars, CostDollars, CostRiel, Quantity, BarcodeNumber, CreatedByUserID " +
+                "SELECT ii.ID, ii.Name, Description, PicturePath, CostDollars, CostDollars, CostRiel, Quantity, BarcodeNumber, CreatedByUserID," +
+                "       ProfitPerItemDollars, ProfitPerItemRiel " +
                 "FROM InventoryItems ii LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
                 "ORDER BY ii.Name, CostRiel, Description, CostRiel, CostDollars";
@@ -58,6 +61,8 @@ namespace SimpleInventory.Models
                             item.PicturePath = dbHelper.ReadString(reader, "PicturePath");
                             item.CostDollars = dbHelper.ReadDecimal(reader, "CostDollars");
                             item.CostRiel = dbHelper.ReadInt(reader, "CostRiel");
+                            item.ProfitPerItemDollars = dbHelper.ReadDecimal(reader, "ProfitPerItemDollars");
+                            item.ProfitPerItemRiel = dbHelper.ReadInt(reader, "ProfitPerItemRiel");
                             item.Quantity = dbHelper.ReadInt(reader, "Quantity");
                             item.BarcodeNumber = dbHelper.ReadString(reader, "BarcodeNumber");
                             item.CreatedByUserID = dbHelper.ReadInt(reader, "CreatedByUserID");
@@ -65,6 +70,7 @@ namespace SimpleInventory.Models
                         }
                     }
                 }
+                conn.Close();
             }
             return items;
         }
@@ -77,8 +83,9 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     string query = "INSERT INTO InventoryItems (Name, Description, PicturePath, CostDollars, " +
-                        "CostRiel, Quantity, BarcodeNumber, CreatedByUserID) VALUES " +
-                        "(@name, @description, @picturePath, @costDollars, @costRiel, @quantity, @barcodeNumber, @createdByUserID)";
+                        "CostRiel, Quantity, BarcodeNumber, CreatedByUserID, ProfitPerItemDollars, ProfitPerItemRiel) VALUES " +
+                        "(@name, @description, @picturePath, @costDollars, @costRiel, @quantity, @barcodeNumber, @createdByUserID," +
+                        " @profitPerItemDollars, @profitPerItemRiel)";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@name", Name);
                     command.Parameters.AddWithValue("@description", Description);
@@ -88,6 +95,8 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@quantity", Quantity);
                     command.Parameters.AddWithValue("@barcodeNumber", BarcodeNumber);
                     command.Parameters.AddWithValue("@createdByUserID", userID);
+                    command.Parameters.AddWithValue("@profitPerItemDollars", ProfitPerItemDollars.ToString());
+                    command.Parameters.AddWithValue("@profitPerItemRiel", ProfitPerItemRiel);
                     command.ExecuteNonQuery();
                     conn.Close();
                 }

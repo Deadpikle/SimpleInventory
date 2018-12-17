@@ -21,5 +21,7 @@ namespace SimpleInventory.Models
         public int PaidRiel { get; set; } // payment defaults to Riel
         public decimal ChangeDollars { get; set; }
         public int ChangeRiel { get; set; }
+        public decimal ProfitPerItemDollars { get; set; }
+        public int ProfitPerItemRiel { get; set; }
     }
 }

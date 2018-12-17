@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SimpleInventory.Views"
+             xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModels:CreateOrEditItemViewModel}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -24,14 +26,20 @@
                 <TextBox Width="300" Text="{Binding Description}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200" Text="{Binding Quantity}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Cost (Riel)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="200" Text="{Binding CostRiel}"/>
                 <Label Content="Cost ($, USD)" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="200" Text="{Binding CostDollars}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding Quantity}"/>
+                <Label Content="Profit/item (Riel)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200" Text="{Binding ProfitPerItemRiel}"/>
+                <Label Content="Profit/item ($, USD)" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200" Text="{Binding ProfitPerItemDollars}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
