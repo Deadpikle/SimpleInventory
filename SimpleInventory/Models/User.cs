@@ -10,6 +10,7 @@ namespace SimpleInventory.Models
     {
         public string ID;
         public string Name;
+        public string Username;
         public string PasswordHash;
     }
 }

@@ -18,7 +18,8 @@ namespace SimpleInventory.Models
         
         public int Quantity { get; set; }
 
-        // BarcodeNumber is a string just in case we need to change from #'s later or it's really long or something
-        public string BarcodeNumber { get; set; } 
+        /// BarcodeNumber is a string just in case we need to change from #'s later or it's really long or something
+        public string BarcodeNumber { get; set; }
+        public bool WasDeleted { get; set; }
     }
 }

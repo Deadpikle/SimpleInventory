@@ -13,9 +13,9 @@ namespace SimpleInventory.Models
         public int QuantitySold { get; set; } // defaults to 1
         public int InventoryItemID { get; set; }
         public int SoldByUserID { get; set; }
+
         public decimal DollarsPaid { get; set; }
         public int RielPaid { get; set; } // payment defaults to Riel
-
         public decimal DollarsChange { get; set; }
         public int RielChange { get; set; }
     }
