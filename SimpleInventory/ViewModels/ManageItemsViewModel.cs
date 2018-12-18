@@ -12,9 +12,12 @@ namespace SimpleInventory.ViewModels
         private int _selectedIndex = 0;
         private InventoryItem _selectedItem;
 
+        private bool _isItemSelected;
+
         public ManageItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             Items = InventoryItem.LoadItems();
+            IsItemSelected = false;
         }
 
         public List<InventoryItem> Items
@@ -23,10 +26,16 @@ namespace SimpleInventory.ViewModels
             set { _items = value; NotifyPropertyChanged(); }
         }
 
+        public bool IsItemSelected
+        {
+            get { return _isItemSelected; }
+            set { _isItemSelected = value; NotifyPropertyChanged(); }
+        }
+
         public int SelectedIndex
         {
             get { return _selectedIndex; }
-            set { _selectedIndex = value; NotifyPropertyChanged(); }
+            set { _selectedIndex = value; NotifyPropertyChanged(); IsItemSelected = value != -1; }
         }
 
         public InventoryItem SelectedItem
