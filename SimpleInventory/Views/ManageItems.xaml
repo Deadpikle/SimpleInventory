@@ -25,16 +25,14 @@
         <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Items}" d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
                   SelectionUnit="FullRow" SelectedIndex="{Binding SelectedIndex}" SelectedItem="{Binding SelectedItem}"
-                  AlternatingRowBackground="Gainsboro">
+                  AlternatingRowBackground="Gainsboro" RowHeaderWidth="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding CostDollars}"/>
-                <DataGridTextColumn Header="Cost (Riel)" Binding="{Binding CostRiel}"/>
-                <DataGridTextColumn Header="Cost ($)" Binding="{Binding CostDollars}"/>
-                <DataGridTextColumn Header="Profit/item (Riel)" Binding="{Binding ProfitPerItemDollars}"/>
-                <DataGridTextColumn Header="Profit/item ($)" Binding="{Binding ProfitPerItemRiel}"/>
-                <DataGridTextColumn Header="Barcode" Binding="{Binding BarcodeNumber}"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Cost}"/>
+                <DataGridTextColumn Header="Cost" Binding="{Binding CostWithCurrency}"/>
+                <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItem}"/>
+                <DataGridTextColumn Header="Barcode" Binding="{Binding BarcodeNumber}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" >

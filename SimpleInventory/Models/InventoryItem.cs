@@ -18,6 +18,7 @@ namespace SimpleInventory.Models
 
         public decimal Cost { get; set; }
         public Currency CostCurrency { get; set; }
+        public string CostWithCurrency { get { return Cost.ToString() + " (" + CostCurrency?.Symbol + ")"; } }
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
 
@@ -62,7 +63,7 @@ namespace SimpleInventory.Models
                             item.Cost = dbHelper.ReadDecimal(reader, "Cost");
                             var costCurrencyID = dbHelper.ReadInt(reader, "CostCurrencyID");
                             item.CostCurrency = currencies.ContainsKey(costCurrencyID) ? currencies[costCurrencyID] : null;
-                            item.ProfitPerItem = dbHelper.ReadDecimal(reader, "ProfitPerItemDollars");
+                            item.ProfitPerItem = dbHelper.ReadDecimal(reader, "ProfitPerItem");
                             var profitCurrencyID = dbHelper.ReadInt(reader, "ProfitPerItemCurrencyID");
                             item.ProfitPerItemCurrency = currencies.ContainsKey(profitCurrencyID) ? currencies[profitCurrencyID] : null;
                             item.Quantity = dbHelper.ReadInt(reader, "Quantity");

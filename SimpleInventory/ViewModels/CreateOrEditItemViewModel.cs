@@ -180,10 +180,12 @@ namespace SimpleInventory.ViewModels
             decimal cost = 0m;
             bool didParse = Decimal.TryParse(Cost, out cost);
             item.Cost = didParse ? cost : 0m;
+            item.CostCurrency = _currencies[_selectedCostCurrencyIndex];
 
             decimal profit = 0m;
             didParse = Decimal.TryParse(ProfitPerItem, out profit);
             item.ProfitPerItem = didParse ? profit : 0m;
+            item.ProfitPerItemCurrency = _currencies[_selectedProfitCurrencyIndex];
 
             item.BarcodeNumber = BarcodeNumber;
             item.PicturePath = "";
