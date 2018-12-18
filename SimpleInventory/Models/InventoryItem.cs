@@ -18,10 +18,31 @@ namespace SimpleInventory.Models
 
         public decimal Cost { get; set; }
         public Currency CostCurrency { get; set; }
-        public string CostWithCurrency { get { return Cost.ToString() + " (" + CostCurrency?.Symbol + ")"; } }
+        public string CostWithCurrency
+        {
+            get
+            {
+                if (CostCurrency != null)
+                {
+                    return Cost.ToString() + " (" + CostCurrency?.Symbol + ")";
+                }
+                return Cost.ToString();
+            }
+        }
+
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
-        public string ProfitPerItemWithCurrency { get { return ProfitPerItem.ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")"; } }
+        public string ProfitPerItemWithCurrency
+        {
+            get
+            {
+                if (ProfitPerItemCurrency != null)
+                {
+                    return ProfitPerItem.ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                }
+                return ProfitPerItem.ToString();
+            }
+        }
 
         public int Quantity { get; set; }
 
