@@ -2,13 +2,14 @@
 using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
     class ManageItemsViewModel : BaseViewModel, ICreatedInventoryItem
     {
-        private List<InventoryItem> _items;
+        private ObservableCollection<InventoryItem> _items;
         private int _selectedIndex = 0;
         private InventoryItem _selectedItem;
 
@@ -16,11 +17,11 @@ namespace SimpleInventory.ViewModels
 
         public ManageItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
-            Items = InventoryItem.LoadItems();
+            Items = new ObservableCollection<InventoryItem>(InventoryItem.LoadItemsNotDeleted());
             IsItemSelected = false;
         }
 
-        public List<InventoryItem> Items
+        public ObservableCollection<InventoryItem> Items
         {
             get { return _items; }
             set { _items = value; NotifyPropertyChanged(); }
@@ -79,7 +80,16 @@ namespace SimpleInventory.ViewModels
 
         public void CreatedInventoryItem(InventoryItem item)
         {
-            _items.Add(item);
+            Items.Add(item);
+        }
+
+        public void DeleteItem(InventoryItem item)
+        {
+            if (item != null)
+            {
+                item.Delete();
+                Items.Remove(item);
+            }
         }
     }
 }

@@ -78,6 +78,11 @@ namespace SimpleInventory.Models
             return items;
         }
 
+        public static List<InventoryItem> LoadItemsNotDeleted()
+        {
+            return LoadItems(" WHERE WasDeleted = 0");
+        }
+
         public void CreateNewItem(int userID)
         {
             var dbHelper = new DatabaseHelper();
@@ -128,6 +133,22 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@createdByUserID", userID);
                     command.Parameters.AddWithValue("@profitPerItem", ProfitPerItem.ToString());
                     command.Parameters.AddWithValue("@profitPerItemCurrencyID", ProfitPerItemCurrency?.ID);
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void Delete()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "UPDATE InventoryItems SET WasDeleted = 1 WHERE ID = @id";
+                    command.CommandText = query;
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
                     conn.Close();
