@@ -80,23 +80,12 @@ namespace SimpleInventory.Helpers
                     var userVersion = reader.GetInt32(0); // initial version is 0
                     switch (userVersion + 1)
                     {
-                        case 1:
-                            // need to add profit per item to InventoryItems & ItemsSoldInfo
-                            string updateInventoryItems = "" +
-                                "ALTER TABLE InventoryItems ADD ProfitPerItemDollars INTEGER DEFAULT 0;" +
-                                "ALTER TABLE InventoryItems ADD ProfitPerItemRiel INTEGER DEFAULT 0;";
-                            command.CommandText = updateInventoryItems;
-                            command.ExecuteNonQuery();
-                            string updateItemsSoldInfo = "" +
-                                "ALTER TABLE ItemsSoldInfo ADD ProfitPerItemDollars INTEGER DEFAULT 0;" +
-                                "ALTER TABLE ItemsSoldInfo ADD ProfitPerItemRiel INTEGER DEFAULT 0;";
-                            command.CommandText = updateItemsSoldInfo;
-                            command.ExecuteNonQuery();
+                        /*case 1:
                             // bump user_version
                             command.CommandText = "PRAGMA user_version = 1";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            break;*/
                     }
                     reader.Close();
                 }
@@ -128,13 +117,25 @@ namespace SimpleInventory.Helpers
                     command.CommandText = createUsersTable;
                     command.ExecuteNonQuery();
 
+                    string createCurrenciesTable = "CREATE TABLE Currencies (" +
+                        "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                        "Name TEXT," +
+                        "Abbreviation TEXT," +
+                        "Symbol TEXT," +
+                        "ConversionRateToUSD TEXT," +
+                        "IsDefaultCurrency INTEGER DEFAULT 0)";
+                    command.CommandText = createCurrenciesTable;
+                    command.ExecuteNonQuery();
+
                     string createInventoryItemTable = "CREATE TABLE InventoryItems (" +
                         "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                         "Name TEXT," +
                         "Description TEXT," +
                         "PicturePath TEXT," +
-                        "CostDollars TEXT," +
-                        "CostRiel INTEGER," +
+                        "Cost TEXT," +
+                        "CostCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                        "ProfitPerItem TEXT," +
+                        "ProfitPerItemCurrencyID INTEGER REFERENCES Currencies(ID)," +
                         "Quantity INTEGER," +
                         "BarcodeNumber TEXT," +
                         "WasDeleted INTEGER DEFAULT 0," +
@@ -146,12 +147,14 @@ namespace SimpleInventory.Helpers
                         "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                         "DateTimeSold TEXT," +
                         "QuantitySold INTEGER DEFAULT 1," +
-                        "CostDollars TEXT," +
-                        "CostRiel INTEGER," +
-                        "PaidDollars TEXT," +
-                        "PaidRiel INTEGER," +
-                        "ChangeDollars TEXT," +
-                        "ChangeRiel INTEGER," +
+                        "Cost TEXT," +
+                        "CostCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                        "Paid TEXT," +
+                        "PaidCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                        "Change TEXT," +
+                        "ChangeCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                        "ProfitPerItem TEXT," +
+                        "ProfitPerItemCurrencyID INTEGER REFERENCES Currencies(ID)," +
                         "InventoryItemID INTEGER REFERENCES InventoryItems(ID)," +
                         "SoldByUserID INTEGER REFERENCES Users(ID) )";
                     command.CommandText = createItemSoldInfoTable;
@@ -165,7 +168,7 @@ namespace SimpleInventory.Helpers
                     command.CommandText = createGeneratedBarcodesTable;
                     command.ExecuteNonQuery();
 
-                    // add an initial user
+                    // add initial data
                     string addInitialUser = "" +
                         "INSERT INTO Users (Name, Username, PasswordHash) VALUES (@name, @username, @passwordHash)";
                     command.CommandText = addInitialUser;
