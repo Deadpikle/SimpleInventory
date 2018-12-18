@@ -25,5 +25,33 @@ namespace SimpleInventory.ViewModels
         {
             PushViewModel(new ManageItemsViewModel(ViewModelChanger));
         }
+
+        public ICommand MoveToScanItemsScreen
+        {
+            get { return new RelayCommand(LoadScanItemsScreen); }
+        }
+
+        private void LoadScanItemsScreen()
+        {
+            PushViewModel(new ScanItemsViewModel(ViewModelChanger));
+        }
+
+        public ICommand MoveToGenerateBarcodesScreen
+        {
+            get { return new RelayCommand(LoadGenerateBarcodesScreen); }
+        }
+
+        private void LoadGenerateBarcodesScreen()
+        {
+        }
+
+        public ICommand MoveToReportsScreen
+        {
+            get { return new RelayCommand(LoadReportsScreen); }
+        }
+
+        private void LoadReportsScreen()
+        {
+        }
     }
 }
