@@ -17,6 +17,8 @@ namespace SimpleInventory.Models
         public decimal ConversionRateToUSD { get; set; }
         public bool IsDefaultCurrency { get; set; }
 
+        public string NameWithSymbol { get { return Name + " (" + Symbol + ")"; } }
+
         public static List<Currency> LoadCurrencies(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var items = new List<Currency>();
@@ -62,6 +64,11 @@ namespace SimpleInventory.Models
         public static Dictionary<int, Currency> GetKeyValueCurrencyList(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var currencies = LoadCurrencies(whereClause, whereParams);
+            return ConvertListToKeyValueList(currencies);
+        }
+
+        public static Dictionary<int, Currency> ConvertListToKeyValueList(List<Currency> currencies)
+        {
             var dictionary = new Dictionary<int, Currency>();
             foreach (Currency currency in currencies)
             {

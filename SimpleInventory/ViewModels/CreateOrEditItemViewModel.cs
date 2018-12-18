@@ -19,12 +19,21 @@ namespace SimpleInventory.ViewModels
         private string _description;
         private string _cost;
         private string _profitPerItem;
+
+        private int _indexOfDefaultCurrency;
+        private int _selectedCostCurrencyIndex;
+        private int _selectedProfitCurrencyIndex;
+
         private int _quantity;
         private string _barcodeNumber;
+
+        private List<Currency> _currencies;
 
         public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             _isCreating = true;
+            _currencies = Currency.LoadCurrencies();
+            SetupCurrencyIndices();
             Name = "";
             Description = "";
             Cost = "0.0";
@@ -37,6 +46,7 @@ namespace SimpleInventory.ViewModels
         {
             _isCreating = false;
             _inventoryItemID = item.ID;
+            _currencies = Currency.LoadCurrencies();
             Name = item.Name;
             Description = item.Description;
             Cost = item.Cost.ToString();
@@ -46,6 +56,11 @@ namespace SimpleInventory.ViewModels
         }
 
         public User CurrentUser { get; set; }
+
+        public List<Currency> Currencies
+        {
+            get { return _currencies; }
+        }
 
         public string Name
         {
@@ -65,10 +80,22 @@ namespace SimpleInventory.ViewModels
             set { _cost = value; NotifyPropertyChanged(); }
         }
 
+        public int SelectedCostCurrencyIndex
+        {
+            get { return _selectedCostCurrencyIndex; }
+            set { _selectedCostCurrencyIndex = value; NotifyPropertyChanged(); }
+        }
+
         public string ProfitPerItem
         {
             get { return _profitPerItem; }
             set { _profitPerItem = value; NotifyPropertyChanged(); }
+        }
+
+        public int SelectedProfitCurrencyIndex
+        {
+            get { return _selectedProfitCurrencyIndex; }
+            set { _selectedProfitCurrencyIndex = value; NotifyPropertyChanged(); }
         }
 
         public int Quantity
@@ -101,6 +128,47 @@ namespace SimpleInventory.ViewModels
         }
 
         #endregion
+
+        private void SetupCurrencyIndices(InventoryItem item = null)
+        {
+            var didSetCostCurrencyIndex = false;
+            var didSetProfitCurrencyIndex = false;
+            for (int i = 0; i < _currencies.Count; i++)
+            {
+                var currency = _currencies[i];
+                if (currency.IsDefaultCurrency)
+                {
+                    _indexOfDefaultCurrency = i;
+                    if (item == null)
+                    {
+                        _selectedCostCurrencyIndex = i;
+                        _selectedProfitCurrencyIndex = i;
+                        didSetCostCurrencyIndex = didSetProfitCurrencyIndex = true;
+                    }
+                }
+                if (item != null)
+                {
+                    if (item.CostCurrency != null && item.CostCurrency.ID == currency.ID)
+                    {
+                        _selectedCostCurrencyIndex = i;
+                        didSetCostCurrencyIndex = true;
+                    }
+                    if (item.ProfitPerItemCurrency != null && item.ProfitPerItemCurrency.ID == currency.ID)
+                    {
+                        _selectedProfitCurrencyIndex = i;
+                        didSetProfitCurrencyIndex = true;
+                    }
+                }
+            }
+            if (!didSetCostCurrencyIndex)
+            {
+                _selectedCostCurrencyIndex = _indexOfDefaultCurrency;
+            }
+            if (!didSetProfitCurrencyIndex)
+            {
+                _selectedProfitCurrencyIndex = _indexOfDefaultCurrency;
+            }
+        }
 
         private void CreateOrSaveItem()
         {

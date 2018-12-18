@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SimpleInventory.Views"
+             xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CreateOrEditItemViewModel}}"
              mc:Ignorable="d" 
@@ -30,16 +31,30 @@
                 <TextBox Width="200" Text="{Binding Quantity}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Cost (Riel)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding CostRiel}"/>
-                <Label Content="Cost ($, USD)" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding CostDollars}"/>
+                <Label Content="Cost" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200" Text="{Binding Cost}"/>
+                <Label Content="Cost Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
+                          SelectedIndex="{Binding SelectedCostCurrencyIndex}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding NameWithSymbol}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Profit/item (Riel)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding ProfitPerItemRiel}"/>
-                <Label Content="Profit/item ($, USD)" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding ProfitPerItemDollars}"/>
+                <Label Content="Profit / Item" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="200" Text="{Binding ProfitPerItem}"/>
+                <Label Content="Profit / Item Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
+                          SelectedIndex="{Binding SelectedProfitCurrencyIndex}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding NameWithSymbol}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>

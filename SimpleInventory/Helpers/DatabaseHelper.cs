@@ -188,8 +188,8 @@ namespace SimpleInventory.Helpers
 
                     // add default currencies
                     string addCurrency = "" +
-                        "INSERT INTO Users (Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency) " +
-                        "VALUES (@name, @abbreviation, @symbol, @conversion, @isDefault";
+                        "INSERT INTO Currencies (Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency) " +
+                        "VALUES (@name, @abbreviation, @symbol, @conversion, @isDefault)";
                     command.CommandText = addCurrency;
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@name", "US Dollars");
