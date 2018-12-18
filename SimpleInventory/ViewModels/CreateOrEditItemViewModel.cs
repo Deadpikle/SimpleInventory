@@ -17,10 +17,8 @@ namespace SimpleInventory.ViewModels
 
         private string _name;
         private string _description;
-        private int _costRiel;
-        private string _costDollars;
-        private int _profitPerItemRiel;
-        private string _profitPerItemDollars;
+        private string _cost;
+        private string _profitPerItem;
         private int _quantity;
         private string _barcodeNumber;
 
@@ -29,10 +27,8 @@ namespace SimpleInventory.ViewModels
             _isCreating = true;
             Name = "";
             Description = "";
-            CostRiel = 0;
-            CostDollars = "0.0";
-            ProfitPerItemRiel = 0;
-            ProfitPerItemDollars = "0.0";
+            Cost = "0.0";
+            ProfitPerItem = "0.0";
             Quantity = 0;
             BarcodeNumber = "";
         }
@@ -43,10 +39,8 @@ namespace SimpleInventory.ViewModels
             _inventoryItemID = item.ID;
             Name = item.Name;
             Description = item.Description;
-            CostRiel = item.CostRiel;
-            CostDollars = item.CostDollars.ToString();
-            ProfitPerItemRiel = item.ProfitPerItemRiel;
-            ProfitPerItemDollars = item.ProfitPerItemDollars.ToString();
+            Cost = item.Cost.ToString();
+            ProfitPerItem = item.ProfitPerItem.ToString();
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
         }
@@ -65,28 +59,16 @@ namespace SimpleInventory.ViewModels
             set { _description = value; NotifyPropertyChanged(); }
         }
 
-        public int CostRiel
+        public string Cost
         {
-            get { return _costRiel; }
-            set { _costRiel = value; NotifyPropertyChanged(); }
+            get { return _cost; }
+            set { _cost = value; NotifyPropertyChanged(); }
         }
 
-        public string CostDollars
+        public string ProfitPerItem
         {
-            get { return _costDollars; }
-            set { _costDollars = value; NotifyPropertyChanged(); }
-        }
-
-        public int ProfitPerItemRiel
-        {
-            get { return _profitPerItemRiel; }
-            set { _profitPerItemRiel = value; NotifyPropertyChanged(); }
-        }
-
-        public string ProfitPerItemDollars
-        {
-            get { return _profitPerItemDollars; }
-            set { _profitPerItemDollars = value; NotifyPropertyChanged(); }
+            get { return _profitPerItem; }
+            set { _profitPerItem = value; NotifyPropertyChanged(); }
         }
 
         public int Quantity
@@ -127,15 +109,13 @@ namespace SimpleInventory.ViewModels
             var item = new InventoryItem();
             item.Name = Name;
             item.Description = Description;
-            decimal dollarCost = 0m;
-            bool didParse = Decimal.TryParse(CostDollars, out dollarCost);
-            item.CostDollars = didParse ? dollarCost : 0m;
-            item.CostRiel = CostRiel;
+            decimal cost = 0m;
+            bool didParse = Decimal.TryParse(Cost, out cost);
+            item.Cost = didParse ? cost : 0m;
 
-            decimal dollarProfit = 0m;
-            didParse = Decimal.TryParse(ProfitPerItemDollars, out dollarProfit);
-            item.ProfitPerItemDollars = didParse ? dollarProfit : 0m;
-            item.ProfitPerItemRiel = ProfitPerItemRiel;
+            decimal profit = 0m;
+            didParse = Decimal.TryParse(ProfitPerItem, out profit);
+            item.ProfitPerItem = didParse ? profit : 0m;
 
             item.BarcodeNumber = BarcodeNumber;
             item.PicturePath = "";

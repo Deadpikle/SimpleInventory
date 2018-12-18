@@ -78,7 +78,8 @@ namespace SimpleInventory.Helpers
 
         private void PerformMigrationsAsNecessary(SQLiteCommand command)
         {
-            command.CommandText = "PRAGMA user_version";
+            // uncomment when you need some migrations
+            /*command.CommandText = "PRAGMA user_version";
             using (var reader = command.ExecuteReader())
             {
                 if (reader.Read())
@@ -86,12 +87,12 @@ namespace SimpleInventory.Helpers
                     var userVersion = reader.GetInt32(0); // initial version is 0
                     switch (userVersion + 1)
                     {
-                        /*case 1:
+                        case 1:
                             // bump user_version
                             command.CommandText = "PRAGMA user_version = 1";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;*/
+                            break;
                     }
                     reader.Close();
                 }
@@ -99,7 +100,7 @@ namespace SimpleInventory.Helpers
                 {
                     reader.Close();
                 }
-            }
+            }*/
         }
 
         private void CreateDatabase()
@@ -202,7 +203,7 @@ namespace SimpleInventory.Helpers
                     command.Parameters.AddWithValue("@abbreviation", "KHR");
                     command.Parameters.AddWithValue("@symbol", "៛");
                     command.Parameters.AddWithValue("@conversion", "4050");
-                    command.Parameters.AddWithValue("@isDefault", false);
+                    command.Parameters.AddWithValue("@isDefault", true);
                     command.ExecuteNonQuery();
 
                     command.CommandText = "PRAGMA user_version = 0";
