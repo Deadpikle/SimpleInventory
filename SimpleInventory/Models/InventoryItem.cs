@@ -21,6 +21,7 @@ namespace SimpleInventory.Models
         public string CostWithCurrency { get { return Cost.ToString() + " (" + CostCurrency?.Symbol + ")"; } }
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
+        public string ProfitPerItemWithCurrency { get { return ProfitPerItem.ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")"; } }
 
         public int Quantity { get; set; }
 

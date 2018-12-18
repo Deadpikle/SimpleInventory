@@ -40,8 +40,8 @@ namespace SimpleInventory.ViewModels
             SetupCurrencyIndices();
             Name = "";
             Description = "";
-            Cost = "0.0";
-            ProfitPerItem = "0.0";
+            Cost = "0";
+            ProfitPerItem = "0";
             Quantity = 0;
             BarcodeNumber = "";
             _createdItemListener = createdItemListener;

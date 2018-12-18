@@ -73,7 +73,7 @@ namespace SimpleInventory.Helpers
         public decimal ReadDecimal(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
-            return reader.IsDBNull(ordinal) ? 0.0m : reader.GetDecimal(ordinal);
+            return reader.IsDBNull(ordinal) ? 0m : reader.GetDecimal(ordinal);
         }
 
         private void PerformMigrationsAsNecessary(SQLiteCommand command)

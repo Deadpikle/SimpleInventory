@@ -31,7 +31,7 @@
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Cost}"/>
                 <DataGridTextColumn Header="Cost" Binding="{Binding CostWithCurrency}"/>
-                <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItem}"/>
+                <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItemWithCurrency}"/>
                 <DataGridTextColumn Header="Barcode" Binding="{Binding BarcodeNumber}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
