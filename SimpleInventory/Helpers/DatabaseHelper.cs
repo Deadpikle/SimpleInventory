@@ -52,6 +52,12 @@ namespace SimpleInventory.Helpers
             return new SQLiteCommand(conn);
         }
 
+        public bool ReadBool(SQLiteDataReader reader, string columnName)
+        {
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? false : reader.GetBoolean(ordinal);
+        }
+
         public int ReadInt(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
@@ -195,7 +201,7 @@ namespace SimpleInventory.Helpers
                     command.Parameters.AddWithValue("@name", "Cambodian Riel");
                     command.Parameters.AddWithValue("@abbreviation", "KHR");
                     command.Parameters.AddWithValue("@symbol", "៛");
-                    command.Parameters.AddWithValue("@conversion", "1.0");
+                    command.Parameters.AddWithValue("@conversion", "4050");
                     command.Parameters.AddWithValue("@isDefault", false);
                     command.ExecuteNonQuery();
 
