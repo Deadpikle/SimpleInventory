@@ -169,6 +169,7 @@ namespace SimpleInventory.Helpers
                     command.ExecuteNonQuery();
 
                     // add initial data
+                    // add default user
                     string addInitialUser = "" +
                         "INSERT INTO Users (Name, Username, PasswordHash) VALUES (@name, @username, @passwordHash)";
                     command.CommandText = addInitialUser;
@@ -176,6 +177,26 @@ namespace SimpleInventory.Helpers
                     command.Parameters.AddWithValue("@name", "Administrator");
                     command.Parameters.AddWithValue("@username", "admin");
                     command.Parameters.AddWithValue("@passwordHash", User.HashPassword("changeme"));
+                    command.ExecuteNonQuery();
+
+                    // add default currencies
+                    string addCurrency = "" +
+                        "INSERT INTO Users (Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency) " +
+                        "VALUES (@name, @abbreviation, @symbol, @conversion, @isDefault";
+                    command.CommandText = addCurrency;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@name", "US Dollars");
+                    command.Parameters.AddWithValue("@abbreviation", "USD");
+                    command.Parameters.AddWithValue("@symbol", "$");
+                    command.Parameters.AddWithValue("@conversion", "1.0");
+                    command.Parameters.AddWithValue("@isDefault", false);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@name", "Cambodian Riel");
+                    command.Parameters.AddWithValue("@abbreviation", "KHR");
+                    command.Parameters.AddWithValue("@symbol", "៛");
+                    command.Parameters.AddWithValue("@conversion", "1.0");
+                    command.Parameters.AddWithValue("@isDefault", false);
                     command.ExecuteNonQuery();
 
                     command.CommandText = "PRAGMA user_version = 0";
