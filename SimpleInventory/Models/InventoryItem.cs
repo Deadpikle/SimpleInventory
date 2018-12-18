@@ -35,7 +35,7 @@ namespace SimpleInventory.Models
                 "       ProfitPerItem, ProfitPerItemCurrencyID " +
                 "FROM InventoryItems ii LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY ii.Name, CostRiel, Description, CostRiel, CostDollars";
+                "ORDER BY ii.Name, Cost, Description";
             var currencies = Currency.GetKeyValueCurrencyList();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())

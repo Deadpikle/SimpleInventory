@@ -21,11 +21,10 @@ namespace SimpleInventory.Models
         {
             var items = new List<Currency>();
             string query = "" +
-                "SELECT ii.ID, ii.Name, Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
-                "       ProfitPerItem, ProfitPerItemCurrencyID " +
-                "FROM InventoryItems ii LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
+                "SELECT ID, Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency " +
+                "FROM Currencies " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY ii.Name, CostRiel, Description, CostRiel, CostDollars";
+                "ORDER BY Name, Abbreviation, ConversionRateToUSD";
 
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
