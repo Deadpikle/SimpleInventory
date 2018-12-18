@@ -15,13 +15,13 @@ namespace SimpleInventory.Models
         public int SoldByUserID { get; set; }
 
         // we remember the cost of things in case it changes over time so we have the original info :)
-        public decimal CostDollars { get; set; }
-        public int CostRiel { get; set; } // payment defaults to Riel
-        public decimal PaidDollars { get; set; }
-        public int PaidRiel { get; set; } // payment defaults to Riel
-        public decimal ChangeDollars { get; set; }
-        public int ChangeRiel { get; set; }
-        public decimal ProfitPerItemDollars { get; set; }
-        public int ProfitPerItemRiel { get; set; }
+        public decimal Cost { get; set; }
+        public Currency CostCurrency { get; set; }
+        public decimal Paid { get; set; }
+        public Currency PaidCurrency { get; set; }
+        public decimal Change { get; set; }
+        public Currency ChangeCurrency { get; set; }
+        public decimal ProfitPerItem { get; set; }
+        public Currency ProfitPerItemCurrency { get; set; }
     }
 }

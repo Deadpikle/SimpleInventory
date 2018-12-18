@@ -16,10 +16,10 @@ namespace SimpleInventory.Models
         public string PicturePath { get; set; }
         public int CreatedByUserID { get; set; }
 
-        public decimal CostDollars { get; set; }
-        public int CostRiel { get; set; }
-        public decimal ProfitPerItemDollars { get; set; }
-        public int ProfitPerItemRiel { get; set; }
+        public decimal Cost { get; set; }
+        public Currency CostCurrency { get; set; }
+        public decimal ProfitPerItem { get; set; }
+        public Currency ProfitPerItemCurrency { get; set; }
 
         public int Quantity { get; set; }
 
