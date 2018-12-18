@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
-    class ManageItemsViewModel : BaseViewModel
+    class ManageItemsViewModel : BaseViewModel, ICreatedInventoryItem
     {
         private List<InventoryItem> _items;
         private int _selectedIndex = 0;
@@ -51,7 +51,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAddItemScreen()
         {
-            PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger));
+            PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger, this));
         }
 
         public ICommand MoveToEditItemScreen
@@ -75,6 +75,11 @@ namespace SimpleInventory.ViewModels
         private void PopToMainMenu()
         {
             PopViewModel();
+        }
+
+        public void CreatedInventoryItem(InventoryItem item)
+        {
+            _items.Add(item);
         }
     }
 }

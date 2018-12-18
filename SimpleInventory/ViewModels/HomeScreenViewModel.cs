@@ -16,16 +16,6 @@ namespace SimpleInventory.ViewModels
         {
         }
 
-        public ICommand MoveToAddItemScreen
-        {
-            get { return new RelayCommand(LoadAddItemScreen); }
-        }
-
-        private void LoadAddItemScreen()
-        {
-            PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger));
-        }
-
         public ICommand MoveToManageItemsScreen
         {
             get { return new RelayCommand(LoadManageItemsScreen); }

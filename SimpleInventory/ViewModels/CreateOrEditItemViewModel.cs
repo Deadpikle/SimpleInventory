@@ -27,12 +27,16 @@ namespace SimpleInventory.ViewModels
         private int _quantity;
         private string _barcodeNumber;
 
+        private InventoryItem _currentItemBeingEdited;
+        private ICreatedInventoryItem _createdItemListener;
+
         private List<Currency> _currencies;
 
-        public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
+        public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger, ICreatedInventoryItem createdItemListener) : base(viewModelChanger)
         {
             _isCreating = true;
             _currencies = Currency.LoadCurrencies();
+            _currentItemBeingEdited = null;
             SetupCurrencyIndices();
             Name = "";
             Description = "";
@@ -40,11 +44,13 @@ namespace SimpleInventory.ViewModels
             ProfitPerItem = "0.0";
             Quantity = 0;
             BarcodeNumber = "";
+            _createdItemListener = createdItemListener;
         }
 
         public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
             _isCreating = false;
+            _currentItemBeingEdited = item;
             _inventoryItemID = item.ID;
             _currencies = Currency.LoadCurrencies();
             Name = item.Name;
@@ -54,6 +60,8 @@ namespace SimpleInventory.ViewModels
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
         }
+
+        #region Properties
 
         public User CurrentUser { get; set; }
 
@@ -109,6 +117,8 @@ namespace SimpleInventory.ViewModels
             get { return _barcodeNumber; }
             set { _barcodeNumber = value; NotifyPropertyChanged(); }
         }
+
+        #endregion
 
         #region ICommands
 
@@ -174,7 +184,7 @@ namespace SimpleInventory.ViewModels
         {
             // validate
             // create/save
-            var item = new InventoryItem();
+            var item = _currentItemBeingEdited != null ? _currentItemBeingEdited : new InventoryItem();
             item.Name = Name;
             item.Description = Description;
             decimal cost = 0m;
@@ -194,6 +204,7 @@ namespace SimpleInventory.ViewModels
             if (_isCreating)
             {
                 item.CreateNewItem(userID);
+                _createdItemListener?.CreatedInventoryItem(item);
             }
             else
             {
