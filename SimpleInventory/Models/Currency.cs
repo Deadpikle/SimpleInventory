@@ -14,7 +14,7 @@ namespace SimpleInventory.Models
         public string Name { get; set; }
         public string Abbreviation { get; set; }
         public string Symbol { get; set; }
-        public decimal ConversionRateToUSD { get; set; }
+        public decimal ConversionRateToUSD { get; set; } // One X to 1 USD = formula
         public bool IsDefaultCurrency { get; set; }
 
         public string NameWithSymbol { get { return Name + " (" + Symbol + ")"; } }

@@ -51,15 +51,15 @@
                         Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding PurchasedItem.Name}" FontSize="16" FontWeight="Bold"/>
                 <TextBlock Grid.Row="0" Margin="5,5,0,5" FontSize="14">
-                    <Span FontSize="15">Purchased on: <Run FontSize="15" Text="{Binding PurchaseInfo.DateTimeInfo}"/></Span>
+                    <Span FontSize="15">Purchased on: <Run FontSize="15" Text="{Binding DateTimePurchased}"/></Span>
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Quantity Purchased" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Text="{Binding PurchaseInfo.QuantitySold}"/>
+                    <TextBox Width="100" Text="{Binding Quantity}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="200" Text="{Binding PurchaseInfo.Paid}"/>
+                    <TextBox Width="200" Text="{Binding PaidAmount}"/>
                     <Label Content="Paid Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                     <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedPaidCurrencyIndex}">

@@ -23,6 +23,11 @@ namespace SimpleInventory.ViewModels
         private int _selectedPaidCurrencyIndex;
         private string _changeNeeded;
         private int _selectedChangeCurrencyIndex;
+        private string _paidAmount;
+        private int _quantity;
+        private bool _hasPaidAmountChangedForCurrentItem;
+        private string _dateTimePurchased;
+        private bool _isChangingPaidFromQuantity;
 
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
@@ -92,6 +97,78 @@ namespace SimpleInventory.ViewModels
             set { _selectedChangeCurrencyIndex = value; NotifyPropertyChanged(); }
         }
 
+        // TODO: until paid amount adjusted manually, update it when the quantity changes
+
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                _quantity = value;
+                NotifyPropertyChanged();
+                if (value <= 0)
+                {
+                    Quantity = 1; // you can't buy 0 items
+                }
+                else if(!_hasPaidAmountChangedForCurrentItem)
+                {
+                    // assume that the user has paid in full
+                    _isChangingPaidFromQuantity = true;
+                    PaidAmount = (PurchasedItem.Cost * _quantity).ToString();
+                    _isChangingPaidFromQuantity = false;
+                }
+            }
+        }
+
+        public string PaidAmount
+        {
+            get { return _paidAmount; }
+            set
+            {
+                _paidAmount = value;
+                NotifyPropertyChanged();
+                if (!_isChangingPaidFromQuantity)
+                {
+                    _hasPaidAmountChangedForCurrentItem = true;
+                }
+                // update change if necessary
+                UpdatePurchaseInfoCurrencies();
+                var changeCurrency = PurchaseInfo.ChangeCurrency;
+                var paidCurrency = PurchaseInfo.PaidCurrency;
+                var paidAsDecimal = decimal.Parse(PaidAmount); // TODO: tryParse
+                // if the amount paid doesn't equal the quantity, the user needs some change!
+                if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
+                {
+                    // we want to put things in the change currency's amount
+                    if (paidCurrency.ID != changeCurrency.ID)
+                    {
+                        // convert to dollar, then convert to currency
+                        paidAsDecimal /= paidCurrency.ConversionRateToUSD;
+                        paidAsDecimal *= changeCurrency.ConversionRateToUSD;
+                    }
+                    var amountNeededToPay = PurchaseInfo.Cost * PurchaseInfo.QuantitySold;
+                    if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
+                    {
+                        amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
+                        amountNeededToPay *= changeCurrency.ConversionRateToUSD;
+                    }
+                    ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
+                    PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
+                }
+                else
+                {
+                    ChangeNeeded = "0 " + changeCurrency.Symbol;
+                    PurchaseInfo.Change = 0;
+                }
+            }
+        }
+
+        public string DateTimePurchased
+        {
+            get { return _dateTimePurchased; }
+            set { _dateTimePurchased = value; NotifyPropertyChanged(); }
+        }
+
         #endregion
 
         #region ICommands
@@ -116,10 +193,13 @@ namespace SimpleInventory.ViewModels
             var item = InventoryItem.LoadItemByBarcode(BarcodeNumber);
             if (item != null)
             {
+                _hasPaidAmountChangedForCurrentItem = false;
                 ItemPurchaseStatusMessage = "Item successfully found!";
+                PurchasedItem = item;
                 // create purchase data object and save to the db
                 var purchaseData = new ItemSoldInfo();
                 purchaseData.DateTimeSold = DateTime.Now;
+                DateTimePurchased = purchaseData.DateTimeSold.ToString("dddd, d MMMM 'at' h:mm tt");
                 purchaseData.InventoryItemID = item.ID;
                 purchaseData.QuantitySold = 1;
                 var userID = CurrentUser != null ? CurrentUser.ID : 1;
@@ -133,13 +213,13 @@ namespace SimpleInventory.ViewModels
                 purchaseData.ProfitPerItem = item.ProfitPerItem;
                 purchaseData.ProfitPerItemCurrency = item.ProfitPerItemCurrency;
                 purchaseData.CreateNewSoldInfo();
+                PurchaseInfo = purchaseData;
 
-                // TODO: update combobox indices!
                 // show info to the user for possible future editing
                 ChangeNeeded = "0"; // TODO: update if paid updated -- might want to bind to a different property for set {} updates
                 SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
                 SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
-                PurchaseInfo = purchaseData;
+                Quantity = 1;
                 PurchaseInfoIsVisible = true;
             }
             else
@@ -154,11 +234,18 @@ namespace SimpleInventory.ViewModels
             get { return new RelayCommand(SavePurchaseUpdatesToDB); }
         }
 
+        private void UpdatePurchaseInfoCurrencies()
+        {
+            PurchaseInfo.ChangeCurrency = _currencies[SelectedChangeCurrencyIndex];
+            PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
+        }
+
         private void SavePurchaseUpdatesToDB()
         {
             if (PurchaseInfoIsVisible && PurchaseInfo != null)
             {
-                // TODO: Update currencies!
+                UpdatePurchaseInfoCurrencies();
+                PurchaseInfo.QuantitySold = Quantity;
                 PurchaseInfo.SaveUpdates();
             }
         }
