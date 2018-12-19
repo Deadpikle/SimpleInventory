@@ -45,21 +45,23 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Margin="0,5,0,0" Content="Previous Purchase Details" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Grid.Row="0" Margin="0,5,0,0" Content="Purchase Details" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Vertical" HorizontalAlignment="Left" Margin="5,0,0,0"
                         Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="{Binding PurchasedItem.Name}" FontSize="16" FontWeight="Bold"/>
                 <TextBlock Grid.Row="0" Margin="5,5,0,5" FontSize="14">
-                    <Span FontSize="15">Purchased on: <Run FontSize="15" Text="{Binding DateTimePurchased}"/></Span>
+                    <Span FontSize="15">Purchased on: <Run FontSize="15" Text="{Binding DateTimePurchased}"/> | <Span 
+                        FontSize="15">Cost per item: <Run FontSize="15" Text="{Binding PurchasedItem.CostWithCurrency, Mode=OneWay}"/></Span></Span>
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Quantity Purchased" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="200" Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="200" Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                     <Label Content="Paid Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                     <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedPaidCurrencyIndex}">
@@ -72,7 +74,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Change Needed" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <Label Content="{Binding ChangeNeeded}" Width="75"/>
+                    <Label Content="{Binding ChangeNeeded}" Width="75" VerticalAlignment="Center"/>
                     <Label Content="Change Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                     <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedChangeCurrencyIndex}">
@@ -83,9 +85,10 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                    Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SavePurchaseUpdates}"/>
             </StackPanel>
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                    Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SavePurchaseUpdates}"
+                    Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>
