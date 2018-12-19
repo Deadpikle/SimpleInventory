@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using SimpleInventory.Models;
 
 namespace SimpleInventory.Helpers
 {
@@ -40,6 +41,8 @@ namespace SimpleInventory.Helpers
             {
                 PdfDocument document = new PdfDocument();
                 document.Info.Title = "SimpleInventory Barcodes";
+                long barcodeToUse = GeneratedBarcode.GetLatestBarcodeNumber() + 1;
+                var barcodesGenerated = new List<long>();
                 for (int i = 0; i < numberOfPages; i++)
                 {
                     PdfPage page = document.AddPage();
@@ -68,7 +71,7 @@ namespace SimpleInventory.Helpers
                         XUnit xCoord = XUnit.FromInch(1);
                         while (!isWidthFull)
                         {
-                            var image = barcodeCreator.Encode(BarcodeLib.TYPE.CODE128, "00000001");
+                            var image = barcodeCreator.Encode(BarcodeLib.TYPE.CODE128, barcodeToUse.ToString());
                             if (image != null)
                             {
                                 XImage pdfImage = XImage.FromBitmapSource(ConvertImageToBitmapImage(image));
@@ -80,6 +83,8 @@ namespace SimpleInventory.Helpers
                                 {
                                     isWidthFull = true;
                                 }
+                                barcodesGenerated.Add(barcodeToUse);
+                                barcodeToUse++;
                             }
                             else
                             {
@@ -97,6 +102,8 @@ namespace SimpleInventory.Helpers
                         }
                     }
                 }
+                // save the fact that we generated barcodes
+                GeneratedBarcode.AddGeneratedCodes(barcodesGenerated, DateTime.Now, 1);
                 // save the document and start the process for viewing the pdf
                 document.Save(outputPath);
                 Process.Start(outputPath);

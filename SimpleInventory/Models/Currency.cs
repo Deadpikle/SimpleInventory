@@ -54,6 +54,7 @@ namespace SimpleInventory.Models
                             item.IsDefaultCurrency = dbHelper.ReadBool(reader, "IsDefaultCurrency");
                             items.Add(item);
                         }
+                        reader.Close();
                     }
                 }
                 conn.Close();

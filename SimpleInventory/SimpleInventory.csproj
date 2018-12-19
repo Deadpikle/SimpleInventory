@@ -112,7 +112,7 @@
     <Compile Include="Interfaces\IChangeViewModel.cs" />
     <Compile Include="Interfaces\ICreatedInventoryItem.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\GeneratedBarcodes.cs" />
+    <Compile Include="Models\GeneratedBarcode.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\ItemSoldInfo.cs" />
     <Compile Include="Models\User.cs" />

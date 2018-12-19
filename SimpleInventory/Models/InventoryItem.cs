@@ -93,6 +93,7 @@ namespace SimpleInventory.Models
                             item.CreatedByUserID = dbHelper.ReadInt(reader, "CreatedByUserID");
                             items.Add(item);
                         }
+                        reader.Close();
                     }
                 }
                 conn.Close();
