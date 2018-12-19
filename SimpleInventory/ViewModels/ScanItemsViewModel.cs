@@ -49,6 +49,11 @@ namespace SimpleInventory.ViewModels
 
         public User CurrentUser { get; set; }
 
+        public List<Currency> Currencies
+        {
+            get { return _currencies; }
+        }
+
         public string BarcodeNumber
         {
             get { return _barcodeNumber; }
