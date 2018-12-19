@@ -105,6 +105,20 @@ namespace SimpleInventory.Models
             return LoadItems(" WHERE WasDeleted = 0");
         }
 
+        public static InventoryItem LoadItemByID(int id)
+        {
+            var data = LoadItems(" WHERE WasDeleted = 0 AND ID = @id ", 
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@id", id.ToString()) });
+            return data.Count > 0 ? data[0] : null;
+        }
+
+        public static InventoryItem LoadItemByBarcode(string barcode)
+        {
+            var data = LoadItems(" WHERE WasDeleted = 0 AND BarcodeNumber = @barcode ",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@barcode", barcode) });
+            return data.Count > 0 ? data[0] : null;
+        }
+
         public void CreateNewItem(int userID)
         {
             var dbHelper = new DatabaseHelper();
