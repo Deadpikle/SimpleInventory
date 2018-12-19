@@ -110,12 +110,16 @@ namespace SimpleInventory.ViewModels
                 {
                     Quantity = 1; // you can't buy 0 items
                 }
-                else if(!_hasPaidAmountChangedForCurrentItem)
+                else if (!_hasPaidAmountChangedForCurrentItem)
                 {
                     // assume that the user has paid in full
                     _isChangingPaidFromQuantity = true;
                     PaidAmount = (PurchasedItem.Cost * _quantity).ToString();
                     _isChangingPaidFromQuantity = false;
+                }
+                else
+                {
+                    UpdateChange();
                 }
             }
         }
@@ -131,35 +135,43 @@ namespace SimpleInventory.ViewModels
                 {
                     _hasPaidAmountChangedForCurrentItem = true;
                 }
-                // update change if necessary
-                UpdatePurchaseInfoCurrencies();
-                var changeCurrency = PurchaseInfo.ChangeCurrency;
-                var paidCurrency = PurchaseInfo.PaidCurrency;
-                var paidAsDecimal = decimal.Parse(PaidAmount); // TODO: tryParse
-                // if the amount paid doesn't equal the quantity, the user needs some change!
-                if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
+                UpdateChange();
+            }
+        }
+
+        private void UpdateChange()
+        {
+            UpdatePurchaseInfoCurrencies();
+            var changeCurrency = PurchaseInfo.ChangeCurrency;
+            var paidCurrency = PurchaseInfo.PaidCurrency;
+            var paidAsDecimal = 0m; // TODO: tryParse
+            if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+            {
+                paidAsDecimal = 0;
+            }
+            // if the amount paid doesn't equal the quantity, the user needs some change!
+            if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
+            {
+                // we want to put things in the change currency's amount
+                if (paidCurrency.ID != changeCurrency.ID)
                 {
-                    // we want to put things in the change currency's amount
-                    if (paidCurrency.ID != changeCurrency.ID)
-                    {
-                        // convert to dollar, then convert to currency
-                        paidAsDecimal /= paidCurrency.ConversionRateToUSD;
-                        paidAsDecimal *= changeCurrency.ConversionRateToUSD;
-                    }
-                    var amountNeededToPay = PurchaseInfo.Cost * PurchaseInfo.QuantitySold;
-                    if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
-                    {
-                        amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
-                        amountNeededToPay *= changeCurrency.ConversionRateToUSD;
-                    }
-                    ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
-                    PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
+                    // convert to dollar, then convert to currency
+                    paidAsDecimal /= paidCurrency.ConversionRateToUSD;
+                    paidAsDecimal *= changeCurrency.ConversionRateToUSD;
                 }
-                else
+                var amountNeededToPay = PurchaseInfo.Cost * Quantity;
+                if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
                 {
-                    ChangeNeeded = "0 " + changeCurrency.Symbol;
-                    PurchaseInfo.Change = 0;
+                    amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
+                    amountNeededToPay *= changeCurrency.ConversionRateToUSD;
                 }
+                ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
+                PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
+            }
+            else
+            {
+                ChangeNeeded = "0 " + changeCurrency.Symbol;
+                PurchaseInfo.Change = 0;
             }
         }
 

@@ -55,11 +55,11 @@
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Quantity Purchased" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Text="{Binding Quantity}"/>
+                    <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="200" Text="{Binding PaidAmount}"/>
+                    <TextBox Width="200" Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="Paid Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                     <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedPaidCurrencyIndex}">
