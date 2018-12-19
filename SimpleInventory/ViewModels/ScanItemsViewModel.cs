@@ -10,6 +10,8 @@ using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
+    // TODO: when currencies are different, the +/- sign for change isn't right
+    // TODO: on selected index changed for currencies, update change
     class ScanItemsViewModel : BaseViewModel
     {
         private string _barcodeNumber;
@@ -84,22 +86,38 @@ namespace SimpleInventory.ViewModels
             set { _itemPurchaseStatusMessage = value; NotifyPropertyChanged(); }
         }
 
-        public int SelectedPaidCurrencyIndex
-        {
-            get { return _selectedPaidCurrencyIndex; }
-            set { _selectedPaidCurrencyIndex = value; NotifyPropertyChanged(); }
-        }
-
         public string ChangeNeeded
         {
             get { return _changeNeeded; }
-            set { _changeNeeded = value; NotifyPropertyChanged(); }
+            set
+            {
+                _changeNeeded = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int SelectedPaidCurrencyIndex
+        {
+            get { return _selectedPaidCurrencyIndex; }
+            set
+            {
+                _selectedPaidCurrencyIndex = value;
+                NotifyPropertyChanged();
+                UpdatePurchaseInfoCurrencies();
+                UpdateChange();
+            }
         }
 
         public int SelectedChangeCurrencyIndex
         {
             get { return _selectedChangeCurrencyIndex; }
-            set { _selectedChangeCurrencyIndex = value; NotifyPropertyChanged(); }
+            set
+            {
+                _selectedChangeCurrencyIndex = value;
+                NotifyPropertyChanged();
+                UpdatePurchaseInfoCurrencies();
+                UpdateChange();
+            }
         }
 
         // TODO: until paid amount adjusted manually, update it when the quantity changes
@@ -146,37 +164,40 @@ namespace SimpleInventory.ViewModels
 
         private void UpdateChange()
         {
-            UpdatePurchaseInfoCurrencies();
-            var changeCurrency = PurchaseInfo.ChangeCurrency;
-            var paidCurrency = PurchaseInfo.PaidCurrency;
-            var paidAsDecimal = 0m; // TODO: tryParse
-            if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+            if (PurchaseInfo != null)
             {
-                paidAsDecimal = 0;
-            }
-            // if the amount paid doesn't equal the quantity, the user needs some change!
-            if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
-            {
-                // we want to put things in the change currency's amount
-                if (paidCurrency.ID != changeCurrency.ID)
+                UpdatePurchaseInfoCurrencies();
+                var changeCurrency = PurchaseInfo.ChangeCurrency;
+                var paidCurrency = PurchaseInfo.PaidCurrency;
+                var paidAsDecimal = 0m; // TODO: tryParse
+                if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
                 {
-                    // convert to dollar, then convert to currency
-                    paidAsDecimal /= paidCurrency.ConversionRateToUSD;
-                    paidAsDecimal *= changeCurrency.ConversionRateToUSD;
+                    paidAsDecimal = 0;
                 }
-                var amountNeededToPay = PurchaseInfo.Cost * Quantity;
-                if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
+                // if the amount paid doesn't equal the quantity, the user needs some change!
+                if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
                 {
-                    amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
-                    amountNeededToPay *= changeCurrency.ConversionRateToUSD;
+                    // we want to put things in the change currency's amount
+                    if (paidCurrency.ID != changeCurrency.ID)
+                    {
+                        // convert to dollar, then convert to currency
+                        paidAsDecimal /= paidCurrency.ConversionRateToUSD;
+                        paidAsDecimal *= changeCurrency.ConversionRateToUSD;
+                    }
+                    var amountNeededToPay = PurchaseInfo.Cost * Quantity;
+                    if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
+                    {
+                        amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
+                        amountNeededToPay *= changeCurrency.ConversionRateToUSD;
+                    }
+                    ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
+                    PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
                 }
-                ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
-                PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
-            }
-            else
-            {
-                ChangeNeeded = "0 " + changeCurrency.Symbol;
-                PurchaseInfo.Change = 0;
+                else
+                {
+                    ChangeNeeded = "0 " + changeCurrency.Symbol;
+                    PurchaseInfo.Change = 0;
+                }
             }
         }
 
@@ -253,8 +274,17 @@ namespace SimpleInventory.ViewModels
 
         private void UpdatePurchaseInfoCurrencies()
         {
-            PurchaseInfo.ChangeCurrency = _currencies[SelectedChangeCurrencyIndex];
-            PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
+            if (PurchaseInfo != null)
+            {
+                if (SelectedChangeCurrencyIndex >= 0 && SelectedChangeCurrencyIndex < _currencies.Count)
+                {
+                    PurchaseInfo.ChangeCurrency = _currencies[SelectedChangeCurrencyIndex];
+                }
+                if (SelectedPaidCurrencyIndex >= 0 && SelectedPaidCurrencyIndex < _currencies.Count)
+                {
+                    PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
+                }
+            }
         }
 
         private void SavePurchaseUpdatesToDB()
