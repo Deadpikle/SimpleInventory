@@ -120,12 +120,16 @@
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChangeNotifier.cs" />
+    <Compile Include="ViewModels\GenerateBarcodesViewModel.cs" />
     <Compile Include="ViewModels\HomeScreenViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageItemsViewModel.cs" />
     <Compile Include="ViewModels\ScanItemsViewModel.cs" />
     <Compile Include="Views\CreateOrEditItem.xaml.cs">
       <DependentUpon>CreateOrEditItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenerateBarcodes.xaml.cs">
+      <DependentUpon>GenerateBarcodes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeScreen.xaml.cs">
       <DependentUpon>HomeScreen.xaml</DependentUpon>
@@ -149,6 +153,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\CreateOrEditItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GenerateBarcodes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,5 +18,8 @@
         <DataTemplate DataType="{x:Type viewModels:ScanItemsViewModel}">
             <views:ScanItems/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:GenerateBarcodesViewModel}">
+            <views:GenerateBarcodes/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
