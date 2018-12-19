@@ -24,5 +24,15 @@ namespace SimpleInventory.ViewModels
         {
             PopViewModel();
         }
+
+        public ICommand MarkItemPurchased
+        {
+            get { return new RelayCommand(ItemWasPurchased); }
+        }
+
+        private void ItemWasPurchased()
+        {
+
+        }
     }
 }

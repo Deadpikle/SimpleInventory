@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,14 @@ namespace SimpleInventory.Views
         public ScanItems()
         {
             InitializeComponent();
+        }
+
+        private void BarcodeScanTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                (DataContext as ScanItemsViewModel)?.MarkItemPurchased.Execute(null);
+            }
         }
     }
 }

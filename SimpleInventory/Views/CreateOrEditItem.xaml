@@ -31,9 +31,9 @@
                 <TextBox Width="200" Text="{Binding Quantity}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Cost" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <Label Content="Purchase Cost" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="200" Text="{Binding Cost}"/>
-                <Label Content="Cost Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <Label Content="Purchase Cost Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedCostCurrencyIndex}">
                     <ComboBox.ItemTemplate>
