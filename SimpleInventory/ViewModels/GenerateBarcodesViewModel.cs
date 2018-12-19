@@ -19,6 +19,16 @@ namespace SimpleInventory.ViewModels
 
         }
 
+        public ICommand GoToMainMenu
+        {
+            get { return new RelayCommand(PopToMainMenu); }
+        }
+
+        private void PopToMainMenu()
+        {
+            PopViewModel();
+        }
+
         public ICommand GenerateBarcodes
         {
             get { return new RelayCommand(GeneratePDFOfBarcodes); }
