@@ -64,6 +64,12 @@ namespace SimpleInventory.Helpers
             return reader.IsDBNull(ordinal) ? 0 : reader.GetInt32(ordinal);
         }
 
+        public long ReadLong(SQLiteDataReader reader, string columnName)
+        {
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? 0 : reader.GetInt64(ordinal);
+        }
+
         public string ReadString(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
@@ -169,7 +175,7 @@ namespace SimpleInventory.Helpers
 
                     string createGeneratedBarcodesTable = "CREATE TABLE GeneratedBarcodes (" +
                         "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                        "Number TEXT," +
+                        "Number INTEGER," +
                         "DateTimeGenerated TEXT," +
                         "GeneratedByUserID INTEGER REFERENCES Users(ID) )";
                     command.CommandText = createGeneratedBarcodesTable;
