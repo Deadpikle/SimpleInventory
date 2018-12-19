@@ -13,5 +13,10 @@ namespace SimpleInventory.Helpers
         {
             return  LicenseManager.UsageMode == LicenseUsageMode.Designtime;
         }
+
+        public static string DateTimeToStringFormat()
+        {
+            return "yyyy-m-d H:m:s"; // 24 hr time (0-23)
+        }
     }
 }

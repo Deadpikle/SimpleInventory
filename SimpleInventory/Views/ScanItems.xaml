@@ -36,9 +36,9 @@
             <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBox Width="300" Text="{Binding BarcodeNumber}" Height="25" FontSize="16" KeyDown="BarcodeScanTextBox_KeyDown"/>
                 <Button Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                Content="Mark Item Purchased" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding MarkItemPurchased}"/>
+                Content="Mark Item Purchased" Margin="15,5,5,0" Padding="10" Height="40" Width="150" Command="{Binding MarkItemPurchased}"/>
             </StackPanel>
-            <Label Grid.Row="2" FontStyle="Italic" Content="{Binding ItemPurchaseStatusMessage}" HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,5"/>
+            <Label Grid.Row="2" FontStyle="Italic" Content="{Binding ItemPurchaseStatusMessage}" HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,7"/>
         </Grid>
         <Rectangle Grid.Row="2" Fill="Gainsboro" Height="10"/>
         <Grid Grid.Row="3" Grid.Column="0">
