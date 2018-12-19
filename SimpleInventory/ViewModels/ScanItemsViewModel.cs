@@ -169,7 +169,7 @@ namespace SimpleInventory.ViewModels
                 UpdatePurchaseInfoCurrencies();
                 var changeCurrency = PurchaseInfo.ChangeCurrency;
                 var paidCurrency = PurchaseInfo.PaidCurrency;
-                var paidAsDecimal = 0m; // TODO: tryParse
+                var paidAsDecimal = 0m;
                 if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
                 {
                     paidAsDecimal = 0;
@@ -293,6 +293,12 @@ namespace SimpleInventory.ViewModels
             {
                 UpdatePurchaseInfoCurrencies();
                 PurchaseInfo.QuantitySold = Quantity;
+                var paidAsDecimal = 0m;
+                if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+                {
+                    paidAsDecimal = 0;
+                }
+                PurchaseInfo.Paid = paidAsDecimal;
                 PurchaseInfo.SaveUpdates();
             }
         }

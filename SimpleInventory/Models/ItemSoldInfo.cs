@@ -51,6 +51,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@inventoryID", InventoryItemID);
                     command.Parameters.AddWithValue("@userID", SoldByUserID);
                     command.ExecuteNonQuery();
+                    ID = (int)conn.LastInsertRowId;
                     conn.Close();
                 }
             }
@@ -63,11 +64,24 @@ namespace SimpleInventory.Models
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "UPDATE InventoryItems SET Name = @name, Description = @description, PicturePath = @picturePath, " +
-                        "Cost = @cost, CostCurrencyID = @costCurrencyID, Quantity = @quantity, BarcodeNumber = @barcodeNumber, " +
-                        "CreatedByUserID = @createdByUserID, ProfitPerItem = @profitPerItem, ProfitPerItemCurrencyID = @profitPerItemCurrencyID" +
+                    string query = "UPDATE ItemsSoldInfo SET DateTimeSold = @dateTime, QuantitySold = @quantity, Cost = @cost, " +
+                        "CostCurrencyID = @costCurrency, Paid = @paid, PaidCurrencyID = @paidCurrency, Change = @change, " +
+                        "ChangeCurrencyID = @changeCurrency, ProfitPerItem = @profit, ProfitPerItemCurrencyID = @profitCurrency, " +
+                        "InventoryItemID = @inventoryID, SoldByUserID = @userID " +
                         " WHERE ID = @id";
                     command.CommandText = query;
+                    command.Parameters.AddWithValue("@dateTime", DateTimeSold.ToString(Utilities.DateTimeToStringFormat()));
+                    command.Parameters.AddWithValue("@quantity", QuantitySold);
+                    command.Parameters.AddWithValue("@cost", Cost);
+                    command.Parameters.AddWithValue("@costCurrency", CostCurrency?.ID);
+                    command.Parameters.AddWithValue("@paid", Paid);
+                    command.Parameters.AddWithValue("@paidCurrency", PaidCurrency?.ID);
+                    command.Parameters.AddWithValue("@change", Change);
+                    command.Parameters.AddWithValue("@changeCurrency", ChangeCurrency?.ID);
+                    command.Parameters.AddWithValue("@profit", ProfitPerItem);
+                    command.Parameters.AddWithValue("@profitCurrency", ProfitPerItemCurrency?.ID);
+                    command.Parameters.AddWithValue("@inventoryID", InventoryItemID);
+                    command.Parameters.AddWithValue("@userID", SoldByUserID);
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
                     conn.Close();
