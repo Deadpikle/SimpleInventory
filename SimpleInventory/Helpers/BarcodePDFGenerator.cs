@@ -9,5 +9,9 @@ namespace SimpleInventory.Helpers
     // class for generating a PDF of X number of barcodes via PDFSharp and BarcodeLib
     class BarcodePDFGenerator
     {
+        public void GenerateBarcodes(string outputPath, int numberOfPages = 1)
+        {
+
+        }
     }
 }

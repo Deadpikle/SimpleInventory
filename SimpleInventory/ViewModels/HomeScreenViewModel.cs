@@ -43,6 +43,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadGenerateBarcodesScreen()
         {
+            PushViewModel(new GenerateBarcodesViewModel(ViewModelChanger));
         }
 
         public ICommand MoveToReportsScreen
