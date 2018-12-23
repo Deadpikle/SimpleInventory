@@ -115,7 +115,9 @@
     <Compile Include="Models\GeneratedBarcode.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\ItemSoldInfo.cs" />
+    <Compile Include="Models\QuantityAdjustment.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChangeNotifier.cs" />
@@ -124,6 +126,9 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageItemsViewModel.cs" />
     <Compile Include="ViewModels\ScanItemsViewModel.cs" />
+    <Compile Include="Views\AdjustQuantity.xaml.cs">
+      <DependentUpon>AdjustQuantity.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateOrEditItem.xaml.cs">
       <DependentUpon>CreateOrEditItem.xaml</DependentUpon>
     </Compile>
@@ -151,6 +156,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\AdjustQuantity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreateOrEditItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

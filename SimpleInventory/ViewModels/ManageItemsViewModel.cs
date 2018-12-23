@@ -68,6 +68,16 @@ namespace SimpleInventory.ViewModels
             }
         }
 
+        public ICommand MoveToAdjustQuantityScreen
+        {
+            get { return new RelayCommand(LoadAdjustQuantityScreen); }
+        }
+
+        private void LoadAdjustQuantityScreen()
+        {
+            PushViewModel(null);
+        }
+
         public ICommand GoToMainMenu
         {
             get { return new RelayCommand(PopToMainMenu); }

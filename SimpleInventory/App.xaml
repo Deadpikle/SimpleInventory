@@ -21,5 +21,8 @@
         <DataTemplate DataType="{x:Type viewModels:GenerateBarcodesViewModel}">
             <views:GenerateBarcodes/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:AdjustQuantityViewModel}">
+            <views:AdjustQuantity/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
