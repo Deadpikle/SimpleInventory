@@ -11,11 +11,24 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
                     Content="Return to Manage Items" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToManageItems}"/>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Scan Items" FontWeight="Bold" FontSize="16" 
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Adjust Quantity" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Grid.Row="1" HorizontalAlignment="Center" Content="{Binding ItemName}" FontWeight="Bold"/>
+        <Label Grid.Row="2" HorizontalAlignment="Center" Content="Set the current final quantity for the current item. This action cannot be reversed!" FontStyle="Italic"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,5,0,5">
+            <Label Content="Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+            <TextBox Width="300" Text="{Binding Quantity}"/>
+        </StackPanel>
+        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
+                Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" 
+                Command="{Binding SaveQuantityUpdates}"/>
     </Grid>
 </UserControl>

@@ -12,9 +12,24 @@ namespace SimpleInventory.ViewModels
 {
     class AdjustQuantityViewModel : BaseViewModel
     {
+        private InventoryItem _item;
+        private int _quantity;
+
         public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
+            _item = item;
+            Quantity = item?.Quantity ?? 0;
+        }
 
+        public string ItemName
+        {
+            get { return _item?.Name; }
+        }
+
+        public int Quantity
+        {
+            get { return _quantity; }
+            set { _quantity = value; NotifyPropertyChanged(); }
         }
 
         public ICommand GoToManageItems
@@ -25,6 +40,16 @@ namespace SimpleInventory.ViewModels
         private void ReturnToPreviousScreen()
         {
             PopViewModel();
+        }
+
+        public ICommand SaveQuantityUpdates
+        {
+            get { return new RelayCommand(AdjustQuantity); }
+        }
+
+        private void AdjustQuantity()
+        {
+            ReturnToPreviousScreen();
         }
     }
 }
