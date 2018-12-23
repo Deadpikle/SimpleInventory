@@ -289,6 +289,7 @@ namespace SimpleInventory.ViewModels
                 PurchasedItem.AdjustQuantityByAmount(PurchaseInfo.QuantitySold);
                 PurchaseInfoIsVisible = false;
                 BarcodeNumber = "";
+                ItemPurchaseStatusMessage = "";
             }
         }
 
