@@ -75,7 +75,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAdjustQuantityScreen()
         {
-            PushViewModel(null);
+            PushViewModel(new AdjustQuantityViewModel(ViewModelChanger, SelectedItem));
         }
 
         public ICommand GoToMainMenu

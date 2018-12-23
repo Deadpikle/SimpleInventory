@@ -1,4 +1,5 @@
 ﻿using SimpleInventory.Interfaces;
+using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace SimpleInventory.ViewModels
 {
     class AdjustQuantityViewModel : BaseViewModel
     {
-        public AdjustQuantityViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
+        public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
 
         }

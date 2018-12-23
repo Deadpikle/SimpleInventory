@@ -118,6 +118,12 @@ namespace SimpleInventory.ViewModels
             set { _barcodeNumber = value; NotifyPropertyChanged(); }
         }
 
+        public bool IsCreating
+        {
+            get { return _isCreating; }
+            set { _isCreating = value; NotifyPropertyChanged(); }
+        }
+
         #endregion
 
         #region ICommands
@@ -199,12 +205,17 @@ namespace SimpleInventory.ViewModels
 
             item.BarcodeNumber = BarcodeNumber;
             item.PicturePath = "";
-            item.Quantity = Quantity;
+            if (_isCreating) // any further adjustments have to be made via the adjust quantity screen
+            {
+                item.Quantity = Quantity;
+            }
             var userID = CurrentUser != null ? CurrentUser.ID : 1;
             if (_isCreating)
             {
                 item.CreateNewItem(userID);
+                QuantityAdjustment.UpdateQuantity(Quantity, item.ID, userID);
                 _createdItemListener?.CreatedInventoryItem(item);
+
             }
             else
             {

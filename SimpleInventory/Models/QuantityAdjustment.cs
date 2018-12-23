@@ -22,7 +22,7 @@ namespace SimpleInventory.Models
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, UserID)" +
+                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID)" +
                         " VALUES (@amount, @dateTime, @itemID, @userID);";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@amount", quantity);

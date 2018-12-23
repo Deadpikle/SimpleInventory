@@ -143,6 +143,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@profitPerItem", ProfitPerItem.ToString());
                     command.Parameters.AddWithValue("@profitPerItemCurrencyID", ProfitPerItemCurrency?.ID);
                     command.ExecuteNonQuery();
+                    ID = (int)conn.LastInsertRowId;
                     conn.Close();
                 }
             }
