@@ -85,7 +85,7 @@ namespace SimpleInventory.Helpers
         private void PerformMigrationsAsNecessary(SQLiteCommand command)
         {
             // uncomment when you need some migrations
-            /*command.CommandText = "PRAGMA user_version";
+            command.CommandText = "PRAGMA user_version";
             using (var reader = command.ExecuteReader())
             {
                 if (reader.Read())
@@ -94,19 +94,24 @@ namespace SimpleInventory.Helpers
                     switch (userVersion + 1)
                     {
                         case 1:
+                            // create QuantityAdjustments table
+                            string createQuantityAdjustmentsTable = "CREATE TABLE QuantityAdjustments (" +
+                                "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                "AmountChanged TEXT," +
+                                "DateTimeChanged TEXT," +
+                                "InventoryItemID INTEGER REFERENCES InventoryItems(ID)," +
+                                "SoldByUserID INTEGER REFERENCES Users(ID))";
+                            command.CommandText = createQuantityAdjustmentsTable;
+                            command.ExecuteNonQuery();
                             // bump user_version
                             command.CommandText = "PRAGMA user_version = 1";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
                     }
-                    reader.Close();
                 }
-                else
-                {
-                    reader.Close();
-                }
-            }*/
+                reader.Close();
+            }
         }
 
         private void CreateDatabase()
