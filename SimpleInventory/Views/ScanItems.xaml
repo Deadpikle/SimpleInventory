@@ -86,9 +86,14 @@
                     </ComboBox>
                 </StackPanel>
             </StackPanel>
-            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
                     Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SavePurchaseUpdates}"
                     Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Button Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                    Content="Cancel Purchase" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Click="CancelPurchase_Click"
+                    Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

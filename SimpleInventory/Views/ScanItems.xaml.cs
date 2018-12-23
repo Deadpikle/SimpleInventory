@@ -33,5 +33,15 @@ namespace SimpleInventory.Views
                 (DataContext as ScanItemsViewModel)?.MarkItemPurchased.Execute(null);
             }
         }
+
+
+        private void CancelPurchase_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to cancel this purchase?", "Delete Inventory Item", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+            {
+                (DataContext as ScanItemsViewModel)?.CancelPurchase.Execute(null);
+            }
+        }
     }
 }

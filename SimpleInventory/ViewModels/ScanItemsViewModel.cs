@@ -276,6 +276,22 @@ namespace SimpleInventory.ViewModels
             }
         }
 
+        public ICommand CancelPurchase
+        {
+            get { return new RelayCommand(PerformPurchaseCancel); }
+        }
+
+        private void PerformPurchaseCancel()
+        {
+            if (PurchasedItem != null && PurchaseInfo != null)
+            {
+                PurchaseInfo.Delete();
+                PurchasedItem.AdjustQuantityByAmount(PurchaseInfo.QuantitySold);
+                PurchaseInfoIsVisible = false;
+                BarcodeNumber = "";
+            }
+        }
+
         public ICommand SavePurchaseUpdates
         {
             get { return new RelayCommand(SavePurchaseUpdatesToDB); }
