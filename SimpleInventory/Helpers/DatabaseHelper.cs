@@ -25,14 +25,20 @@ namespace SimpleInventory.Helpers
             return File.Exists(GetFilePath());
         }
 
+        private SQLiteConnection GetDatabaseConnectionWithoutMigrating()
+        {
+            var conn = new SQLiteConnection("data source=" + GetFilePath());
+            conn.Open();
+            return conn;
+        }
+
         public SQLiteConnection GetDatabaseConnection()
         {
             if (!DoesDatabaseExist())
             {
                 CreateDatabase();
             }
-            var conn = new SQLiteConnection("data source=" + GetFilePath());
-            conn.Open();
+            var conn = GetDatabaseConnectionWithoutMigrating();
             using (var command = new SQLiteCommand(conn))
             {
                 command.CommandText = "PRAGMA foreign_keys = 1";
@@ -91,6 +97,8 @@ namespace SimpleInventory.Helpers
                 if (reader.Read())
                 {
                     var userVersion = reader.GetInt32(0); // initial version is 0
+                    var space = command.Connection.FileName;
+                    reader.Close(); // have to close it now otherwise we can't execute commands
                     switch (userVersion + 1)
                     {
                         case 1:
@@ -100,17 +108,30 @@ namespace SimpleInventory.Helpers
                                 "AmountChanged TEXT," +
                                 "DateTimeChanged TEXT," +
                                 "InventoryItemID INTEGER REFERENCES InventoryItems(ID)," +
-                                "SoldByUserID INTEGER REFERENCES Users(ID))";
+                                "AdjustedByUserID INTEGER REFERENCES Users(ID))";
                             command.CommandText = createQuantityAdjustmentsTable;
                             command.ExecuteNonQuery();
                             // bump user_version
-                            command.CommandText = "PRAGMA user_version = 1";
+                            command.CommandText = "PRAGMA user_version = 1;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            command.CommandText = "PRAGMA user_version";
+                            using (var reader2 = command.ExecuteReader())
+                            {
+                                if (reader2.Read())
+                                {
+                                    var userVersion2 = reader2.GetInt32(0); // initial version is 0
+                                    var a = userVersion;
+                                }
+                                reader2.Close();
+                            }
+                                    break;
                     }
                 }
-                reader.Close();
+                else
+                {
+                    reader.Close();
+                }
             }
         }
 
@@ -123,7 +144,7 @@ namespace SimpleInventory.Helpers
             }
             SQLiteConnection.CreateFile(GetFilePath());
             // now open and create the database
-            using (var conn = GetDatabaseConnection())
+            using (var conn = GetDatabaseConnectionWithoutMigrating())
             {
                 using (var command = GetSQLiteCommand(conn))
                 {
