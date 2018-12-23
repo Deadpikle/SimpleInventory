@@ -21,6 +21,8 @@ namespace SimpleInventory.ViewModels
             Quantity = item?.Quantity ?? 0;
         }
 
+        public User CurrentUser { get; set; }
+
         public string ItemName
         {
             get { return _item?.Name; }
@@ -49,6 +51,11 @@ namespace SimpleInventory.ViewModels
 
         private void AdjustQuantity()
         {
+            var difference = Quantity - _item.Quantity;
+            var userID = CurrentUser != null ? CurrentUser.ID : 1;
+            QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID);
+            _item.AdjustQuantityByAmount(difference);
+            _item.Quantity = Quantity;
             ReturnToPreviousScreen();
         }
     }
