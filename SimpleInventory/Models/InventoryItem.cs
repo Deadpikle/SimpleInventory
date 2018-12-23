@@ -185,6 +185,7 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     var mathOperator = amount < 0 ? "-" : "+";
+                    amount = Math.Abs(amount);
                     string query = "UPDATE InventoryItems SET Quantity = Quantity " + mathOperator + 
                         " " + amount.ToString() + " WHERE ID = @id";
                     command.CommandText = query;
