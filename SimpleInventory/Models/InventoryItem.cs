@@ -177,6 +177,22 @@ namespace SimpleInventory.Models
             }
         }
 
+        public void ReduceQuantityByAmount(int amount = 1)
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "UPDATE InventoryItems SET Quantity = Quantity - " + amount.ToString() + " WHERE ID = @id";
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
         public void Delete()
         {
             var dbHelper = new DatabaseHelper();
