@@ -156,7 +156,7 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     string query = "UPDATE InventoryItems SET Name = @name, Description = @description, PicturePath = @picturePath, " +
-                        "Cost = @cost, CostCurrencyID = @costCurrencyID, Quantity = @quantity, BarcodeNumber = @barcodeNumber, " +
+                        "Cost = @cost, CostCurrencyID = @costCurrencyID, BarcodeNumber = @barcodeNumber, " +
                         "CreatedByUserID = @createdByUserID, ProfitPerItem = @profitPerItem, ProfitPerItemCurrencyID = @profitPerItemCurrencyID" +
                         " WHERE ID = @id";
                     command.CommandText = query;
@@ -165,7 +165,6 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@picturePath", PicturePath);
                     command.Parameters.AddWithValue("@cost", Cost.ToString());
                     command.Parameters.AddWithValue("@costCurrencyID", CostCurrency?.ID);
-                    command.Parameters.AddWithValue("@quantity", Quantity);
                     command.Parameters.AddWithValue("@barcodeNumber", BarcodeNumber);
                     command.Parameters.AddWithValue("@createdByUserID", userID);
                     command.Parameters.AddWithValue("@profitPerItem", ProfitPerItem.ToString());
@@ -177,14 +176,16 @@ namespace SimpleInventory.Models
             }
         }
 
-        public void ReduceQuantityByAmount(int amount = 1)
+        public void AdjustQuantityByAmount(int amount = 1)
         {
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "UPDATE InventoryItems SET Quantity = Quantity - " + amount.ToString() + " WHERE ID = @id";
+                    var mathOperator = amount < 0 ? "-" : "+";
+                    string query = "UPDATE InventoryItems SET Quantity = Quantity " + mathOperator + 
+                        " " + amount.ToString() + " WHERE ID = @id";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
