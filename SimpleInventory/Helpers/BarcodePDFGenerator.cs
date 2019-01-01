@@ -17,6 +17,11 @@ namespace SimpleInventory.Helpers
     // class for generating a PDF of X number of barcodes via PDFSharp and BarcodeLib
     class BarcodePDFGenerator
     {
+        public BarcodePDFGenerator()
+        {
+            IsDryRun = true;
+        }
+
         // http://james-ramsden.com/c-convert-image-bitmapimage/
         private BitmapImage ConvertImageToBitmapImage(Image img)
         {
@@ -35,7 +40,19 @@ namespace SimpleInventory.Helpers
             }
         }
 
-        public void GenerateBarcodes(string outputPath, uint numberOfPages = 1)
+        /// <summary>
+        /// If true, does not save anything to disk on barcode generate or update the database.
+        /// Use for figuring out how many barcodes will be generated ahead of time.
+        /// </summary>
+        public bool IsDryRun { get; set; }
+
+        /// <summary>
+        /// Generates a barcode PDF and returns the number of barcodes generated
+        /// </summary>
+        /// <param name="outputPath"></param>
+        /// <param name="numberOfPages"></param>
+        /// <returns></returns>
+        public int GenerateBarcodes(string outputPath, uint numberOfPages = 1)
         {
             if (numberOfPages > 0)
             {
@@ -102,12 +119,17 @@ namespace SimpleInventory.Helpers
                         }
                     }
                 }
-                // save the fact that we generated barcodes
-                GeneratedBarcode.AddGeneratedCodes(barcodesGenerated, DateTime.Now, 1);
-                // save the document and start the process for viewing the pdf
-                document.Save(outputPath);
-                Process.Start(outputPath);
+                if (!IsDryRun)
+                {
+                    // save the fact that we generated barcodes
+                    GeneratedBarcode.AddGeneratedCodes(barcodesGenerated, DateTime.Now, 1);
+                    // save the document and start the process for viewing the pdf
+                    document.Save(outputPath);
+                    Process.Start(outputPath);
+                }
+                return barcodesGenerated.Count;
             }
+            return 0;
         }
     }
 }
