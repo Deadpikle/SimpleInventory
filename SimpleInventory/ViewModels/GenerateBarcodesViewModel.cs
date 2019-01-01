@@ -20,11 +20,13 @@ namespace SimpleInventory.ViewModels
         private int _numberOfBarcodesOutput;
 
         private List<string> _paperSizes;
+        private List<string> _barcodeTypes;
 
         public GenerateBarcodesViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             NumberOfPages = 1;
             PaperSizes = new List<string> { "A4", "Letter" };
+            BarcodeTypes = new List<string> { "Code128", "Code39" };
         }
 
         public int NumberOfPages
@@ -62,6 +64,12 @@ namespace SimpleInventory.ViewModels
             set { _paperSizes = value; NotifyPropertyChanged(); }
         }
 
+        public List<string> BarcodeTypes
+        {
+            get { return _barcodeTypes; }
+            set { _barcodeTypes = value; NotifyPropertyChanged(); }
+        }
+
         private PdfSharp.PageSize GetPaperSize()
         {
             if (PaperSizeSelectedIndex == 0)
@@ -75,11 +83,25 @@ namespace SimpleInventory.ViewModels
             return PdfSharp.PageSize.A4;
         }
 
+        private BarcodeLib.TYPE GetBarcodeType()
+        {
+            if (BarcodeTypeSelectedIndex == 0)
+            {
+                return BarcodeLib.TYPE.CODE128;
+            }
+            else if (BarcodeTypeSelectedIndex == 1)
+            {
+                return BarcodeLib.TYPE.CODE39;
+            }
+            return BarcodeLib.TYPE.CODE128;
+        }
+
         private void UpdateBarcodeOutputAmount()
         {
             var generator = new BarcodePDFGenerator();
             generator.PageSize = GetPaperSize();
-            generator.BarcodeType = BarcodeLib.TYPE.CODE128;
+            generator.BarcodeType = GetBarcodeType();
+            generator.NumberOfPages = NumberOfPages;
             generator.IsDryRun = true;
             NumberOfBarcodesOutput = generator.GenerateBarcodes("");
         }
@@ -110,7 +132,8 @@ namespace SimpleInventory.ViewModels
             {
                 var generator = new BarcodePDFGenerator();
                 generator.PageSize = GetPaperSize();
-                generator.BarcodeType = BarcodeLib.TYPE.CODE128;
+                generator.BarcodeType = GetBarcodeType();
+                generator.NumberOfPages = NumberOfPages;
                 generator.GenerateBarcodes(saveFileDialog.FileName);
             }
         }
