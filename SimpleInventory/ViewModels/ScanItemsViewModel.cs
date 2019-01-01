@@ -3,10 +3,8 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SimpleInventory.ViewModels
 {
@@ -30,6 +28,7 @@ namespace SimpleInventory.ViewModels
         private bool _hasPaidAmountChangedForCurrentItem;
         private string _dateTimePurchased;
         private bool _isChangingPaidFromQuantity;
+        private Brush _itemPurchaseStatusBrush;
 
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
@@ -45,6 +44,7 @@ namespace SimpleInventory.ViewModels
             PurchaseInfoIsVisible = false;
             ItemPurchaseStatusMessage = "";
             SelectedPaidCurrencyIndex = -1;
+            ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
         }
 
         #region Properties
@@ -84,6 +84,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _itemPurchaseStatusMessage; }
             set { _itemPurchaseStatusMessage = value; NotifyPropertyChanged(); }
+        }
+
+        public Brush ItemPurchaseStatusBrush
+        {
+            get { return _itemPurchaseStatusBrush; }
+            set { _itemPurchaseStatusBrush = value; NotifyPropertyChanged(); }
         }
 
         public string ChangeNeeded
@@ -233,13 +239,15 @@ namespace SimpleInventory.ViewModels
             {
                 if (item.Quantity <= 0)
                 {
+                    ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                     ItemPurchaseStatusMessage = "There are no remaining items to purchase for this barcode!";
                     PurchaseInfoIsVisible = false;
                 }
                 else
                 {
                     _hasPaidAmountChangedForCurrentItem = false;
-                    ItemPurchaseStatusMessage = "Item successfully found!";
+                    ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
+                    ItemPurchaseStatusMessage = "Item successfully found and purchased!";
                     PurchasedItem = item;
                     // create purchase data object and save to the db
                     var purchaseData = new ItemSoldInfo();
@@ -271,6 +279,7 @@ namespace SimpleInventory.ViewModels
             }
             else
             {
+                ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                 ItemPurchaseStatusMessage = "Item not found!";
                 PurchaseInfoIsVisible = false;
             }
