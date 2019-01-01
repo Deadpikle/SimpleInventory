@@ -11,12 +11,77 @@ using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
-    // TODO: A4 paper size vs 8.5x11 (defaults to A4)
     class GenerateBarcodesViewModel : BaseViewModel
     {
+        private int _numberOfPages;
+        private int _paperSizeSelectedIndex;
+        private int _barcodeTypeSelectedIndex;
+
+        private int _numberOfBarcodesOutput;
+
+        private List<string> _paperSizes;
+
         public GenerateBarcodesViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
+            NumberOfPages = 1;
+            PaperSizes = new List<string> { "A4", "Letter" };
+        }
 
+        public int NumberOfPages
+        {
+            get { return _numberOfPages; }
+            set { _numberOfPages = value; NotifyPropertyChanged(); UpdateBarcodeOutputAmount(); }
+        }
+
+        public int PaperSizeSelectedIndex
+        {
+            get { return _paperSizeSelectedIndex; }
+            set
+            {
+                _paperSizeSelectedIndex = value;
+                NotifyPropertyChanged();
+                UpdateBarcodeOutputAmount();
+            }
+        }
+
+        public int BarcodeTypeSelectedIndex
+        {
+            get { return _barcodeTypeSelectedIndex; }
+            set { _barcodeTypeSelectedIndex = value; NotifyPropertyChanged(); UpdateBarcodeOutputAmount(); }
+        }
+
+        public int NumberOfBarcodesOutput
+        {
+            get { return _numberOfBarcodesOutput; }
+            set { _numberOfBarcodesOutput = value; NotifyPropertyChanged(); }
+        }
+
+        public List<string> PaperSizes
+        {
+            get { return _paperSizes; }
+            set { _paperSizes = value; NotifyPropertyChanged(); }
+        }
+
+        private PdfSharp.PageSize GetPaperSize()
+        {
+            if (PaperSizeSelectedIndex == 0)
+            {
+                return PdfSharp.PageSize.A4;
+            }
+            else if (PaperSizeSelectedIndex == 1)
+            {
+                return PdfSharp.PageSize.Letter;
+            }
+            return PdfSharp.PageSize.A4;
+        }
+
+        private void UpdateBarcodeOutputAmount()
+        {
+            var generator = new BarcodePDFGenerator();
+            generator.PageSize = GetPaperSize();
+            generator.BarcodeType = BarcodeLib.TYPE.CODE128;
+            generator.IsDryRun = true;
+            NumberOfBarcodesOutput = generator.GenerateBarcodes("");
         }
 
         public ICommand GoToMainMenu
@@ -44,6 +109,8 @@ namespace SimpleInventory.ViewModels
             if (saveFileDialog.ShowDialog() == true)
             {
                 var generator = new BarcodePDFGenerator();
+                generator.PageSize = GetPaperSize();
+                generator.BarcodeType = BarcodeLib.TYPE.CODE128;
                 generator.GenerateBarcodes(saveFileDialog.FileName);
             }
         }
