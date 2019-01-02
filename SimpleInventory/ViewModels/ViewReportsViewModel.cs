@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using Microsoft.Win32;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
@@ -45,6 +46,27 @@ namespace SimpleInventory.ViewModels
         private void RunDayReport()
         {
             CurrentDaySalesReport = DaySales.GenerateDataForSingleDay(SelectedReportDate);
+        }
+
+        public ICommand SaveDayReportToPDF
+        {
+            get { return new RelayCommand(CreateAndSaveDayReport); }
+        }
+
+        private void CreateAndSaveDayReport()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedReportDate.ToString("yyyy-MM-dd");
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var generator = new DayReportPDFGenerator();
+                //generator.PageSize = GetPaperSize();
+                //generator.BarcodeType = GetBarcodeType();
+                //generator.NumberOfPages = NumberOfPages;
+                generator.GeneratePDF(CurrentDaySalesReport, saveFileDialog.FileName);
+            }
         }
     }
 }

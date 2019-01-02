@@ -21,6 +21,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <DatePicker Grid.Row="0" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"
                         SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged}"/>
@@ -35,6 +36,8 @@
                     <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                    Content="Save Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveDayReportToPDF}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -126,11 +126,10 @@ namespace SimpleInventory.ViewModels
 
         private void GeneratePDFOfBarcodes()
         {
-
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            saveFileDialog.FileName = "Inventory-Barcodes-" + DateTime.Now.ToString("yyyy-M-d-H-mm-ss");
+            saveFileDialog.FileName = "Inventory-Barcodes-" + DateTime.Now.ToString("yyyy-MM-dd-H-mm-ss");
             if (saveFileDialog.ShowDialog() == true)
             {
                 var generator = new BarcodePDFGenerator();

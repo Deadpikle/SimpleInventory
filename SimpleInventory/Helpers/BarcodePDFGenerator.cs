@@ -70,7 +70,7 @@ namespace SimpleInventory.Helpers
         /// </summary>
         /// <param name="outputPath"></param>
         /// <param name="numberOfPages"></param>
-        /// <returns></returns>
+        /// <returns>The number of barcodes generated</returns>
         public int GenerateBarcodes(string outputPath)
         {
             if (NumberOfPages > 0)
@@ -82,7 +82,7 @@ namespace SimpleInventory.Helpers
                 for (int i = 0; i < NumberOfPages; i++)
                 {
                     PdfPage page = document.AddPage();
-                    page.Size = PageSize; // TODO: allow for A4 or 8.5x11
+                    page.Size = PageSize;
 
                     XGraphics gfx = XGraphics.FromPdfPage(page);
                     XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
