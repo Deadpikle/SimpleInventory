@@ -128,7 +128,7 @@ namespace SimpleInventory.ViewModels
 
         #region ICommands
 
-        public ICommand GoToMainMenu
+        public ICommand PopBack
         {
             get { return new RelayCommand(PopToMainMenu); }
         }

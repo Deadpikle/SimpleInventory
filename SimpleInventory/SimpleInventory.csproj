@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageItemsViewModel.cs" />
     <Compile Include="ViewModels\ScanItemsViewModel.cs" />
+    <Compile Include="ViewModels\ViewReportsViewModel.cs" />
     <Compile Include="Views\AdjustQuantity.xaml.cs">
       <DependentUpon>AdjustQuantity.xaml</DependentUpon>
     </Compile>
@@ -146,6 +147,9 @@
     </Compile>
     <Compile Include="Views\ScanItems.xaml.cs">
       <DependentUpon>ScanItems.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewReports.xaml.cs">
+      <DependentUpon>ViewReports.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ScanItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ViewReports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

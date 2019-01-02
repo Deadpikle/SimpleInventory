@@ -53,6 +53,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadReportsScreen()
         {
+            PushViewModel(new ViewReportsViewModel(ViewModelChanger));
         }
     }
 }

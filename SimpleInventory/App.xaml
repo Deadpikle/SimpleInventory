@@ -24,5 +24,8 @@
         <DataTemplate DataType="{x:Type viewModels:AdjustQuantityViewModel}">
             <views:AdjustQuantity/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ViewReportsViewModel}">
+            <views:ViewReports/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
