@@ -1,6 +1,7 @@
 ﻿using SimpleInventory.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,64 @@ namespace SimpleInventory.Models
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
 
+        public string ItemName { get; set; }
+
+        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
+        {
+            var items = new List<ItemSoldInfo>();
+            var currencies = Currency.GetKeyValueCurrencyList();
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "" +
+                        "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
+                        "   isi.InventoryItemID, isi.SoldByUserID, i.Name, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID " +
+                        "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
+                        "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' " +
+                        "ORDER BY Name";
+
+                    command.CommandText = query;
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var item = new ItemSoldInfo();
+                            item.ID = dbHelper.ReadInt(reader, "ID");
+                            item.ItemName = dbHelper.ReadString(reader, "Name");
+                            item.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
+                            item.SoldByUserID = dbHelper.ReadInt(reader, "SoldByUserID");
+                            string dateTimeSold = dbHelper.ReadString(reader, "DateTimeSold");
+                            var t = Convert.ToDateTime(dateTimeSold);
+                            item.DateTimeSold = Convert.ToDateTime(dateTimeSold); // DateTime.ParseExact(dateTimeSold, 
+                                //Utilities.DateTimeToDateOnlyStringFormat(), System.Globalization.CultureInfo.InvariantCulture);
+                            item.QuantitySold = dbHelper.ReadInt(reader, "QuantitySold");
+                            item.Cost = dbHelper.ReadDecimal(reader, "Cost");
+                            var costCurrencyID = dbHelper.ReadInt(reader, "CostCurrencyID");
+                            item.CostCurrency = currencies.ContainsKey(costCurrencyID) ? currencies[costCurrencyID] : null;
+                            item.ProfitPerItem = dbHelper.ReadDecimal(reader, "ProfitPerItem");
+                            var profitCurrencyID = dbHelper.ReadInt(reader, "ProfitPerItemCurrencyID");
+                            item.ProfitPerItemCurrency = currencies.ContainsKey(profitCurrencyID) ? currencies[profitCurrencyID] : null;
+
+                            item.Paid = dbHelper.ReadDecimal(reader, "Paid");
+                            var paidCurrencyID = dbHelper.ReadInt(reader, "PaidCurrencyID");
+                            item.PaidCurrency = currencies.ContainsKey(paidCurrencyID) ? currencies[paidCurrencyID] : null;
+
+                            item.Change = dbHelper.ReadDecimal(reader, "Change");
+                            var changeCurrencyID = dbHelper.ReadInt(reader, "ChangeCurrencyID");
+                            item.ChangeCurrency = currencies.ContainsKey(changeCurrencyID) ? currencies[changeCurrencyID] : null;
+
+                            items.Add(item);
+                        }
+                        reader.Close();
+                    }
+
+                    conn.Close();
+                }
+            }
+            return items;
+        }
 
         public void CreateNewSoldInfo()
         {

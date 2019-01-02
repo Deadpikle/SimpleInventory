@@ -115,10 +115,12 @@
     <Compile Include="Interfaces\IChangeViewModel.cs" />
     <Compile Include="Interfaces\ICreatedInventoryItem.cs" />
     <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\DaySales.cs" />
     <Compile Include="Models\GeneratedBarcode.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\ItemSoldInfo.cs" />
     <Compile Include="Models\QuantityAdjustment.cs" />
+    <Compile Include="Models\ReportItemSold.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
