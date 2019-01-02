@@ -100,6 +100,17 @@ namespace SimpleInventory.Helpers
                 }
             //}
             // print totals
+            if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
+            {
+                // GOTTA AADDDDDD A NEWWWW PAGEEE....
+                page = document.AddPage();
+                page.Size = PdfSharp.PageSize.A4;
+                gfx = XGraphics.FromPdfPage(page);
+                AddTitle(sales, margin, page, gfx);
+                DrawPageNumber(++pageNumber, margin, page, gfx);
+                yCoord = margin + XUnit.FromInch(1.3);
+                DrawHeaders(yCoord, margin, gfx);
+            }
             yCoord += XUnit.FromInch(0.5);
             XFont totalFont = new XFont("Segoe UI", 16, XFontStyle.Bold);
             XFont totalDataFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
