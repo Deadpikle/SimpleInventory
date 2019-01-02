@@ -115,12 +115,14 @@ namespace SimpleInventory.Helpers
                                 xCoord += XUnit.FromPoint(pdfImage.PointWidth);
                                 imageHeight = XUnit.FromPoint(pdfImage.PointHeight);
                                 var blah = XUnit.FromPoint(image.Width);
-                                if (xCoord + XUnit.FromPoint(pdfImage.PointWidth) > page.Width - XUnit.FromInch(1))
+                                XUnit spaceBetweenBarcodes = XUnit.FromInch(0.75);
+                                if (xCoord + XUnit.FromPoint(pdfImage.PointWidth) + spaceBetweenBarcodes > page.Width - XUnit.FromInch(1))
                                 {
                                     isWidthFull = true;
                                 }
                                 barcodesGenerated.Add(barcodeToUse);
                                 barcodeToUse++;
+                                xCoord += spaceBetweenBarcodes;
                             }
                             else
                             {
