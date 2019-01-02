@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,6 +23,19 @@ namespace SimpleInventory.Helpers
         public static string DateTimeToDateOnlyStringFormat()
         {
             return "yyyy-M-d"; // 24 hr time (0-23)
+        }
+
+        public static decimal ConvertAmount(decimal amount, Currency initialCurrency, Currency toCurrency)
+        {
+            if (initialCurrency.ConversionRateToUSD == 1)
+            {
+                return amount * toCurrency.ConversionRateToUSD;
+            }
+            else
+            {
+                // / = convert to USD, then convert to other currency
+                return amount / initialCurrency.ConversionRateToUSD * toCurrency.ConversionRateToUSD;
+            }
         }
     }
 }

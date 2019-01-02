@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace SimpleInventory.Models
         public DateTime Date { get; set; }
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
+        public Currency Currency { get; set; }
+        // TODO: add total items sold
 
         public static DaySales GenerateDataForSingleDay(DateTime date)
         {
@@ -20,33 +23,73 @@ namespace SimpleInventory.Models
             totalDaySaleInfo.TotalIncome = 0;
             totalDaySaleInfo.TotalProfit = 0;
             totalDaySaleInfo.ItemsSold = new List<ReportItemSold>();
+            var currencies = Currency.LoadCurrencies();
+            foreach (Currency currency in currencies)
+            {
+                if (currency.IsDefaultCurrency)
+                {
+                    totalDaySaleInfo.Currency = currency;
+                    break;
+                }
+            }
             var data = ItemSoldInfo.LoadInfoForDate(date);
 
             var itemIDToReportSold = new Dictionary<int, ReportItemSold>();
-            foreach (ItemSoldInfo info in data)
+            foreach (ItemSoldInfo singleItemInfo in data)
             {
-                if (!itemIDToReportSold.ContainsKey(info.InventoryItemID))
+                if (!itemIDToReportSold.ContainsKey(singleItemInfo.InventoryItemID))
                 {
                     ReportItemSold itemSold = new ReportItemSold();
-                    itemSold.Name = info.ItemName;
+                    itemSold.Name = singleItemInfo.ItemName;
                     itemSold.QuantityPurchased = 0;
-                    itemSold.CostPerItem = info.Cost;
-                    itemSold.CostCurrency = info.CostCurrency;
+                    itemSold.CostPerItem = singleItemInfo.Cost; // TODO: should be handled as an average!
+                    itemSold.CostCurrency = singleItemInfo.CostCurrency;
                     itemSold.TotalCost = 0;
-                    itemSold.ProfitPerItem = info.ProfitPerItem;
-                    itemSold.ProfitCurrency = info.ProfitPerItemCurrency;
+                    itemSold.ProfitPerItem = singleItemInfo.ProfitPerItem; // TODO: should be handled as an average!
+                    itemSold.ProfitCurrency = singleItemInfo.ProfitPerItemCurrency;
                     itemSold.TotalProfit = 0;
-                    itemIDToReportSold[info.InventoryItemID] = itemSold;
+                    itemIDToReportSold[singleItemInfo.InventoryItemID] = itemSold;
                     totalDaySaleInfo.ItemsSold.Add(itemSold);
                 }
-                // TODO: handle differences in currency!
-                ReportItemSold itemSoldData = itemIDToReportSold[info.InventoryItemID];
-                itemSoldData.QuantityPurchased += info.QuantitySold;
-                itemSoldData.TotalCost += info.QuantitySold * info.Cost;
-                itemSoldData.TotalProfit += info.QuantitySold * info.ProfitPerItem;
-
-                totalDaySaleInfo.TotalIncome += info.QuantitySold * info.Cost;
-                totalDaySaleInfo.TotalProfit += info.QuantitySold * info.ProfitPerItem;
+                ReportItemSold itemSoldData = itemIDToReportSold[singleItemInfo.InventoryItemID];
+                itemSoldData.QuantityPurchased += singleItemInfo.QuantitySold;
+                if (itemSoldData.CostCurrency.ID == singleItemInfo.CostCurrency.ID)
+                {
+                    itemSoldData.TotalCost += singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                }
+                else
+                {
+                    itemSoldData.TotalCost += singleItemInfo.QuantitySold * 
+                        Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, itemSoldData.CostCurrency);
+                }
+                if (itemSoldData.ProfitCurrency.ID == singleItemInfo.ProfitPerItemCurrency.ID)
+                {
+                    itemSoldData.TotalProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                }
+                else
+                {
+                    itemSoldData.TotalProfit += singleItemInfo.QuantitySold * 
+                        Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, itemSoldData.ProfitCurrency);
+                }
+                // now add to total income/profit
+                if (totalDaySaleInfo.Currency.ID == singleItemInfo.CostCurrency.ID)
+                {
+                    totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                }
+                else
+                {
+                    totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold *
+                        Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                }
+                if (totalDaySaleInfo.Currency.ID == singleItemInfo.ProfitPerItemCurrency.ID)
+                {
+                    totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                }
+                else
+                {
+                    totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold *
+                        Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, totalDaySaleInfo.Currency);
+                }
             }
             return totalDaySaleInfo;
         }

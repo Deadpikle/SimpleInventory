@@ -10,7 +10,7 @@ namespace SimpleInventory.Models
     {
         public string Name { get; set; }
         public decimal QuantityPurchased { get; set; }
-        public decimal CostPerItem { get; set; }
+        public decimal CostPerItem { get; set; } // in theory, should be an average, as this could change over time
         public Currency CostCurrency { get; set; }
 
         public string CostWithCurrency
@@ -39,7 +39,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        public decimal ProfitPerItem { get; set; }
+        public decimal ProfitPerItem { get; set; } // in theory, should be an average, as this could change over time
         public Currency ProfitCurrency { get; set; }
         public decimal TotalProfit { get; set; }
 
