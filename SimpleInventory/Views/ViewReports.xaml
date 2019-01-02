@@ -31,10 +31,10 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
                     <DataGridTextColumn Header="Quantity Purchased" Binding="{Binding QuantityPurchased}"/>
-                    <DataGridTextColumn Header="Cost / Item" Binding="{Binding CostPerItem}"/>
-                    <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost}"/>
-                    <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItem}"/>
-                    <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfit}"/>
+                    <DataGridTextColumn Header="Cost / Item" Binding="{Binding CostWithCurrency}"/>
+                    <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCostWithCurrency}"/>
+                    <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitWithCurrency}"/>
+                    <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
