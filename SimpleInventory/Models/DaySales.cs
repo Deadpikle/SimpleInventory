@@ -14,7 +14,7 @@ namespace SimpleInventory.Models
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
-        // TODO: add total items sold
+        public int TotalItemsSold { get; set; }
 
         public static DaySales GenerateDataForSingleDay(DateTime date)
         {
@@ -23,6 +23,7 @@ namespace SimpleInventory.Models
             totalDaySaleInfo.TotalIncome = 0;
             totalDaySaleInfo.TotalProfit = 0;
             totalDaySaleInfo.ItemsSold = new List<ReportItemSold>();
+            totalDaySaleInfo.TotalItemsSold = 0;
             var currencies = Currency.LoadCurrencies();
             foreach (Currency currency in currencies)
             {
@@ -53,6 +54,7 @@ namespace SimpleInventory.Models
                 }
                 ReportItemSold itemSoldData = itemIDToReportSold[singleItemInfo.InventoryItemID];
                 itemSoldData.QuantityPurchased += singleItemInfo.QuantitySold;
+                totalDaySaleInfo.TotalItemsSold += singleItemInfo.QuantitySold;
                 if (itemSoldData.CostCurrency.ID == singleItemInfo.CostCurrency.ID)
                 {
                     itemSoldData.TotalCost += singleItemInfo.QuantitySold * singleItemInfo.Cost;
