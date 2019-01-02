@@ -34,7 +34,7 @@
                FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBox Width="300" Text="{Binding BarcodeNumber}" Height="25" FontSize="16" KeyDown="BarcodeScanTextBox_KeyDown"/>
+                <TextBox Width="300" Text="{Binding BarcodeNumber, UpdateSourceTrigger=PropertyChanged}" Height="25" FontSize="16" KeyDown="BarcodeScanTextBox_KeyDown"/>
                 <Button Grid.ColumnSpan="2" HorizontalAlignment="Center"
                 Content="Purchase Item (1)" Margin="15,5,5,0" Padding="10" Height="40" Width="150" Command="{Binding MarkItemPurchased}"/>
             </StackPanel>

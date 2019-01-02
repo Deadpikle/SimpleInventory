@@ -283,6 +283,7 @@ namespace SimpleInventory.ViewModels
                 ItemPurchaseStatusMessage = "Item not found!";
                 PurchaseInfoIsVisible = false;
             }
+            BarcodeNumber = ""; // empty the field so that something can be scanned again
         }
 
         public ICommand CancelPurchase
