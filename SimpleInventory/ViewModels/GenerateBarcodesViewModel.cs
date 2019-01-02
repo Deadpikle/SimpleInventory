@@ -98,12 +98,15 @@ namespace SimpleInventory.ViewModels
 
         private void UpdateBarcodeOutputAmount()
         {
-            var generator = new BarcodePDFGenerator();
-            generator.PageSize = GetPaperSize();
-            generator.BarcodeType = GetBarcodeType();
-            generator.NumberOfPages = NumberOfPages;
-            generator.IsDryRun = true;
-            NumberOfBarcodesOutput = generator.GenerateBarcodes("");
+            if (NumberOfPages >= 0)
+            {
+                var generator = new BarcodePDFGenerator();
+                generator.PageSize = GetPaperSize();
+                generator.BarcodeType = GetBarcodeType();
+                generator.NumberOfPages = 1;
+                generator.IsDryRun = true;
+                NumberOfBarcodesOutput = NumberOfPages * generator.GenerateBarcodes("");
+            }
         }
 
         public ICommand GoToMainMenu
