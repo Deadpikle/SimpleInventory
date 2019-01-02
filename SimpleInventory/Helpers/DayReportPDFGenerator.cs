@@ -20,7 +20,7 @@ namespace SimpleInventory.Helpers
         {
             XUnit yCoord = margin;
             XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
-            gfx.DrawString("Inventory Daily Report", font, XBrushes.Black,
+            gfx.DrawString("Daily Inventory Report", font, XBrushes.Black,
                 new XRect(0, yCoord, page.Width, page.Height), XStringFormats.TopCenter);
             gfx.DrawString(sales.Date.ToString("d MMMM, yyyy"), font, XBrushes.Black,
                 new XRect(0, yCoord + XUnit.FromInch(0.4), page.Width, page.Height), XStringFormats.TopCenter);
@@ -48,7 +48,7 @@ namespace SimpleInventory.Helpers
         public void GeneratePDF(DaySales sales, string outputPath)
         {
             PdfDocument document = new PdfDocument();
-            document.Info.Title = "Inventory Daily Report -- " + sales.Date.ToString("yyyy-MM-dd");
+            document.Info.Title = "Daily Inventory Report -- " + sales.Date.ToString("yyyy-MM-dd");
 
             PdfPage page = document.AddPage();
             page.Size = PdfSharp.PageSize.A4;
@@ -83,13 +83,20 @@ namespace SimpleInventory.Helpers
                     }
                     yCoord += XUnit.FromInch(0.3);
                     xCoord = margin;
+                    // these could be centered nicely or something, but *shrug*
                     gfx.DrawString(itemSold.Name, itemFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
                     xCoord += XUnit.FromInch(2.5);
-                    gfx.DrawString(itemSold.QuantityPurchased.ToString(), itemFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+                    gfx.DrawString(itemSold.QuantityPurchased.ToString(), itemFont, XBrushes.Black, 
+                        new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
                     xCoord += XUnit.FromInch(1.5);
-                    gfx.DrawString(itemSold.TotalCostWithCurrency, itemFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+                    gfx.DrawString(itemSold.TotalCostWithCurrency, itemFont, XBrushes.Black, 
+                        new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
                     xCoord += XUnit.FromInch(1.5);
-                    gfx.DrawString(itemSold.TotalProfitWithCurrency, itemFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+                    gfx.DrawString(itemSold.TotalProfitWithCurrency, itemFont, XBrushes.Black, 
+                        new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+
+                    XUnit yCoordForLine = +XUnit.FromInch(0.15);
+                    gfx.DrawLine(XPens.Black, margin, yCoord + yCoordForLine, page.Width - margin, yCoord + yCoordForLine);
                 }
             //}
             // print totals
@@ -99,11 +106,14 @@ namespace SimpleInventory.Helpers
             xCoord = margin;
             gfx.DrawString("TOTAL", totalFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
             xCoord += XUnit.FromInch(2.5);
-            gfx.DrawString(sales.TotalItemsSold.ToString(), totalDataFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+            gfx.DrawString(sales.TotalItemsSold.ToString(), totalDataFont, XBrushes.Black,
+                        new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
             xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.TotalIncomeWithCurrency, totalDataFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+            gfx.DrawString(sales.TotalIncomeWithCurrency, totalDataFont, XBrushes.Black,
+                        new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
             xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.TotalProfitWithCurrency, totalDataFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+            gfx.DrawString(sales.TotalProfitWithCurrency, totalDataFont, XBrushes.Black,
+                        new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
 
 
             // save the document and start the process for viewing the pdf
