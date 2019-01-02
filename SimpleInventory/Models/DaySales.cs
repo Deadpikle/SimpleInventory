@@ -16,6 +16,30 @@ namespace SimpleInventory.Models
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
 
+        public string TotalIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalIncome.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalIncome.ToString();
+            }
+        }
+
+        public string TotalProfitWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalProfit.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalProfit.ToString();
+            }
+        }
+
         public static DaySales GenerateDataForSingleDay(DateTime date)
         {
             var totalDaySaleInfo = new DaySales();

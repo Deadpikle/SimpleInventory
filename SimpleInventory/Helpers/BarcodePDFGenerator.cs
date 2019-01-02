@@ -76,7 +76,7 @@ namespace SimpleInventory.Helpers
             if (NumberOfPages > 0)
             {
                 PdfDocument document = new PdfDocument();
-                document.Info.Title = "SimpleInventory Barcodes";
+                document.Info.Title = "Inventory Barcodes";
                 long barcodeToUse = GeneratedBarcode.GetLatestBarcodeNumber() + 1;
                 var barcodesGenerated = new List<long>();
                 for (int i = 0; i < NumberOfPages; i++)
@@ -87,7 +87,7 @@ namespace SimpleInventory.Helpers
                     XGraphics gfx = XGraphics.FromPdfPage(page);
                     XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
                     XUnit yCoord = XUnit.FromInch(1); // pixels
-                    gfx.DrawString("SimpleInventory Barcodes", font, XBrushes.Black,
+                    gfx.DrawString("Inventory Barcodes", font, XBrushes.Black,
                         new XRect(0, yCoord, page.Width, page.Height), XStringFormats.TopCenter);
 
                     yCoord += XUnit.FromInch(0.7);
