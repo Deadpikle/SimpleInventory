@@ -25,6 +25,7 @@
         <DataGrid Grid.Row="1" Grid.Column="0" Name="ItemsGrid" ItemsSource="{Binding Items}" d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
                   SelectionUnit="FullRow" SelectedIndex="{Binding SelectedIndex}" SelectedItem="{Binding SelectedItem}"
+                  SelectionMode="Single"
                   AlternatingRowBackground="Gainsboro" RowHeaderWidth="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>

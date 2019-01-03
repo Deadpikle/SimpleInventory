@@ -23,35 +23,33 @@
         <StackPanel Margin="15,0,0,0" Grid.Row="1" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Name" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="300" Text="{Binding Name}"/>
+                <TextBox Width="300" Text="{Binding Name}" VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Description" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="300" Text="{Binding Description}"/>
+                <TextBox Width="300" Text="{Binding Description}" VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="200" Text="{Binding Quantity}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Purchase Cost" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding Cost}"/>
-                <Label Content="Purchase Cost Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
+                <Label Content="Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="150" Text="{Binding Cost}" VerticalContentAlignment="Center" FontSize="14"/>
+                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedCostCurrencyIndex}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding NameWithSymbol}"/>
+                            <Label Content="{Binding NameWithSymbol}" FontSize="14"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Profit / Item" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding ProfitPerItem}"/>
-                <Label Content="Profit / Item Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedProfitCurrencyIndex}">
+                <TextBox Width="150" Text="{Binding ProfitPerItem}" VerticalContentAlignment="Center" FontSize="14"/>
+                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
+                          SelectedIndex="{Binding SelectedProfitCurrencyIndex}" FontSize="14">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding NameWithSymbol}"/>
@@ -61,7 +59,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="250" Text="{Binding BarcodeNumber}"/>
+                <TextBox Width="250" Text="{Binding BarcodeNumber}" VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
                 Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveItem}"/>
