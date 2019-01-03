@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
@@ -188,41 +189,58 @@ namespace SimpleInventory.ViewModels
 
         private void CreateOrSaveItem()
         {
-            // validate
-            // create/save
             var item = _currentItemBeingEdited != null ? _currentItemBeingEdited : new InventoryItem();
-            item.Name = Name;
-            item.Description = Description;
-            decimal cost = 0m;
-            bool didParse = Decimal.TryParse(Cost, out cost);
-            item.Cost = didParse ? cost : 0m;
-            item.CostCurrency = _currencies[_selectedCostCurrencyIndex];
-
-            decimal profit = 0m;
-            didParse = Decimal.TryParse(ProfitPerItem, out profit);
-            item.ProfitPerItem = didParse ? profit : 0m;
-            item.ProfitPerItemCurrency = _currencies[_selectedProfitCurrencyIndex];
-
-            item.BarcodeNumber = BarcodeNumber;
-            item.PicturePath = "";
-            if (_isCreating) // any further adjustments have to be made via the adjust quantity screen
+            // validate
+            bool didValidate = true;
+            string errorMessage = "";
+            if (!string.IsNullOrWhiteSpace(BarcodeNumber))
             {
-                item.Quantity = Quantity;
+                var loadedItem = InventoryItem.LoadItemByBarcode(BarcodeNumber);
+                if (loadedItem != null && (_isCreating || (!_isCreating && _inventoryItemID != loadedItem.ID)))
+                {
+                    didValidate = false;
+                    errorMessage = "Barcode already exists for item named " + loadedItem.Name;
+                }
             }
-            var userID = CurrentUser != null ? CurrentUser.ID : 1;
-            if (_isCreating)
+            if (didValidate)
             {
-                item.CreateNewItem(userID);
-                QuantityAdjustment.UpdateQuantity(Quantity, item.ID, userID);
-                _createdItemListener?.CreatedInventoryItem(item);
+                // create/save
+                item.Name = Name;
+                item.Description = Description;
+                decimal cost = 0m;
+                bool didParse = Decimal.TryParse(Cost, out cost);
+                item.Cost = didParse ? cost : 0m;
+                item.CostCurrency = _currencies[_selectedCostCurrencyIndex];
 
+                decimal profit = 0m;
+                didParse = Decimal.TryParse(ProfitPerItem, out profit);
+                item.ProfitPerItem = didParse ? profit : 0m;
+                item.ProfitPerItemCurrency = _currencies[_selectedProfitCurrencyIndex];
+
+                item.BarcodeNumber = BarcodeNumber;
+                item.PicturePath = "";
+                if (_isCreating) // any further adjustments have to be made via the adjust quantity screen
+                {
+                    item.Quantity = Quantity;
+                }
+                var userID = CurrentUser != null ? CurrentUser.ID : 1;
+                if (_isCreating)
+                {
+                    item.CreateNewItem(userID);
+                    QuantityAdjustment.UpdateQuantity(Quantity, item.ID, userID);
+                    _createdItemListener?.CreatedInventoryItem(item);
+                }
+                else
+                {
+                    item.ID = _inventoryItemID;
+                    item.SaveItemUpdates(userID);
+                }
+                PopViewModel();
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                item.ID = _inventoryItemID;
-                item.SaveItemUpdates(userID);
+                MessageBox.Show(errorMessage, "Error!", MessageBoxButton.OK);
             }
-            PopViewModel();
         }
     }
 }
