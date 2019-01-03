@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
@@ -26,7 +27,8 @@
                FontSize="16"/>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,5,0,5">
             <Label Content="Quantity" Margin="10,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-            <TextBox Width="300" Text="{Binding Quantity}" VerticalContentAlignment="Center" FontSize="14"/>
+            <mahapps:NumericUpDown Width="300" Value="{Binding Quantity}" VerticalContentAlignment="Center" FontSize="14"
+                                   TextAlignment="Left"/>
         </StackPanel>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                 Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" 

@@ -27,9 +27,13 @@
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
                   SelectionUnit="FullRow" SelectedIndex="{Binding SelectedIndex}" SelectedItem="{Binding SelectedItem}"
                   SelectionMode="Single" GridLinesVisibility="All" 
-                  AlternatingRowBackground="{StaticResource GrayBrush10}"
                   RowHeaderWidth="0" Background="LightGray" BorderBrush="Gray" BorderThickness="1"
                   ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+            <DataGrid.Style>
+                <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
+                    <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                </Style>
+            </DataGrid.Style>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>

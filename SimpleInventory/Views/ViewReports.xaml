@@ -43,10 +43,15 @@
             </DatePicker>
             <DataGrid Grid.Row="1" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      AlternatingRowBackground="Gainsboro" RowHeaderWidth="0"
+                      RowHeaderWidth="0"
                       d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
                       Background="LightGray" BorderBrush="Gray" BorderThickness="1"
                   ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                <DataGrid.Style>
+                    <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                    </Style>
+                </DataGrid.Style>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
                     <DataGridTextColumn Header="Quantity Purchased" Binding="{Binding QuantityPurchased}"/>
