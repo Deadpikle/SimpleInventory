@@ -3,29 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SimpleInventory"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
+             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:views="clr-namespace:SimpleInventory.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemViewModel}">
-            <views:CreateOrEditItem/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:ManageItemsViewModel}">
-            <views:ManageItems/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:HomeScreenViewModel}">
-            <views:HomeScreen/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:ScanItemsViewModel}">
-            <views:ScanItems/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:GenerateBarcodesViewModel}">
-            <views:GenerateBarcodes/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:AdjustQuantityViewModel}">
-            <views:AdjustQuantity/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:ViewReportsViewModel}">
-            <views:ViewReports/>
-        </DataTemplate>
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemViewModel}">
+                <views:CreateOrEditItem/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ManageItemsViewModel}">
+                <views:ManageItems/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:HomeScreenViewModel}">
+                <views:HomeScreen/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ScanItemsViewModel}">
+                <views:ScanItems/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:GenerateBarcodesViewModel}">
+                <views:GenerateBarcodes/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:AdjustQuantityViewModel}">
+                <views:AdjustQuantity/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ViewReportsViewModel}">
+                <views:ViewReports/>
+            </DataTemplate>
+            <Style TargetType="{x:Type mahapps:WindowButtonCommands}" BasedOn="{StaticResource MahApps.Metro.Styles.WindowButtonCommands.Win10}" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
