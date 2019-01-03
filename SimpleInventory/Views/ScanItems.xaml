@@ -30,7 +30,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
-               Content="Use the barcode scanner or enter in the barcode number manually and click 'Mark Item Purchased'" 
+               Content="Use the barcode scanner or enter in the barcode number manually and click 'Purchase Item'" 
                FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
