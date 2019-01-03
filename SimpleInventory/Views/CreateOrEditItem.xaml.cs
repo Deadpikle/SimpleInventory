@@ -23,6 +23,13 @@ namespace SimpleInventory.Views
         public CreateOrEditItem()
         {
             InitializeComponent();
+            Loaded += CreateOrEditItem_Loaded;
+        }
+
+        private void CreateOrEditItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(NameTextBox);
+            Loaded -= CreateOrEditItem_Loaded;
         }
     }
 }

@@ -24,6 +24,13 @@ namespace SimpleInventory.Views
         public ScanItems()
         {
             InitializeComponent();
+            Loaded += ScanItems_Loaded;
+        }
+
+        private void ScanItems_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(BarcodeTextBox);
+            Loaded -= ScanItems_Loaded;
         }
 
         private void BarcodeScanTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -33,7 +40,6 @@ namespace SimpleInventory.Views
                 (DataContext as ScanItemsViewModel)?.MarkItemPurchased.Execute(null);
             }
         }
-
 
         private void CancelPurchase_Click(object sender, RoutedEventArgs e)
         {
