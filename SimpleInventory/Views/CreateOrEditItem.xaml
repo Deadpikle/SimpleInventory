@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SimpleInventory.Views"
+             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CreateOrEditItemViewModel}}"
@@ -32,7 +33,8 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding Quantity}" TabIndex="2"/>
+                <TextBox Width="200" Text="{Binding Quantity}" TabIndex="2" mahapps:TextBoxHelper.Watermark="500"
+                         VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>

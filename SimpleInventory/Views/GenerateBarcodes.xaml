@@ -19,7 +19,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToMainMenu}"/>
+                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding GoToMainMenu}"/>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Generate Barcodes" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <StackPanel Grid.Row="1" Margin="0,10,0,0">
@@ -29,7 +29,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Paper Size" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <ComboBox Width="100" ItemsSource="{Binding PaperSizes}" IsEditable="False"
+                <ComboBox Width="125" ItemsSource="{Binding PaperSizes}" IsEditable="False"
                           SelectedIndex="{Binding PaperSizeSelectedIndex}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -40,7 +40,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Barcode Type" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <ComboBox Width="100" ItemsSource="{Binding BarcodeTypes}" IsEditable="False"
+                <ComboBox Width="125" ItemsSource="{Binding BarcodeTypes}" IsEditable="False"
                           SelectedIndex="{Binding BarcodeTypeSelectedIndex}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -53,7 +53,7 @@
                 <Span FontWeight="Bold" FontSize="16">Outputs <Run Text="{Binding NumberOfBarcodesOutput}"/> barcodes</Span>
             </TextBlock>
             <Button HorizontalAlignment="Center" 
-                    Content="Generate Barcode PDF" Margin="5,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GenerateBarcodes}"/>
+                    Content="Generate Barcode PDF" Margin="5,5,5,5" Padding="10" Height="40" Command="{Binding GenerateBarcodes}"/>
         </StackPanel>
     </Grid>
 </UserControl>

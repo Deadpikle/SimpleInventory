@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:models="clr-namespace:SimpleInventory.Models"
+             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToMainMenu}"/>
+                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding GoToMainMenu}"/>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Reports" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Grid Grid.Row="1">
@@ -24,7 +25,22 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <DatePicker Grid.Row="0" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                        SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <TextBox x:Name="PART_TextBox"
+                                             Style="{StaticResource MetroTextBox}"
+                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                             RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
             <DataGrid Grid.Row="1" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
                       AlternatingRowBackground="Gainsboro" RowHeaderWidth="0"
