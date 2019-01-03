@@ -23,12 +23,14 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <DatePicker Grid.Row="0" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="100" HorizontalAlignment="Left"  VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged}"/>
+            <DatePicker Grid.Row="0" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
+                        SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
             <DataGrid Grid.Row="1" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
                       AlternatingRowBackground="Gainsboro" RowHeaderWidth="0"
-                      d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}">
+                      d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
+                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
+                  ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
                     <DataGridTextColumn Header="Quantity Purchased" Binding="{Binding QuantityPurchased}"/>
