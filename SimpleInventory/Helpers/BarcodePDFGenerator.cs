@@ -107,7 +107,7 @@ namespace SimpleInventory.Helpers
                         XUnit xCoord = XUnit.FromInch(1);
                         while (!isWidthFull)
                         {
-                            var image = barcodeCreator.Encode(BarcodeType, barcodeToUse.ToString());
+                            var image = barcodeCreator.Encode(BarcodeType, barcodeToUse.ToString(), 300, 150);
                             if (image != null)
                             {
                                 XImage pdfImage = XImage.FromBitmapSource(ConvertImageToBitmapImage(image));
