@@ -234,54 +234,57 @@ namespace SimpleInventory.ViewModels
 
         private void ItemWasPurchased()
         {
-            var item = InventoryItem.LoadItemByBarcode(BarcodeNumber);
-            if (item != null)
+            if (!string.IsNullOrWhiteSpace(BarcodeNumber))
             {
-                if (item.Quantity <= 0)
+                var item = InventoryItem.LoadItemByBarcode(BarcodeNumber);
+                if (item != null)
                 {
-                    ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
-                    ItemPurchaseStatusMessage = "There are no remaining items to purchase for this barcode!";
-                    PurchaseInfoIsVisible = false;
+                    if (item.Quantity <= 0)
+                    {
+                        ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
+                        ItemPurchaseStatusMessage = "There are no remaining items to purchase for this barcode!";
+                        PurchaseInfoIsVisible = false;
+                    }
+                    else
+                    {
+                        _hasPaidAmountChangedForCurrentItem = false;
+                        ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
+                        ItemPurchaseStatusMessage = "Item successfully found and purchased!";
+                        PurchasedItem = item;
+                        // create purchase data object and save to the db
+                        var purchaseData = new ItemSoldInfo();
+                        purchaseData.DateTimeSold = DateTime.Now;
+                        DateTimePurchased = purchaseData.DateTimeSold.ToString("dddd, d MMMM 'at' h:mm tt");
+                        purchaseData.InventoryItemID = item.ID;
+                        purchaseData.QuantitySold = 1;
+                        var userID = CurrentUser != null ? CurrentUser.ID : 1;
+                        purchaseData.SoldByUserID = userID;
+                        purchaseData.Cost = item.Cost;
+                        purchaseData.CostCurrency = item.CostCurrency;
+                        purchaseData.Paid = item.Cost; // default the amount the user paid to the exact cost
+                        purchaseData.PaidCurrency = item.CostCurrency;
+                        purchaseData.Change = 0; // by default, no change
+                        purchaseData.ChangeCurrency = item.CostCurrency;
+                        purchaseData.ProfitPerItem = item.ProfitPerItem;
+                        purchaseData.ProfitPerItemCurrency = item.ProfitPerItemCurrency;
+                        purchaseData.CreateNewSoldInfo();
+                        PurchaseInfo = purchaseData;
+                        // decrease quantity by 1
+                        item.AdjustQuantityByAmount(-1);
+                        // show info to the user for possible future editing
+                        ChangeNeeded = "0"; // TODO: update if paid updated -- might want to bind to a different property for set {} updates
+                        SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
+                        SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
+                        Quantity = 1;
+                        PurchaseInfoIsVisible = true;
+                    }
                 }
                 else
                 {
-                    _hasPaidAmountChangedForCurrentItem = false;
-                    ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
-                    ItemPurchaseStatusMessage = "Item successfully found and purchased!";
-                    PurchasedItem = item;
-                    // create purchase data object and save to the db
-                    var purchaseData = new ItemSoldInfo();
-                    purchaseData.DateTimeSold = DateTime.Now;
-                    DateTimePurchased = purchaseData.DateTimeSold.ToString("dddd, d MMMM 'at' h:mm tt");
-                    purchaseData.InventoryItemID = item.ID;
-                    purchaseData.QuantitySold = 1;
-                    var userID = CurrentUser != null ? CurrentUser.ID : 1;
-                    purchaseData.SoldByUserID = userID;
-                    purchaseData.Cost = item.Cost;
-                    purchaseData.CostCurrency = item.CostCurrency;
-                    purchaseData.Paid = item.Cost; // default the amount the user paid to the exact cost
-                    purchaseData.PaidCurrency = item.CostCurrency;
-                    purchaseData.Change = 0; // by default, no change
-                    purchaseData.ChangeCurrency = item.CostCurrency;
-                    purchaseData.ProfitPerItem = item.ProfitPerItem;
-                    purchaseData.ProfitPerItemCurrency = item.ProfitPerItemCurrency;
-                    purchaseData.CreateNewSoldInfo();
-                    PurchaseInfo = purchaseData;
-                    // decrease quantity by 1
-                    item.AdjustQuantityByAmount(-1);
-                    // show info to the user for possible future editing
-                    ChangeNeeded = "0"; // TODO: update if paid updated -- might want to bind to a different property for set {} updates
-                    SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
-                    SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
-                    Quantity = 1;
-                    PurchaseInfoIsVisible = true;
+                    ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
+                    ItemPurchaseStatusMessage = "Item not found!";
+                    PurchaseInfoIsVisible = false;
                 }
-            }
-            else
-            {
-                ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
-                ItemPurchaseStatusMessage = "Item not found!";
-                PurchaseInfoIsVisible = false;
             }
             BarcodeNumber = ""; // empty the field so that something can be scanned again
         }
