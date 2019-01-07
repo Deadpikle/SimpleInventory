@@ -248,7 +248,7 @@ namespace SimpleInventory.Models
                             {
                                 if (reader.HasRows && reader.Read())
                                 {
-                                    quantity += reader.GetInt32(0); // initial version is 0
+                                    quantity += reader.GetInt32(0);
                                 }
                                 reader.Close(); // have to close it now otherwise we can't execute commands
                             }
@@ -260,7 +260,7 @@ namespace SimpleInventory.Models
                             {
                                 if (reader.HasRows && reader.Read())
                                 {
-                                    quantity -= reader.GetInt32(0); // initial version is 0
+                                    quantity -= reader.GetInt32(0);
                                 }
                                 reader.Close(); // have to close it now otherwise we can't execute commands
                             }
@@ -270,6 +270,7 @@ namespace SimpleInventory.Models
                     conn.Close();
                 }
             }
+            items.Sort((left, right) => left.Name.CompareTo(right.Name));
             return items;
         }
     }
