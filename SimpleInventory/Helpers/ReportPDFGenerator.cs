@@ -22,10 +22,20 @@ namespace SimpleInventory.Helpers
             XUnit yCoord = margin;
             XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
             var titleWord = sales.IsDailyReport() ? "Daily" : "Weekly";
-            gfx.DrawString(titleWord + " Inventory Report", font, XBrushes.Black,
+            gfx.DrawString(titleWord + " Inventory Sold Report", font, XBrushes.Black,
                 new XRect(0, yCoord, page.Width, page.Height), XStringFormats.TopCenter);
-            gfx.DrawString(sales.GetDate().ToString("d MMMM, yyyy"), font, XBrushes.Black,
-                new XRect(0, yCoord + XUnit.FromInch(0.4), page.Width, page.Height), XStringFormats.TopCenter);
+            if (sales.IsDailyReport())
+            {
+                gfx.DrawString(sales.GetDate().ToString("d MMMM, yyyy"), font, XBrushes.Black,
+                    new XRect(0, yCoord + XUnit.FromInch(0.4), page.Width, page.Height), XStringFormats.TopCenter);
+            }
+            else
+            {
+                XFont smallerTitleFont = new XFont("Verdana", 16, XFontStyle.Bold);
+                gfx.DrawString(sales.GetDate().ToString("d MMMM, yyyy") + " - " +  sales.GetDate().AddDays(6).ToString("d MMMM, yyyy"), 
+                    smallerTitleFont, XBrushes.Black,
+                    new XRect(0, yCoord + XUnit.FromInch(0.4), page.Width, page.Height), XStringFormats.TopCenter);
+            }
         }
 
         private void DrawHeaders(XUnit yCoord, XUnit margin, XGraphics gfx)
@@ -51,7 +61,7 @@ namespace SimpleInventory.Helpers
         {
             PdfDocument document = new PdfDocument();
             var titleWord = sales.IsDailyReport() ? "Daily" : "Weekly";
-            document.Info.Title = titleWord + " Inventory Report -- " + sales.GetDate().ToString("yyyy-MM-dd");
+            document.Info.Title = titleWord + " Inventory Sold Report -- " + sales.GetDate().ToString("yyyy-MM-dd");
 
             PdfPage page = document.AddPage();
             page.Size = PdfSharp.PageSize.A4;
