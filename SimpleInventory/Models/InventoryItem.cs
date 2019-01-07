@@ -211,5 +211,10 @@ namespace SimpleInventory.Models
                 }
             }
         }
+
+        public static List<InventoryItem> GetStockByEndOfDate(DateTime date)
+        {
+            return new List<InventoryItem>();
+        }
     }
 }

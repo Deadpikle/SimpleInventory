@@ -15,13 +15,17 @@ namespace SimpleInventory.ViewModels
     {
         private DateTime _selectedDailyReportDate;
         private DateTime _selectedWeeklyReportDate;
+        private DateTime _selectedInventoryStockDate;
         private DaySales _currentDaySalesReport;
         private WeekSales _currentWeeklySalesReport;
+
+        private List<InventoryItem> _inventoryStockReport;
 
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             SelectedDailyReportDate = DateTime.Now;
             SelectedWeeklyReportDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
+            SelectedInventoryStockDate = DateTime.Now;
         }
 
         public DateTime SelectedDailyReportDate
@@ -36,6 +40,12 @@ namespace SimpleInventory.ViewModels
             set { _selectedWeeklyReportDate = value; NotifyPropertyChanged(); RunWeeklyReport(); }
         }
 
+        public DateTime SelectedInventoryStockDate
+        {
+            get { return _selectedInventoryStockDate; }
+            set { _selectedInventoryStockDate = value; NotifyPropertyChanged(); RunStockReport(); }
+        }
+
         public DaySales CurrentDaySalesReport
         {
             get { return _currentDaySalesReport; }
@@ -46,6 +56,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _currentWeeklySalesReport; }
             set { _currentWeeklySalesReport = value; NotifyPropertyChanged(); }
+        }
+
+        public List<InventoryItem> InventoryStockReport
+        {
+            get { return _inventoryStockReport; }
+            set { _inventoryStockReport = value; NotifyPropertyChanged(); }
         }
 
         public ICommand GoToMainMenu
@@ -108,6 +124,11 @@ namespace SimpleInventory.ViewModels
                 //generator.NumberOfPages = NumberOfPages;
                 generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
             }
+        }
+
+        private void RunStockReport()
+        {
+            InventoryStockReport = InventoryItem.GetStockByEndOfDate(SelectedInventoryStockDate);
         }
     }
 }
