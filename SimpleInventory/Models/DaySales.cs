@@ -65,6 +65,7 @@ namespace SimpleInventory.Models
                 if (!itemIDToReportSold.ContainsKey(singleItemInfo.InventoryItemID))
                 {
                     ReportItemSold itemSold = new ReportItemSold();
+                    itemSold.InventoryItemID = singleItemInfo.InventoryItemID;
                     itemSold.Name = singleItemInfo.ItemName;
                     itemSold.QuantityPurchased = 0;
                     itemSold.CostPerItem = singleItemInfo.Cost; // TODO: should be handled as an average!

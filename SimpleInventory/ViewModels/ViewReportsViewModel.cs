@@ -16,6 +16,7 @@ namespace SimpleInventory.ViewModels
         private DateTime _selectedDailyReportDate;
         private DateTime _selectedWeeklyReportDate;
         private DaySales _currentDaySalesReport;
+        private WeekSales _currentWeeklySalesReport;
 
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
@@ -32,13 +33,19 @@ namespace SimpleInventory.ViewModels
         public DateTime SelectedWeeklyReportDate
         {
             get { return _selectedWeeklyReportDate; }
-            set { _selectedWeeklyReportDate = value; NotifyPropertyChanged(); /* RunDayReport(); */ }
+            set { _selectedWeeklyReportDate = value; NotifyPropertyChanged(); RunWeeklyReport(); }
         }
 
         public DaySales CurrentDaySalesReport
         {
             get { return _currentDaySalesReport; }
             set { _currentDaySalesReport = value; NotifyPropertyChanged(); }
+        }
+
+        public WeekSales CurrentWeeklySalesReport
+        {
+            get { return _currentWeeklySalesReport; }
+            set { _currentWeeklySalesReport = value; NotifyPropertyChanged(); }
         }
 
         public ICommand GoToMainMenu
@@ -74,6 +81,32 @@ namespace SimpleInventory.ViewModels
                 //generator.BarcodeType = GetBarcodeType();
                 //generator.NumberOfPages = NumberOfPages;
                 generator.GeneratePDF(CurrentDaySalesReport, saveFileDialog.FileName);
+            }
+        }
+
+        private void RunWeeklyReport()
+        {
+            CurrentWeeklySalesReport = WeekSales.GenerateDataForWeek(SelectedWeeklyReportDate);
+        }
+
+        public ICommand SaveWeeklyReportToPDF
+        {
+            get { return new RelayCommand(CreateAndSaveWeeklyReport); }
+        }
+
+        private void CreateAndSaveWeeklyReport()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            saveFileDialog.FileName = "Weekly-Inventory-Report-" + SelectedWeeklyReportDate.ToString("yyyy-MM-dd");
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var generator = new DayReportPDFGenerator();
+                //generator.PageSize = GetPaperSize();
+                //generator.BarcodeType = GetBarcodeType();
+                //generator.NumberOfPages = NumberOfPages;
+               // generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
             }
         }
     }

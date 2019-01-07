@@ -133,6 +133,7 @@
     <Compile Include="Models\QuantityAdjustment.cs" />
     <Compile Include="Models\ReportItemSold.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\WeekSales.cs" />
     <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
