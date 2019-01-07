@@ -67,7 +67,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Save Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveDayReportToPDF}"/>
+                    Content="Save Daily Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="200" Command="{Binding SaveDayReportToPDF}"/>
 
             <Label Grid.Row="0" Grid.Column="1" Content="Weekly Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
             <DatePicker Grid.Row="1" Grid.Column="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
@@ -108,7 +108,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Save Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveWeeklyReportToPDF}"/>
+                    Content="Save Weekly Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using SimpleInventory.Helpers;
+using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SimpleInventory.Models
 {
-    class WeekSales
+    class WeekSales : IItemsSoldReportData
     {
         public List<DaySales> AllDaySales { get; set; }
         public DateTime Date { get; set; }
@@ -108,5 +109,39 @@ namespace SimpleInventory.Models
             }
             return weekSales;
         }
+
+        #region IItemsSoldReportData
+
+        public DateTime GetDate()
+        {
+            return Date;
+        }
+
+        public List<ReportItemSold> GetItemsSold()
+        {
+            return AllItemsSold;
+        }
+
+        public string GetTotalIncomeWithCurrency()
+        {
+            return TotalIncomeWithCurrency;
+        }
+
+        public int GetTotalItemsSold()
+        {
+            return TotalItemsSold;
+        }
+
+        public string GetTotalProfitWithCurrency()
+        {
+            return TotalProfitWithCurrency;
+        }
+
+        public bool IsDailyReport()
+        {
+            return false;
+        }
+
+        #endregion
     }
 }

@@ -11,18 +11,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using SimpleInventory.Models;
+using SimpleInventory.Interfaces;
 
 namespace SimpleInventory.Helpers
 {
-    class DayReportPDFGenerator
+    class ReportPDFGenerator
     {
-        private void AddTitle(DaySales sales, XUnit margin, PdfPage page, XGraphics gfx)
+        private void AddTitle(IItemsSoldReportData sales, XUnit margin, PdfPage page, XGraphics gfx)
         {
             XUnit yCoord = margin;
             XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
-            gfx.DrawString("Daily Inventory Report", font, XBrushes.Black,
+            var titleWord = sales.IsDailyReport() ? "Daily" : "Weekly";
+            gfx.DrawString(titleWord + " Inventory Report", font, XBrushes.Black,
                 new XRect(0, yCoord, page.Width, page.Height), XStringFormats.TopCenter);
-            gfx.DrawString(sales.Date.ToString("d MMMM, yyyy"), font, XBrushes.Black,
+            gfx.DrawString(sales.GetDate().ToString("d MMMM, yyyy"), font, XBrushes.Black,
                 new XRect(0, yCoord + XUnit.FromInch(0.4), page.Width, page.Height), XStringFormats.TopCenter);
         }
 
@@ -45,10 +47,11 @@ namespace SimpleInventory.Helpers
             gfx.DrawString("-" + number.ToString() + "-", headerFont, XBrushes.Black, new XRect(0, page.Height - margin, page.Width, margin), XStringFormats.Center);
         }
 
-        public void GeneratePDF(DaySales sales, string outputPath)
+        public void GeneratePDF(IItemsSoldReportData sales, string outputPath)
         {
             PdfDocument document = new PdfDocument();
-            document.Info.Title = "Daily Inventory Report -- " + sales.Date.ToString("yyyy-MM-dd");
+            var titleWord = sales.IsDailyReport() ? "Daily" : "Weekly";
+            document.Info.Title = titleWord + " Inventory Report -- " + sales.GetDate().ToString("yyyy-MM-dd");
 
             PdfPage page = document.AddPage();
             page.Size = PdfSharp.PageSize.A4;
@@ -69,7 +72,7 @@ namespace SimpleInventory.Helpers
 
             //for (int i = 0; i < 40; i++) // for creating lots of PDF dummy data
             //{
-                foreach (ReportItemSold itemSold in sales.ItemsSold)
+                foreach (ReportItemSold itemSold in sales.GetItemsSold())
                 {
                     if (yCoord + XUnit.FromInch(0.4) >= page.Height - margin)
                     {
@@ -117,13 +120,13 @@ namespace SimpleInventory.Helpers
             xCoord = margin;
             gfx.DrawString("TOTAL", totalFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
             xCoord += XUnit.FromInch(2.5);
-            gfx.DrawString(sales.TotalItemsSold.ToString(), totalDataFont, XBrushes.Black,
+            gfx.DrawString(sales.GetTotalItemsSold().ToString(), totalDataFont, XBrushes.Black,
                         new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
             xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.TotalIncomeWithCurrency, totalDataFont, XBrushes.Black,
+            gfx.DrawString(sales.GetTotalIncomeWithCurrency(), totalDataFont, XBrushes.Black,
                         new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
             xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.TotalProfitWithCurrency, totalDataFont, XBrushes.Black,
+            gfx.DrawString(sales.GetTotalProfitWithCurrency(), totalDataFont, XBrushes.Black,
                         new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
 
 

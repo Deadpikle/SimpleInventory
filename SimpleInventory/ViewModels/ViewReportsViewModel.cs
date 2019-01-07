@@ -76,7 +76,7 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedDailyReportDate.ToString("yyyy-MM-dd");
             if (saveFileDialog.ShowDialog() == true)
             {
-                var generator = new DayReportPDFGenerator();
+                var generator = new ReportPDFGenerator();
                 //generator.PageSize = GetPaperSize();
                 //generator.BarcodeType = GetBarcodeType();
                 //generator.NumberOfPages = NumberOfPages;
@@ -102,11 +102,11 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.FileName = "Weekly-Inventory-Report-" + SelectedWeeklyReportDate.ToString("yyyy-MM-dd");
             if (saveFileDialog.ShowDialog() == true)
             {
-                var generator = new DayReportPDFGenerator();
+                var generator = new ReportPDFGenerator();
                 //generator.PageSize = GetPaperSize();
                 //generator.BarcodeType = GetBarcodeType();
                 //generator.NumberOfPages = NumberOfPages;
-               // generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
+                generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
             }
         }
     }
