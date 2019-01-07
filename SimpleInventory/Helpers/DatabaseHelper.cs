@@ -97,7 +97,6 @@ namespace SimpleInventory.Helpers
                 if (reader.Read())
                 {
                     var userVersion = reader.GetInt32(0); // initial version is 0
-                    var space = command.Connection.FileName;
                     reader.Close(); // have to close it now otherwise we can't execute commands
                     switch (userVersion + 1)
                     {

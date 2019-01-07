@@ -214,7 +214,63 @@ namespace SimpleInventory.Models
 
         public static List<InventoryItem> GetStockByEndOfDate(DateTime date)
         {
-            return new List<InventoryItem>();
+            // this function is terribly unoptimized. There's probably some smart-o
+            // way we can do this all in one query. TODO: optimize GetStockByEndOfDate
+            var items = LoadItems();
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    var dateForQuery = date.AddDays(1).Date;
+                    // current quantity will be the sum of QuantityAdjustments and ItemsSoldInfo for the given
+                    // inventory item ID by the end of the given date
+                    command.CommandText = "" +
+                        "SELECT IFNULL(SUM(qa.AmountChanged), 0) " +
+                        "FROM QuantityAdjustments qa " +
+                        "WHERE qa.InventoryItemID = @itemID AND qa.DateTimeChanged < @date";
+
+                    using (var secondSumCommand = dbHelper.GetSQLiteCommand(conn))
+                    {
+                        secondSumCommand.CommandText = "" +
+                            "SELECT IFNULL(SUM(isi.QuantitySold), 0) " +
+                            "FROM ItemsSoldInfo isi " +
+                            "WHERE isi.InventoryItemID = @itemID AND isi.DateTimeSold < @date";
+
+                        foreach (InventoryItem item in items)
+                        {
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@itemID", item.ID);
+                            command.Parameters.AddWithValue("@date", dateForQuery.ToString(Utilities.DateTimeToStringFormat()));
+
+                            int quantity = 0;
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.HasRows && reader.Read())
+                                {
+                                    quantity += reader.GetInt32(0); // initial version is 0
+                                }
+                                reader.Close(); // have to close it now otherwise we can't execute commands
+                            }
+
+                            secondSumCommand.Parameters.Clear();
+                            secondSumCommand.Parameters.AddWithValue("@itemID", item.ID);
+                            secondSumCommand.Parameters.AddWithValue("@date", dateForQuery.ToString(Utilities.DateTimeToStringFormat()));
+                            using (var reader = secondSumCommand.ExecuteReader())
+                            {
+                                if (reader.HasRows && reader.Read())
+                                {
+                                    quantity -= reader.GetInt32(0); // initial version is 0
+                                }
+                                reader.Close(); // have to close it now otherwise we can't execute commands
+                            }
+                            item.Quantity = quantity;
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            return items;
         }
     }
 }
