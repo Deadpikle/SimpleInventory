@@ -91,7 +91,7 @@
 
             <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CurrentWeeklySalesReport.AllItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      RowHeaderWidth="0"
+                      RowHeaderWidth="0" x:Name="WeeklyReportDataGrid"
                       d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
                       Background="LightGray" BorderBrush="Gray" BorderThickness="1"
                   ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">

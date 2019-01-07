@@ -122,6 +122,8 @@ namespace SimpleInventory.Models
                     }
                 }
             }
+            // need to sort allItemsSoldData by name :)
+            allItemsSoldReports.Sort((left, right) => left.Name.CompareTo(right.Name));
             return weekSales;
         }
 
