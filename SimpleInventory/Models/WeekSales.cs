@@ -69,8 +69,23 @@ namespace SimpleInventory.Models
             {
                 DaySales sales = DaySales.GenerateDataForSingleDay(date.AddDays(i));
                 weekSales.AllDaySales.Add(sales);
-                weekSales.TotalIncome += sales.TotalIncome; // TODO: CONCERN THYSELF WITH CURRENCIES!
-                weekSales.TotalProfit += sales.TotalProfit; // TODO: CONCERN THYSELF WITH CURRENCIES!
+                if (weekSales.Currency.ID == sales.Currency.ID)
+                {
+                    weekSales.TotalIncome += sales.TotalIncome;
+                }
+                else
+                {
+                    weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                }
+
+                if (weekSales.Currency.ID == sales.Currency.ID)
+                {
+                    weekSales.TotalProfit += sales.TotalProfit;
+                }
+                else
+                {
+                    weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
+                }
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
             }
