@@ -13,18 +13,26 @@ namespace SimpleInventory.ViewModels
 {
     class ViewReportsViewModel : BaseViewModel
     {
-        private DateTime _selectedReportDate;
+        private DateTime _selectedDailyReportDate;
+        private DateTime _selectedWeeklyReportDate;
         private DaySales _currentDaySalesReport;
 
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
-            SelectedReportDate = DateTime.Now;
+            SelectedDailyReportDate = DateTime.Now;
+            SelectedWeeklyReportDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
         }
 
-        public DateTime SelectedReportDate
+        public DateTime SelectedDailyReportDate
         {
-            get { return _selectedReportDate; }
-            set { _selectedReportDate = value; NotifyPropertyChanged(); RunDayReport(); }
+            get { return _selectedDailyReportDate; }
+            set { _selectedDailyReportDate = value; NotifyPropertyChanged(); RunDayReport(); }
+        }
+
+        public DateTime SelectedWeeklyReportDate
+        {
+            get { return _selectedWeeklyReportDate; }
+            set { _selectedWeeklyReportDate = value; NotifyPropertyChanged(); /* RunDayReport(); */ }
         }
 
         public DaySales CurrentDaySalesReport
@@ -45,7 +53,7 @@ namespace SimpleInventory.ViewModels
 
         private void RunDayReport()
         {
-            CurrentDaySalesReport = DaySales.GenerateDataForSingleDay(SelectedReportDate);
+            CurrentDaySalesReport = DaySales.GenerateDataForSingleDay(SelectedDailyReportDate);
         }
 
         public ICommand SaveDayReportToPDF
@@ -58,7 +66,7 @@ namespace SimpleInventory.ViewModels
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedReportDate.ToString("yyyy-MM-dd");
+            saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedDailyReportDate.ToString("yyyy-MM-dd");
             if (saveFileDialog.ShowDialog() == true)
             {
                 var generator = new DayReportPDFGenerator();

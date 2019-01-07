@@ -21,11 +21,18 @@
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <DatePicker Grid.Row="0" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Content="Daily Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+            <DatePicker Grid.Row="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
+                        SelectedDate="{Binding SelectedDailyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
+                        Name="DailyReportDatePicker">
                 <DatePicker.Resources>
                     <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
                         <Setter Property="Control.Template">
@@ -41,7 +48,7 @@
                     </Style>
                 </DatePicker.Resources>
             </DatePicker>
-            <DataGrid Grid.Row="1" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
+            <DataGrid Grid.Row="2" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
                       RowHeaderWidth="0"
                       d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
@@ -59,7 +66,48 @@
                     <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                    Content="Save Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveDayReportToPDF}"/>
+
+            <Label Grid.Row="0" Grid.Column="1" Content="Weekly Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+            <DatePicker Grid.Row="1" Grid.Column="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Top"
+                        SelectedDate="{Binding SelectedWeeklyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
+                        Name="WeeklyReportDatePicker">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <TextBox x:Name="PART_TextBox"
+                                             Style="{StaticResource MetroTextBox}"
+                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                             RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
+
+            <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
+                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
+                      RowHeaderWidth="0"
+                      d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
+                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
+                  ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                <DataGrid.Style>
+                    <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                    </Style>
+                </DataGrid.Style>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
+                    <DataGridTextColumn Header="Quantity Purchased" Binding="{Binding QuantityPurchased}"/>
+                    <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
+                    <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
                     Content="Save Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveDayReportToPDF}"/>
         </Grid>
     </Grid>

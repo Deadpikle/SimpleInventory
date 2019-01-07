@@ -119,6 +119,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\BarcodePDFGenerator.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
+    <Compile Include="Helpers\DateTimeExtensions.cs" />
     <Compile Include="Helpers\DayReportPDFGenerator.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Utilities.cs" />

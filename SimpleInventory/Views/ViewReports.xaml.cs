@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,31 @@ namespace SimpleInventory.Views
         public ViewReports()
         {
             InitializeComponent();
+
+            WeeklyReportDatePicker.Loaded += WeeklyReportDatePicker_Loaded;
+        }
+
+        private void WeeklyReportDatePicker_Loaded(object sender, RoutedEventArgs e)
+        {
+            WeeklyReportDatePicker.Loaded -= WeeklyReportDatePicker_Loaded;
+            // add blackout dates for all days but first day of week: https://stackoverflow.com/a/15341837/3938401
+            // unfortunately blackout dates aren't bindable :(
+            int years = 10;
+            WeeklyReportDatePicker.IsTodayHighlighted = false;
+            var currentSunday = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
+            // X years ahead...
+            for (int weeks = 0; weeks < (52 * years); weeks++)
+            {
+                WeeklyReportDatePicker.BlackoutDates.Add(new CalendarDateRange(currentSunday.AddDays(1), currentSunday.AddDays(6)));
+                currentSunday = currentSunday.AddDays(7);
+            }
+            currentSunday = DateTime.Now.StartOfWeek(DayOfWeek.Sunday).AddDays(-7);
+            // X years behind...
+            for (int weeks = 0; weeks < (52 * years); weeks++)
+            {
+                WeeklyReportDatePicker.BlackoutDates.Add(new CalendarDateRange(currentSunday.AddDays(1), currentSunday.AddDays(6)));
+                currentSunday = currentSunday.AddDays(-7);
+            }
         }
     }
 }
