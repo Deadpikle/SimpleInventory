@@ -152,6 +152,82 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 3:
+                            // add ItemTypes table
+                            command.CommandText = "PRAGMA foreign_keys = 0";
+                            command.ExecuteNonQuery();
+                            command.CommandText = "BEGIN TRANSACTION;";
+                            command.ExecuteNonQuery();
+                            string addItemTypesTable = "" +
+                                "CREATE TABLE ItemTypes (" +
+                                "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                "Name TEXT," +
+                                "Description TEXT)";
+                            command.CommandText = addItemTypesTable;
+                            command.ExecuteNonQuery();
+                            string addInitialItemTypes = "" +
+                                "INSERT INTO ItemTypes (Name, Description) VALUES (\"School supplies\", \"Pencils, pens, etc.\")";
+                            command.CommandText = addInitialItemTypes;
+                            command.ExecuteNonQuery();
+                            addInitialItemTypes = "" +
+                                "INSERT INTO ItemTypes (Name, Description) VALUES (\"Drinks\", \"Water, milk, etc.\")";
+                            command.CommandText = addInitialItemTypes;
+                            command.ExecuteNonQuery();
+                            addInitialItemTypes = "" +
+                                "INSERT INTO ItemTypes (Name, Description) VALUES (\"Meal tickets\", \"Tickets for student meals\")";
+                            command.CommandText = addInitialItemTypes;
+                            command.ExecuteNonQuery();
+                            // Ugh, to change IsDrink to ItemTypeID with a FK, we have to recreate
+                            // the entire table. :( :( :( 
+                            // to do so, we create a new table, copy over the data, drop the old table,
+                            // and rename the new table to the new table
+                            string recreateInventoryItemTable = "CREATE TABLE New_InventoryItems (" +
+                                "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                "Name TEXT," +
+                                "Description TEXT," +
+                                "PicturePath TEXT," +
+                                "Cost TEXT," +
+                                "CostCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                                "ProfitPerItem TEXT," +
+                                "ProfitPerItemCurrencyID INTEGER REFERENCES Currencies(ID)," +
+                                "Quantity INTEGER," +
+                                "BarcodeNumber TEXT," +
+                                "WasDeleted INTEGER DEFAULT 0," +
+                                "CreatedByUserID INTEGER REFERENCES Users(ID)," +
+                                "ItemTypeID INTEGER REFERENCES ItemTypes(ID))";
+                            command.CommandText = recreateInventoryItemTable;
+                            command.ExecuteNonQuery();
+                            string moveInventoryData = "" +
+                                "INSERT INTO New_InventoryItems (Name, Description, PicturePath, " +
+                                "Cost, CostCurrencyID, ProfitPerItem, ProfitPerItemCurrencyID," +
+                                "Quantity, BarcodeNumber, WasDeleted, CreatedByUserID, ItemTypeID) " +
+                                "SELECT Name, Description, PicturePath, " +
+                                "Cost, CostCurrencyID, ProfitPerItem, ProfitPerItemCurrencyID," +
+                                "Quantity, BarcodeNumber, WasDeleted, CreatedByUserID, 1 " +
+                                "FROM InventoryItems " +
+                                "ORDER BY ID;";
+                            command.CommandText = moveInventoryData;
+                            command.ExecuteNonQuery();
+                            string removeOldTable = "" +
+                                "DROP TABLE InventoryItems;";
+                            command.CommandText = removeOldTable;
+                            command.ExecuteNonQuery();
+                            string renameNewTable = "" +
+                                "ALTER TABLE New_InventoryItems RENAME TO InventoryItems;";
+                            command.CommandText = renameNewTable;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 3;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            command.CommandText = "COMMIT TRANSACTION;";
+                            command.ExecuteNonQuery();
+                            command.CommandText = "PRAGMA foreign_keys = 1";
+                            command.ExecuteNonQuery();
+                            // cleanup
+                            command.CommandText = "VACUUM;";
+                            command.ExecuteNonQuery();
+                            break;
                     }
                 }
                 else
