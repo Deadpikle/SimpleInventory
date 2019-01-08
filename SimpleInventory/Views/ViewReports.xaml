@@ -19,7 +19,7 @@
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Reports" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TabControl Grid.Row="1" mahapps:TabControlHelper.IsUnderlined="True" mahapps:TabControlHelper.Underlined="SelectedTabItem">
-            <TabItem Header="Items Sold Reports">
+            <TabItem Header="Daily Report">
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -30,7 +30,6 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Content="Daily Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
@@ -79,9 +78,23 @@
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentDaySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left"  
+                    <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"  
                     Content="Save Daily Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="200" Command="{Binding SaveDayReportToPDF}"/>
-
+                </Grid>
+            </TabItem>
+            <TabItem Header="Weekly Report">
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="1" Content="Weekly Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     <DatePicker Grid.Row="1" Grid.Column="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center"  VerticalAlignment="Top"
                         SelectedDate="{Binding SelectedWeeklyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
@@ -129,11 +142,11 @@
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentWeeklySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                     Content="Save Weekly Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Inventory Stock Reports">
+            <TabItem Header="Inventory Stock Report">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
