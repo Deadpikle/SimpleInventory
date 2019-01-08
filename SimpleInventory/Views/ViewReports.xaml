@@ -74,8 +74,8 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncome, Mode=OneWay}" />  |  </Span>
-                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfit, Mode=OneWay}" /></Span>
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                                 </TextBlock>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -144,8 +144,8 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncome, Mode=OneWay}" />  |  </Span>
-                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfit, Mode=OneWay}" /></Span>
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                                 </TextBlock>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
