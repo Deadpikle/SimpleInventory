@@ -64,10 +64,20 @@ namespace SimpleInventory.Helpers
             return reader.IsDBNull(ordinal) ? false : reader.GetBoolean(ordinal);
         }
 
+        public bool ReadBool(SQLiteDataReader reader, int columnNumber)
+        {
+            return reader.IsDBNull(columnNumber) ? false : reader.GetBoolean(columnNumber);
+        }
+
         public int ReadInt(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
             return reader.IsDBNull(ordinal) ? 0 : reader.GetInt32(ordinal);
+        }
+
+        public int ReadInt(SQLiteDataReader reader, int columnNumber)
+        {
+            return reader.IsDBNull(columnNumber) ? 0 : reader.GetInt32(columnNumber);
         }
 
         public long ReadLong(SQLiteDataReader reader, string columnName)
@@ -76,16 +86,31 @@ namespace SimpleInventory.Helpers
             return reader.IsDBNull(ordinal) ? 0 : reader.GetInt64(ordinal);
         }
 
+        public long ReadLong(SQLiteDataReader reader, int columnNumber)
+        {
+            return reader.IsDBNull(columnNumber) ? 0 : reader.GetInt64(columnNumber);
+        }
+
         public string ReadString(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
             return reader.IsDBNull(ordinal) ? "" : reader.GetString(ordinal);
         }
 
+        public string ReadString(SQLiteDataReader reader, int columnNumber)
+        {
+            return reader.IsDBNull(columnNumber) ? "" : reader.GetString(columnNumber);
+        }
+
         public decimal ReadDecimal(SQLiteDataReader reader, string columnName)
         {
             int ordinal = reader.GetOrdinal(columnName);
             return reader.IsDBNull(ordinal) ? 0m : reader.GetDecimal(ordinal);
+        }
+
+        public decimal ReadDecimal(SQLiteDataReader reader, int columnNumber)
+        {
+            return reader.IsDBNull(columnNumber) ? 0m : reader.GetDecimal(columnNumber);
         }
 
         private void PerformMigrationsAsNecessary(SQLiteCommand command)

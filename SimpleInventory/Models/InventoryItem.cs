@@ -253,7 +253,7 @@ namespace SimpleInventory.Models
                             {
                                 if (reader.HasRows && reader.Read())
                                 {
-                                    quantity += reader.GetInt32(0);
+                                    quantity += dbHelper.ReadInt(reader, 0);
                                 }
                                 reader.Close(); // have to close it now otherwise we can't execute commands
                             }
@@ -265,7 +265,7 @@ namespace SimpleInventory.Models
                             {
                                 if (reader.HasRows && reader.Read())
                                 {
-                                    quantity -= reader.GetInt32(0);
+                                    quantity -= dbHelper.ReadInt(reader, 0);
                                 }
                                 reader.Close(); // have to close it now otherwise we can't execute commands
                             }
