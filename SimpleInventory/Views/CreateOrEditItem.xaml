@@ -37,8 +37,15 @@
                          VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Drink?" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding IsDrink}"/>
+                <Label Content="Item Category" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding ItemTypes}" d:DataContext="{d:DesignInstance Type={x:Type models:ItemType}}" IsEditable="False"
+                          SelectedIndex="{Binding SelectedItemTypeIndex}" IsTabStop="False" Width="200">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Name}" FontSize="14"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>

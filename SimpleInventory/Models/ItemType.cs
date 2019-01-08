@@ -13,12 +13,29 @@ namespace SimpleInventory.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsDefault { get; set; }
+
+        public ItemType()
+        {
+            ID = 0;
+            Name = "";
+            Description = "";
+            IsDefault = false;
+        }
+
+        public ItemType(int id, string name, string description, bool isDefault)
+        {
+            ID = id;
+            Name = name;
+            Description = description;
+            IsDefault = isDefault;
+        }
 
         public static List<ItemType> LoadItemTypes(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var items = new List<ItemType>();
             string query = "" +
-                "SELECT ID, Name, Description " +
+                "SELECT ID, Name, Description, IsDefault " +
                 "FROM ItemTypes " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
                 "ORDER BY Name, Description";
@@ -44,6 +61,7 @@ namespace SimpleInventory.Models
                             itemType.ID = dbHelper.ReadInt(reader, "ID");
                             itemType.Name = dbHelper.ReadString(reader, "Name");
                             itemType.Description = dbHelper.ReadString(reader, "Description");
+                            itemType.IsDefault = dbHelper.ReadBool(reader, "IsDefault");
                             items.Add(itemType);
                         }
                         reader.Close();

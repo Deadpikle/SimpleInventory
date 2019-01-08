@@ -131,6 +131,7 @@
     <Compile Include="Models\GeneratedBarcode.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\ItemSoldInfo.cs" />
+    <Compile Include="Models\ItemType.cs" />
     <Compile Include="Models\QuantityAdjustment.cs" />
     <Compile Include="Models\ReportItemSold.cs" />
     <Compile Include="Models\User.cs" />

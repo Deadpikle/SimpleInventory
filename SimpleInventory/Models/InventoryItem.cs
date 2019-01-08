@@ -15,7 +15,7 @@ namespace SimpleInventory.Models
         public string Description { get; set; }
         public string PicturePath { get; set; }
         public int CreatedByUserID { get; set; }
-        public bool IsDrink { get; set; }
+        public ItemType Type { get; set; }
 
         public decimal Cost { get; set; }
         public Currency CostCurrency { get; set; }
@@ -55,11 +55,15 @@ namespace SimpleInventory.Models
         {
             var items = new List<InventoryItem>();
             string query = "" +
-                "SELECT ii.ID, ii.Name, Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
-                "       ProfitPerItem, ProfitPerItemCurrencyID, IsDrink " +
-                "FROM InventoryItems ii LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
+                "SELECT ii.ID, ii.Name, ii.Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
+                "       ProfitPerItem, ProfitPerItemCurrencyID, " +
+                "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
+                "       it.IsDefault AS ItemTypeIsDefault " +
+                "FROM InventoryItems ii " +
+                "   LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
+                "   LEFT JOIN ItemTypes it ON ii.ItemTypeID = it.ID" +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY ii.Name, Cost, Description";
+                "ORDER BY ii.Name, Cost, ii.Description";
             var currencies = Currency.GetKeyValueCurrencyList();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
@@ -92,7 +96,11 @@ namespace SimpleInventory.Models
                             item.Quantity = dbHelper.ReadInt(reader, "Quantity");
                             item.BarcodeNumber = dbHelper.ReadString(reader, "BarcodeNumber");
                             item.CreatedByUserID = dbHelper.ReadInt(reader, "CreatedByUserID");
-                            item.IsDrink = dbHelper.ReadBool(reader, "IsDrink");
+                            item.Type = new ItemType(
+                                dbHelper.ReadInt(reader, "ItemTypeID"),
+                                dbHelper.ReadString(reader, "ItemTypeName"),
+                                dbHelper.ReadString(reader, "ItemTypeDescription"),
+                                dbHelper.ReadBool(reader, "ItemTypeIsDefault"));
                             items.Add(item);
                         }
                         reader.Close();
@@ -130,9 +138,9 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     string query = "INSERT INTO InventoryItems (Name, Description, PicturePath, Cost, " +
-                        "CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID, ProfitPerItem, ProfitPerItemCurrencyID, IsDrink) VALUES " +
+                        "CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID, ProfitPerItem, ProfitPerItemCurrencyID, ItemTypeID) VALUES " +
                         "(@name, @description, @picturePath, @cost, @costCurrencyID, @quantity, @barcodeNumber, @createdByUserID," +
-                        " @profitPerItem, @profitPerItemCurrencyID, @isDrink)";
+                        " @profitPerItem, @profitPerItemCurrencyID, @itemTypeID)";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@name", Name);
                     command.Parameters.AddWithValue("@description", Description);
@@ -144,7 +152,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@createdByUserID", userID);
                     command.Parameters.AddWithValue("@profitPerItem", ProfitPerItem.ToString());
                     command.Parameters.AddWithValue("@profitPerItemCurrencyID", ProfitPerItemCurrency?.ID);
-                    command.Parameters.AddWithValue("@isDrink", IsDrink);
+                    command.Parameters.AddWithValue("@itemTypeID", Type?.ID);
                     command.ExecuteNonQuery();
                     ID = (int)conn.LastInsertRowId;
                     conn.Close();
@@ -162,7 +170,7 @@ namespace SimpleInventory.Models
                     string query = "UPDATE InventoryItems SET Name = @name, Description = @description, PicturePath = @picturePath, " +
                         "Cost = @cost, CostCurrencyID = @costCurrencyID, BarcodeNumber = @barcodeNumber, " +
                         "CreatedByUserID = @createdByUserID, ProfitPerItem = @profitPerItem, ProfitPerItemCurrencyID = @profitPerItemCurrencyID, " +
-                        "IsDrink = @isDrink " +
+                        "ItemTypeID = @itemTypeID " +
                         " WHERE ID = @id";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@name", Name);
@@ -174,7 +182,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@createdByUserID", userID);
                     command.Parameters.AddWithValue("@profitPerItem", ProfitPerItem.ToString());
                     command.Parameters.AddWithValue("@profitPerItemCurrencyID", ProfitPerItemCurrency?.ID);
-                    command.Parameters.AddWithValue("@isDrink", IsDrink);
+                    command.Parameters.AddWithValue("@itemTypeID", Type?.ID);
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
                     conn.Close();
