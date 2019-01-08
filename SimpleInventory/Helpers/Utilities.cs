@@ -17,7 +17,7 @@ namespace SimpleInventory.Helpers
 
         public static string DateTimeToStringFormat()
         {
-            return "yyyy-MM-dd H:mm:ss"; // 24 hr time (0-23)
+            return "yyyy-MM-dd HH:mm:ss"; // 24 hr time (0-23)
         }
 
         public static string DateTimeToDateOnlyStringFormat()
