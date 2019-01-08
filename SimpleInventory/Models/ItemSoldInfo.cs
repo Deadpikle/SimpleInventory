@@ -25,6 +25,7 @@ namespace SimpleInventory.Models
         public Currency ChangeCurrency { get; set; }
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
+        public bool IsDrink { get; set; }
 
         public string ItemName { get; set; }
 
@@ -39,7 +40,7 @@ namespace SimpleInventory.Models
                 {
                     string query = "" +
                         "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
-                        "   isi.InventoryItemID, isi.SoldByUserID, i.Name, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID " +
+                        "   isi.InventoryItemID, isi.SoldByUserID, i.Name, i.IsDrink, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
                         "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' " +
                         "ORDER BY Name";
@@ -52,6 +53,7 @@ namespace SimpleInventory.Models
                             var item = new ItemSoldInfo();
                             item.ID = dbHelper.ReadInt(reader, "ID");
                             item.ItemName = dbHelper.ReadString(reader, "Name");
+                            item.IsDrink = dbHelper.ReadBool(reader, "IsDrink");
                             item.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
                             item.SoldByUserID = dbHelper.ReadInt(reader, "SoldByUserID");
                             string dateTimeSold = dbHelper.ReadString(reader, "DateTimeSold");

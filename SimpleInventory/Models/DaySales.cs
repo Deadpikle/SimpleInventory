@@ -12,6 +12,8 @@ namespace SimpleInventory.Models
     {
         public List<ReportItemSold> ItemsSold { get; set; }
         public DateTime Date { get; set; }
+        public decimal TotalDrinkIncome { get; set; }
+        public decimal TotalDrinkProfit { get; set; }
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
@@ -41,12 +43,38 @@ namespace SimpleInventory.Models
             }
         }
 
+        public string TotalDrinkIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalDrinkIncome.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalDrinkIncome.ToString();
+            }
+        }
+
+        public string TotalDrinkProfitWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalDrinkProfit.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalDrinkProfit.ToString();
+            }
+        }
+
         public static DaySales GenerateDataForSingleDay(DateTime date)
         {
             var totalDaySaleInfo = new DaySales();
             totalDaySaleInfo.Date = date;
             totalDaySaleInfo.TotalIncome = 0;
             totalDaySaleInfo.TotalProfit = 0;
+            totalDaySaleInfo.TotalDrinkIncome = 0;
+            totalDaySaleInfo.TotalDrinkProfit = 0;
             totalDaySaleInfo.ItemsSold = new List<ReportItemSold>();
             totalDaySaleInfo.TotalItemsSold = 0;
             var currencies = Currency.LoadCurrencies();
@@ -67,6 +95,7 @@ namespace SimpleInventory.Models
                 {
                     ReportItemSold itemSold = new ReportItemSold();
                     itemSold.InventoryItemID = singleItemInfo.InventoryItemID;
+                    itemSold.IsDrink = singleItemInfo.IsDrink;
                     itemSold.Name = singleItemInfo.ItemName;
                     itemSold.QuantityPurchased = 0;
                     itemSold.CostPerItem = singleItemInfo.Cost; // TODO: should be handled as an average!
@@ -103,20 +132,38 @@ namespace SimpleInventory.Models
                 if (totalDaySaleInfo.Currency.ID == singleItemInfo.CostCurrency.ID)
                 {
                     totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                    if (singleItemInfo.IsDrink)
+                    {
+                        totalDaySaleInfo.TotalDrinkIncome += singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                    }
                 }
                 else
                 {
                     totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold *
                         Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                    if (singleItemInfo.IsDrink)
+                    {
+                        totalDaySaleInfo.TotalDrinkIncome += singleItemInfo.QuantitySold *
+                            Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                    }
                 }
                 if (totalDaySaleInfo.Currency.ID == singleItemInfo.ProfitPerItemCurrency.ID)
                 {
                     totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                    if (singleItemInfo.IsDrink)
+                    {
+                        totalDaySaleInfo.TotalDrinkProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                    }
                 }
                 else
                 {
                     totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold *
                         Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, totalDaySaleInfo.Currency);
+                    if (singleItemInfo.IsDrink)
+                    {
+                        totalDaySaleInfo.TotalDrinkProfit += singleItemInfo.QuantitySold *
+                            Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, totalDaySaleInfo.Currency);
+                    }
                 }
             }
             return totalDaySaleInfo;
@@ -152,6 +199,16 @@ namespace SimpleInventory.Models
         public bool IsDailyReport()
         {
             return true;
+        }
+
+        public string GetTotalDrinkIncomeWithCurrency()
+        {
+            return TotalDrinkIncomeWithCurrency;
+        }
+
+        public string GetTotalDrinkProfitWithCurrency()
+        {
+            return TotalDrinkProfitWithCurrency;
         }
 
         #endregion

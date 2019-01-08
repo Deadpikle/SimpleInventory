@@ -15,5 +15,7 @@ namespace SimpleInventory.Interfaces
         int GetTotalItemsSold();
         string GetTotalIncomeWithCurrency();
         string GetTotalProfitWithCurrency();
+        string GetTotalDrinkIncomeWithCurrency();
+        string GetTotalDrinkProfitWithCurrency();
     }
 }

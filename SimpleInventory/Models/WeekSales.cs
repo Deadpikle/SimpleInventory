@@ -12,6 +12,8 @@ namespace SimpleInventory.Models
     {
         public List<DaySales> AllDaySales { get; set; }
         public DateTime Date { get; set; }
+        public decimal TotalDrinkIncome { get; set; }
+        public decimal TotalDrinkProfit { get; set; }
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
@@ -40,6 +42,30 @@ namespace SimpleInventory.Models
                     return TotalProfit.ToString() + " (" + Currency?.Symbol + ")";
                 }
                 return TotalProfit.ToString();
+            }
+        }
+
+        public string TotalDrinkIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalDrinkIncome.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalDrinkIncome.ToString();
+            }
+        }
+
+        public string TotalDrinkProfitWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return TotalDrinkProfit.ToString() + " (" + Currency?.Symbol + ")";
+                }
+                return TotalDrinkProfit.ToString();
             }
         }
 
@@ -72,19 +98,23 @@ namespace SimpleInventory.Models
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {
                     weekSales.TotalIncome += sales.TotalIncome;
+                    weekSales.TotalDrinkIncome += sales.TotalDrinkIncome;
                 }
                 else
                 {
                     weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                    weekSales.TotalDrinkIncome += Utilities.ConvertAmount(sales.TotalDrinkIncome, sales.Currency, weekSales.Currency);
                 }
 
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {
                     weekSales.TotalProfit += sales.TotalProfit;
+                    weekSales.TotalDrinkProfit += sales.TotalDrinkIncome;
                 }
                 else
                 {
                     weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
+                    weekSales.TotalDrinkProfit += Utilities.ConvertAmount(sales.TotalDrinkProfit, sales.Currency, weekSales.Currency);
                 }
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
@@ -157,6 +187,16 @@ namespace SimpleInventory.Models
         public bool IsDailyReport()
         {
             return false;
+        }
+
+        public string GetTotalDrinkIncomeWithCurrency()
+        {
+            return TotalDrinkIncomeWithCurrency;
+        }
+
+        public string GetTotalDrinkProfitWithCurrency()
+        {
+            return TotalDrinkProfitWithCurrency;
         }
 
         #endregion
