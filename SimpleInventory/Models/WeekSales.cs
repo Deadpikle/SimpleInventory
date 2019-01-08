@@ -109,7 +109,7 @@ namespace SimpleInventory.Models
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {
                     weekSales.TotalProfit += sales.TotalProfit;
-                    weekSales.TotalDrinkProfit += sales.TotalDrinkIncome;
+                    weekSales.TotalDrinkProfit += sales.TotalDrinkProfit;
                 }
                 else
                 {
