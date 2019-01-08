@@ -17,12 +17,12 @@ namespace SimpleInventory.Helpers
 
         public static string DateTimeToStringFormat()
         {
-            return "yyyy-M-d H:mm:ss"; // 24 hr time (0-23)
+            return "yyyy-MM-dd H:mm:ss"; // 24 hr time (0-23)
         }
 
         public static string DateTimeToDateOnlyStringFormat()
         {
-            return "yyyy-M-d"; // 24 hr time (0-23)
+            return "yyyy-MM-dd"; // 24 hr time (0-23)
         }
 
         public static decimal ConvertAmount(decimal amount, Currency initialCurrency, Currency toCurrency)
