@@ -37,6 +37,10 @@
                          VerticalContentAlignment="Center" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Drink?" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding IsDrink}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="150" Text="{Binding Cost}" VerticalContentAlignment="Center" FontSize="14" TabIndex="3"/>
                 <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"

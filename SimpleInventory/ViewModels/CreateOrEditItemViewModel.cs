@@ -20,6 +20,7 @@ namespace SimpleInventory.ViewModels
         private string _description;
         private string _cost;
         private string _profitPerItem;
+        private bool _isDrink;
 
         private int _indexOfDefaultCurrency;
         private int _selectedCostCurrencyIndex;
@@ -45,6 +46,7 @@ namespace SimpleInventory.ViewModels
             ProfitPerItem = "0";
             Quantity = 0;
             BarcodeNumber = "";
+            IsDrink = false;
             _createdItemListener = createdItemListener;
         }
 
@@ -60,6 +62,7 @@ namespace SimpleInventory.ViewModels
             ProfitPerItem = item.ProfitPerItem.ToString();
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
+            IsDrink = item.IsDrink;
         }
 
         #region Properties
@@ -81,6 +84,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _description; }
             set { _description = value; NotifyPropertyChanged(); }
+        }
+
+        public bool IsDrink
+        {
+            get { return _isDrink; }
+            set { _isDrink = value; NotifyPropertyChanged(); }
         }
 
         public string Cost
@@ -207,6 +216,7 @@ namespace SimpleInventory.ViewModels
                 // create/save
                 item.Name = Name;
                 item.Description = Description;
+                item.IsDrink = IsDrink;
                 decimal cost = 0m;
                 bool didParse = Decimal.TryParse(Cost, out cost);
                 item.Cost = didParse ? cost : 0m;
