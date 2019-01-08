@@ -107,19 +107,19 @@ namespace SimpleInventory.Models
                     // need to add in the income and profit
                     if (weekSales.Currency.ID == sales.Currency.ID)
                     {
-                        moneyInfoToAdjust.TotalIncome += sales.TotalIncome;
+                        moneyInfoToAdjust.TotalIncome += moneyInfo.TotalIncome;
                     }
                     else
                     {
-                        moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                        moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(moneyInfo.TotalIncome, sales.Currency, weekSales.Currency);
                     }
                     if (weekSales.Currency.ID == sales.Currency.ID)
                     {
-                        moneyInfoToAdjust.TotalProfit += sales.TotalProfit;
+                        moneyInfoToAdjust.TotalProfit += moneyInfo.TotalProfit;
                     }
                     else
                     {
-                        moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
+                        moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(moneyInfo.TotalProfit, sales.Currency, weekSales.Currency);
                     }
                 }
             }

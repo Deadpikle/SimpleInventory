@@ -70,10 +70,16 @@
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                        <Span xml:space="preserve">Total drink income: <Run Text="{Binding CurrentDaySalesReport.TotalDrinkIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
-                        <Span>Total drink profit: <Run Text="{Binding CurrentDaySalesReport.TotalDrinkProfitWithCurrency, Mode=OneWay}" /></Span>
-                    </TextBlock>
+                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncome, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfit, Mode=OneWay}" /></Span>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <TextBlock Grid.Row="4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,5">
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentDaySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
@@ -134,10 +140,16 @@
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock Grid.Row="3" Grid.Column="1" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                        <Span xml:space="preserve">Total drink income: <Run Text="{Binding CurrentWeeklySalesReport.TotalDrinkIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
-                        <Span>Total drink profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalDrinkProfitWithCurrency, Mode=OneWay}" /></Span>
-                    </TextBlock>
+                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentWeeklySalesReport.ItemTypeMoneyBreakdown}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncome, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfit, Mode=OneWay}" /></Span>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <TextBlock Grid.Row="4" Grid.Column="1" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,5">
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentWeeklySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
