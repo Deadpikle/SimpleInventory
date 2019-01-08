@@ -228,6 +228,21 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "VACUUM;";
                             command.ExecuteNonQuery();
                             break;
+                        case 4:
+                            // add IsDefault column to ItemTypes
+                            string addIsDefaultColumn = "" +
+                                "ALTER TABLE ItemTypes " +
+                                "ADD COLUMN IsDefault INTEGER DEFAULT 0;";
+                            command.CommandText = addIsDefaultColumn;
+                            command.ExecuteNonQuery();
+                            // set default item type to school supplies
+                            command.CommandText = " UPDATE ItemTypes SET IsDefault = 1 WHERE ID = 1";
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 4;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else
