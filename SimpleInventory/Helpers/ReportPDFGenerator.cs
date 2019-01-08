@@ -133,13 +133,13 @@ namespace SimpleInventory.Helpers
                 xCoord = margin;
                 gfx.DrawString(moneyInfo.Type.Name + " total", totalCategoryFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
                 xCoord += XUnit.FromInch(2.5);
-                gfx.DrawString(sales.GetTotalItemsSold().ToString(), totalCategoryDataFont, XBrushes.Black,
+                gfx.DrawString(moneyInfo.TotalItemsSold.ToString(), totalCategoryDataFont, XBrushes.Black,
                             new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
                 xCoord += XUnit.FromInch(1.5);
-                gfx.DrawString(moneyInfo.TotalIncome.ToString(), totalCategoryDataFont, XBrushes.Black,
+                gfx.DrawString(moneyInfo.TotalIncomeWithCurrency.ToString(), totalCategoryDataFont, XBrushes.Black,
                             new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
                 xCoord += XUnit.FromInch(1.5);
-                gfx.DrawString(moneyInfo.TotalProfit.ToString(), totalCategoryDataFont, XBrushes.Black,
+                gfx.DrawString(moneyInfo.TotalProfitWithCurrency.ToString(), totalCategoryDataFont, XBrushes.Black,
                             new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
             }
             // print totals

@@ -116,12 +116,13 @@ namespace SimpleInventory.Models
                     if (!totalDaySaleInfo.ItemTypeIDToMoneyInfo.ContainsKey(singleItemInfo.ItemType.ID))
                     {
                         var itemTypeMoneyInfo = new ItemTypeMoneyInfo(singleItemInfo.ItemType);
+                        itemTypeMoneyInfo.Currency = totalDaySaleInfo.Currency;
                         totalDaySaleInfo.ItemTypeIDToMoneyInfo[singleItemInfo.ItemType.ID] = itemTypeMoneyInfo;
                         totalDaySaleInfo.ItemTypeMoneyBreakdown.Add(itemTypeMoneyInfo);
                     }
                     moneyInfo = totalDaySaleInfo.ItemTypeIDToMoneyInfo[singleItemInfo.ItemType.ID];
                 }
-
+                moneyInfo.TotalItemsSold += singleItemInfo.QuantitySold;
                 if (totalDaySaleInfo.Currency.ID == singleItemInfo.CostCurrency.ID)
                 {
                     var amountIncrease = singleItemInfo.QuantitySold * singleItemInfo.Cost;

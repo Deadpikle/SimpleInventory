@@ -100,10 +100,12 @@ namespace SimpleInventory.Models
                     if (!weekSales.ItemTypeIDToMoneyInfo.ContainsKey(moneyInfo.Type.ID))
                     {
                         var createdMoneyInfo = new ItemTypeMoneyInfo(moneyInfo.Type);
+                        createdMoneyInfo.Currency = weekSales.Currency;
                         weekSales.ItemTypeIDToMoneyInfo[moneyInfo.Type.ID] = createdMoneyInfo;
                         weekSales.ItemTypeMoneyBreakdown.Add(createdMoneyInfo);
                     }
                     var moneyInfoToAdjust = weekSales.ItemTypeIDToMoneyInfo[moneyInfo.Type.ID];
+                    moneyInfoToAdjust.TotalItemsSold += moneyInfo.TotalItemsSold;
                     // need to add in the income and profit
                     if (weekSales.Currency.ID == sales.Currency.ID)
                     {
