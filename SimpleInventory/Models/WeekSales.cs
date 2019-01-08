@@ -12,14 +12,23 @@ namespace SimpleInventory.Models
     {
         public List<DaySales> AllDaySales { get; set; }
         public DateTime Date { get; set; }
-        public decimal TotalDrinkIncome { get; set; }
-        public decimal TotalDrinkProfit { get; set; }
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
 
         public List<ReportItemSold> AllItemsSold { get; private set; }
+
+        public List<ItemTypeMoneyInfo> ItemTypeMoneyBreakdown { get; set; }
+        public Dictionary<int, ItemTypeMoneyInfo> ItemTypeIDToMoneyInfo { get; private set; }
+
+        public WeekSales()
+        {
+            ItemTypeMoneyBreakdown = new List<ItemTypeMoneyInfo>();
+            ItemTypeIDToMoneyInfo = new Dictionary<int, ItemTypeMoneyInfo>();
+            AllDaySales = new List<DaySales>();
+            AllItemsSold = new List<ReportItemSold>();
+        }
 
         public string TotalIncomeWithCurrency
         {
@@ -45,36 +54,6 @@ namespace SimpleInventory.Models
             }
         }
 
-        public string TotalDrinkIncomeWithCurrency
-        {
-            get
-            {
-                if (Currency != null)
-                {
-                    return TotalDrinkIncome.ToString() + " (" + Currency?.Symbol + ")";
-                }
-                return TotalDrinkIncome.ToString();
-            }
-        }
-
-        public string TotalDrinkProfitWithCurrency
-        {
-            get
-            {
-                if (Currency != null)
-                {
-                    return TotalDrinkProfit.ToString() + " (" + Currency?.Symbol + ")";
-                }
-                return TotalDrinkProfit.ToString();
-            }
-        }
-
-        public WeekSales()
-        {
-            AllDaySales = new List<DaySales>();
-            AllItemsSold = new List<ReportItemSold>();
-        }
-
         public static WeekSales GenerateDataForWeek(DateTime date)
         {
             WeekSales weekSales = new WeekSales();
@@ -98,26 +77,51 @@ namespace SimpleInventory.Models
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {
                     weekSales.TotalIncome += sales.TotalIncome;
-                    weekSales.TotalDrinkIncome += sales.TotalDrinkIncome;
                 }
                 else
                 {
                     weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
-                    weekSales.TotalDrinkIncome += Utilities.ConvertAmount(sales.TotalDrinkIncome, sales.Currency, weekSales.Currency);
                 }
 
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {
                     weekSales.TotalProfit += sales.TotalProfit;
-                    weekSales.TotalDrinkProfit += sales.TotalDrinkProfit;
                 }
                 else
                 {
                     weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
-                    weekSales.TotalDrinkProfit += Utilities.ConvertAmount(sales.TotalDrinkProfit, sales.Currency, weekSales.Currency);
                 }
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
+                // must add up item type category incomes & profits now
+                foreach (ItemTypeMoneyInfo moneyInfo in sales.ItemTypeMoneyBreakdown)
+                {
+                    // if we don't have info on that item type already, create it
+                    if (!weekSales.ItemTypeIDToMoneyInfo.ContainsKey(moneyInfo.Type.ID))
+                    {
+                        var createdMoneyInfo = new ItemTypeMoneyInfo(moneyInfo.Type);
+                        weekSales.ItemTypeIDToMoneyInfo[moneyInfo.Type.ID] = createdMoneyInfo;
+                        weekSales.ItemTypeMoneyBreakdown.Add(createdMoneyInfo);
+                    }
+                    var moneyInfoToAdjust = weekSales.ItemTypeIDToMoneyInfo[moneyInfo.Type.ID];
+                    // need to add in the income and profit
+                    if (weekSales.Currency.ID == sales.Currency.ID)
+                    {
+                        moneyInfoToAdjust.TotalIncome += sales.TotalIncome;
+                    }
+                    else
+                    {
+                        moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                    }
+                    if (weekSales.Currency.ID == sales.Currency.ID)
+                    {
+                        moneyInfoToAdjust.TotalProfit += sales.TotalProfit;
+                    }
+                    else
+                    {
+                        moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
+                    }
+                }
             }
             // now we need to set up the AllItemsSold array
             var itemIDToReportSold = new Dictionary<int, ReportItemSold>();
@@ -152,8 +156,9 @@ namespace SimpleInventory.Models
                     }
                 }
             }
-            // need to sort allItemsSoldData by name :)
-            allItemsSoldReports.Sort((left, right) => left.Name.CompareTo(right.Name));
+            // sort final arrays for nice display
+            weekSales.AllItemsSold.Sort((left, right) => left.Name.CompareTo(right.Name));
+            weekSales.ItemTypeMoneyBreakdown.Sort((left, right) => left.Type.Name.CompareTo(right.Type.Name));
             return weekSales;
         }
 
@@ -189,14 +194,9 @@ namespace SimpleInventory.Models
             return false;
         }
 
-        public string GetTotalDrinkIncomeWithCurrency()
+        public List<ItemTypeMoneyInfo> GetItemTypeMoneyInfo()
         {
-            return TotalDrinkIncomeWithCurrency;
-        }
-
-        public string GetTotalDrinkProfitWithCurrency()
-        {
-            return TotalDrinkProfitWithCurrency;
+            return ItemTypeMoneyBreakdown;
         }
 
         #endregion

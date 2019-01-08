@@ -25,7 +25,7 @@ namespace SimpleInventory.Models
         public Currency ChangeCurrency { get; set; }
         public decimal ProfitPerItem { get; set; }
         public Currency ProfitPerItemCurrency { get; set; }
-        public bool IsDrink { get; set; }
+        public ItemType ItemType { get; set; }
 
         public string ItemName { get; set; }
 
@@ -40,10 +40,13 @@ namespace SimpleInventory.Models
                 {
                     string query = "" +
                         "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
-                        "   isi.InventoryItemID, isi.SoldByUserID, i.Name, i.IsDrink, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID " +
+                        "       isi.InventoryItemID, isi.SoldByUserID, i.Name, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID, " +
+                        "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
+                        "       it.IsDefault AS ItemTypeIsDefault " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
+                        "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
                         "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' " +
-                        "ORDER BY Name";
+                        "ORDER BY i.Name";
 
                     command.CommandText = query;
                     using (SQLiteDataReader reader = command.ExecuteReader())
@@ -53,7 +56,11 @@ namespace SimpleInventory.Models
                             var item = new ItemSoldInfo();
                             item.ID = dbHelper.ReadInt(reader, "ID");
                             item.ItemName = dbHelper.ReadString(reader, "Name");
-                            item.IsDrink = dbHelper.ReadBool(reader, "IsDrink");
+                            item.ItemType = new ItemType(
+                                dbHelper.ReadInt(reader, "ItemTypeID"),
+                                dbHelper.ReadString(reader, "ItemTypeName"),
+                                dbHelper.ReadString(reader, "ItemTypeDescription"),
+                                dbHelper.ReadBool(reader, "ItemTypeIsDefault"));
                             item.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
                             item.SoldByUserID = dbHelper.ReadInt(reader, "SoldByUserID");
                             string dateTimeSold = dbHelper.ReadString(reader, "DateTimeSold");

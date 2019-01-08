@@ -65,7 +65,7 @@
                         </DataGrid.Style>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
-                            <DataGridCheckBoxColumn Header="Drink?" Binding="{Binding IsDrink}"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding ItemType.Name}"/>
                             <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
                             <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
@@ -115,7 +115,7 @@
                         </DataGrid.Style>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
-                            <DataGridCheckBoxColumn Header="Drink?" Binding="{Binding IsDrink}"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding ItemType.Name}"/>
                             <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
                             <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>

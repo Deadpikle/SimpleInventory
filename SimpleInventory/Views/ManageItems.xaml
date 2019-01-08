@@ -37,7 +37,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type.Name}"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Type.Name}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Sale Price" Binding="{Binding CostWithCurrency}"/>
                 <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItemWithCurrency}"/>

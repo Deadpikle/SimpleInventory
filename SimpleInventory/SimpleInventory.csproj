@@ -129,6 +129,7 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DaySales.cs" />
     <Compile Include="Models\GeneratedBarcode.cs" />
+    <Compile Include="Models\ItemTypeMoneyInfo.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\ItemSoldInfo.cs" />
     <Compile Include="Models\ItemType.cs" />

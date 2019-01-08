@@ -12,12 +12,19 @@ namespace SimpleInventory.Models
     {
         public List<ReportItemSold> ItemsSold { get; set; }
         public DateTime Date { get; set; }
-        public decimal TotalDrinkIncome { get; set; }
-        public decimal TotalDrinkProfit { get; set; }
         public decimal TotalIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
+
+        public List<ItemTypeMoneyInfo> ItemTypeMoneyBreakdown { get; set; }
+        public Dictionary<int, ItemTypeMoneyInfo> ItemTypeIDToMoneyInfo { get; private set; }
+
+        public DaySales()
+        {
+            ItemTypeMoneyBreakdown = new List<ItemTypeMoneyInfo>();
+            ItemTypeIDToMoneyInfo = new Dictionary<int, ItemTypeMoneyInfo>();
+        }
 
         public string TotalIncomeWithCurrency
         {
@@ -43,38 +50,12 @@ namespace SimpleInventory.Models
             }
         }
 
-        public string TotalDrinkIncomeWithCurrency
-        {
-            get
-            {
-                if (Currency != null)
-                {
-                    return TotalDrinkIncome.ToString() + " (" + Currency?.Symbol + ")";
-                }
-                return TotalDrinkIncome.ToString();
-            }
-        }
-
-        public string TotalDrinkProfitWithCurrency
-        {
-            get
-            {
-                if (Currency != null)
-                {
-                    return TotalDrinkProfit.ToString() + " (" + Currency?.Symbol + ")";
-                }
-                return TotalDrinkProfit.ToString();
-            }
-        }
-
         public static DaySales GenerateDataForSingleDay(DateTime date)
         {
             var totalDaySaleInfo = new DaySales();
             totalDaySaleInfo.Date = date;
             totalDaySaleInfo.TotalIncome = 0;
             totalDaySaleInfo.TotalProfit = 0;
-            totalDaySaleInfo.TotalDrinkIncome = 0;
-            totalDaySaleInfo.TotalDrinkProfit = 0;
             totalDaySaleInfo.ItemsSold = new List<ReportItemSold>();
             totalDaySaleInfo.TotalItemsSold = 0;
             var currencies = Currency.LoadCurrencies();
@@ -95,7 +76,7 @@ namespace SimpleInventory.Models
                 {
                     ReportItemSold itemSold = new ReportItemSold();
                     itemSold.InventoryItemID = singleItemInfo.InventoryItemID;
-                    itemSold.IsDrink = singleItemInfo.IsDrink;
+                    itemSold.ItemType = singleItemInfo.ItemType;
                     itemSold.Name = singleItemInfo.ItemName;
                     itemSold.QuantityPurchased = 0;
                     itemSold.CostPerItem = singleItemInfo.Cost; // TODO: should be handled as an average!
@@ -128,44 +109,59 @@ namespace SimpleInventory.Models
                     itemSoldData.TotalProfit += singleItemInfo.QuantitySold * 
                         Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, itemSoldData.ProfitCurrency);
                 }
-                // now add to total income/profit
+                // now add to total income/profit after finding item type money info
+                ItemTypeMoneyInfo moneyInfo = null;
+                if (singleItemInfo.ItemType != null)
+                {
+                    if (!totalDaySaleInfo.ItemTypeIDToMoneyInfo.ContainsKey(singleItemInfo.ItemType.ID))
+                    {
+                        var itemTypeMoneyInfo = new ItemTypeMoneyInfo(singleItemInfo.ItemType);
+                        totalDaySaleInfo.ItemTypeIDToMoneyInfo[singleItemInfo.ItemType.ID] = itemTypeMoneyInfo;
+                        totalDaySaleInfo.ItemTypeMoneyBreakdown.Add(itemTypeMoneyInfo);
+                    }
+                    moneyInfo = totalDaySaleInfo.ItemTypeIDToMoneyInfo[singleItemInfo.ItemType.ID];
+                }
+
                 if (totalDaySaleInfo.Currency.ID == singleItemInfo.CostCurrency.ID)
                 {
-                    totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold * singleItemInfo.Cost;
-                    if (singleItemInfo.IsDrink)
+                    var amountIncrease = singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                    totalDaySaleInfo.TotalIncome += amountIncrease;
+                    if (moneyInfo != null)
                     {
-                        totalDaySaleInfo.TotalDrinkIncome += singleItemInfo.QuantitySold * singleItemInfo.Cost;
+                        moneyInfo.TotalIncome += amountIncrease;
                     }
                 }
                 else
                 {
-                    totalDaySaleInfo.TotalIncome += singleItemInfo.QuantitySold *
+                    var amountIncrease = singleItemInfo.QuantitySold *
                         Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
-                    if (singleItemInfo.IsDrink)
+                    totalDaySaleInfo.TotalIncome += amountIncrease;
+                    if (moneyInfo != null)
                     {
-                        totalDaySaleInfo.TotalDrinkIncome += singleItemInfo.QuantitySold *
-                            Utilities.ConvertAmount(singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                        moneyInfo.TotalIncome += amountIncrease;
                     }
                 }
                 if (totalDaySaleInfo.Currency.ID == singleItemInfo.ProfitPerItemCurrency.ID)
                 {
-                    totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
-                    if (singleItemInfo.IsDrink)
+                    var amountIncrease = singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                    totalDaySaleInfo.TotalProfit += amountIncrease;
+                    if (moneyInfo != null)
                     {
-                        totalDaySaleInfo.TotalDrinkProfit += singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem;
+                        moneyInfo.TotalProfit += amountIncrease;
                     }
                 }
                 else
                 {
-                    totalDaySaleInfo.TotalProfit += singleItemInfo.QuantitySold *
+                    var amountIncrease = singleItemInfo.QuantitySold *
                         Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, totalDaySaleInfo.Currency);
-                    if (singleItemInfo.IsDrink)
+                    totalDaySaleInfo.TotalProfit += amountIncrease;
+                    if (moneyInfo != null)
                     {
-                        totalDaySaleInfo.TotalDrinkProfit += singleItemInfo.QuantitySold *
-                            Utilities.ConvertAmount(singleItemInfo.ProfitPerItem, singleItemInfo.ProfitPerItemCurrency, totalDaySaleInfo.Currency);
+                        moneyInfo.TotalProfit += amountIncrease;
                     }
                 }
             }
+            totalDaySaleInfo.ItemsSold.Sort((left, right) => left.Name.CompareTo(right.Name));
             return totalDaySaleInfo;
         }
 
@@ -201,14 +197,9 @@ namespace SimpleInventory.Models
             return true;
         }
 
-        public string GetTotalDrinkIncomeWithCurrency()
+        public List<ItemTypeMoneyInfo> GetItemTypeMoneyInfo()
         {
-            return TotalDrinkIncomeWithCurrency;
-        }
-
-        public string GetTotalDrinkProfitWithCurrency()
-        {
-            return TotalDrinkProfitWithCurrency;
+            return ItemTypeMoneyBreakdown;
         }
 
         #endregion
