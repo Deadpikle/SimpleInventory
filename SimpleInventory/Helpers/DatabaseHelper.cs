@@ -114,17 +114,19 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 1;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            command.CommandText = "PRAGMA user_version";
-                            using (var reader2 = command.ExecuteReader())
-                            {
-                                if (reader2.Read())
-                                {
-                                    var userVersion2 = reader2.GetInt32(0); // initial version is 0
-                                    var a = userVersion;
-                                }
-                                reader2.Close();
-                            }
-                                    break;
+                            break;
+                        case 2:
+                            // add IsDrink column
+                            string addIsDrinkColumn = "" +
+                                "ALTER TABLE InventoryItems " +
+                                "ADD COLUMN IsDrink INTEGER DEFAULT 0;";
+                            command.CommandText = addIsDrinkColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 2;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else
