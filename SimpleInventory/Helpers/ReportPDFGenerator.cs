@@ -112,6 +112,36 @@ namespace SimpleInventory.Helpers
                     gfx.DrawLine(XPens.Black, margin, yCoord + yCoordForLine, page.Width - margin, yCoord + yCoordForLine);
                 }
             //}
+            // print category totals
+            var itemTypeMoneyInfoList = sales.GetItemTypeMoneyInfo();
+            foreach (var moneyInfo in itemTypeMoneyInfoList)
+            {
+                if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
+                {
+                    // GOTTA AADDDDDD A NEWWWW PAGEEE....
+                    page = document.AddPage();
+                    page.Size = PdfSharp.PageSize.A4;
+                    gfx = XGraphics.FromPdfPage(page);
+                    AddTitle(sales, margin, page, gfx);
+                    DrawPageNumber(++pageNumber, margin, page, gfx);
+                    yCoord = margin + XUnit.FromInch(1.3);
+                    DrawHeaders(yCoord, margin, gfx);
+                }
+                yCoord += XUnit.FromInch(0.5);
+                XFont totalCategoryFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
+                XFont totalCategoryDataFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
+                xCoord = margin;
+                gfx.DrawString(moneyInfo.Type.Name + " total", totalCategoryFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+                xCoord += XUnit.FromInch(2.5);
+                gfx.DrawString(sales.GetTotalItemsSold().ToString(), totalCategoryDataFont, XBrushes.Black,
+                            new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
+                xCoord += XUnit.FromInch(1.5);
+                gfx.DrawString(moneyInfo.TotalIncome.ToString(), totalCategoryDataFont, XBrushes.Black,
+                            new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
+                xCoord += XUnit.FromInch(1.5);
+                gfx.DrawString(moneyInfo.TotalProfit.ToString(), totalCategoryDataFont, XBrushes.Black,
+                            new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+            }
             // print totals
             if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
             {
