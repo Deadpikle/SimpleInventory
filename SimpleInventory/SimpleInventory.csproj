@@ -138,6 +138,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\WeekSales.cs" />
     <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
+    <Compile Include="ViewModels\CreateOrEditItemTypeViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChangeNotifier.cs" />
@@ -153,6 +154,9 @@
     </Compile>
     <Compile Include="Views\CreateOrEditItem.xaml.cs">
       <DependentUpon>CreateOrEditItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateOrEditItemType.xaml.cs">
+      <DependentUpon>CreateOrEditItemType.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GenerateBarcodes.xaml.cs">
       <DependentUpon>GenerateBarcodes.xaml</DependentUpon>
@@ -189,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CreateOrEditItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateOrEditItemType.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
