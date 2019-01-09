@@ -21,6 +21,7 @@ Feature set:
 * Ability to login/logout so the system tracks which users are doing (supported by the database but not by the UI)
 * More reporting capabilities
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
+* Use LINQ or similar to clean up the manual SQLite database calls
 
 ## Can I help contribute?
 
