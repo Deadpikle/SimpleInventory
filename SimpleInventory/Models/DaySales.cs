@@ -163,6 +163,7 @@ namespace SimpleInventory.Models
                 }
             }
             totalDaySaleInfo.ItemsSold.Sort((left, right) => left.Name.CompareTo(right.Name));
+            totalDaySaleInfo.ItemTypeMoneyBreakdown.Sort((left, right) => left.Type.Name.CompareTo(right.Type.Name));
             return totalDaySaleInfo;
         }
 
