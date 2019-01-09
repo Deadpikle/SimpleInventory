@@ -55,5 +55,15 @@ namespace SimpleInventory.ViewModels
         {
             PushViewModel(new ViewReportsViewModel(ViewModelChanger));
         }
+
+        public ICommand MoveToManageItemCategoriesScreen
+        {
+            get { return new RelayCommand(LoadViewItemTypesScreen); }
+        }
+
+        private void LoadViewItemTypesScreen()
+        {
+            PushViewModel(new ViewItemTypesViewModel(ViewModelChanger));
+        }
     }
 }

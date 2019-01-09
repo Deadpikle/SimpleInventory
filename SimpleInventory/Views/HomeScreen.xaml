@@ -19,6 +19,8 @@
             <Rectangle Fill="Gray" Width="300" Height="5" Margin="0 0 0 10"/>
             <Button Content="Generate Barcodes" Margin="0 0 0 10" Width="200" Command="{Binding MoveToGenerateBarcodesScreen}" FontSize="16"/>
             <Button Content="Reports" Width="200" Margin="0 0 0 10" Command="{Binding MoveToReportsScreen}" FontSize="16"/>
+            <Rectangle Fill="Gray" Width="300" Height="5" Margin="0 0 0 10"/>
+            <Button Content="Manage Item Categories" Margin="0 0 0 10" Width="200" Command="{Binding MoveToManageItemCategoriesScreen}" FontSize="16"/>
         </StackPanel>
     </Grid>
 </UserControl>
