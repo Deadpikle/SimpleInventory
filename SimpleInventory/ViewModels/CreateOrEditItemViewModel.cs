@@ -15,6 +15,7 @@ namespace SimpleInventory.ViewModels
     {
         private bool _isCreating;
         private int _inventoryItemID;
+        private string _screenTitle;
 
         private string _name;
         private string _description;
@@ -50,6 +51,7 @@ namespace SimpleInventory.ViewModels
             Quantity = 0;
             BarcodeNumber = "";
             _createdItemListener = createdItemListener;
+            ScreenTitle = "Add Item";
         }
 
         public CreateOrEditItemViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
@@ -67,11 +69,18 @@ namespace SimpleInventory.ViewModels
             ProfitPerItem = item.ProfitPerItem.ToString();
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
+            ScreenTitle = "Edit Item";
         }
 
         #region Properties
 
         public User CurrentUser { get; set; }
+
+        public string ScreenTitle
+        {
+            get { return _screenTitle; }
+            set { _screenTitle = value; }
+        }
 
         public List<Currency> Currencies
         {
