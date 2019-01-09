@@ -26,11 +26,11 @@ namespace SimpleInventory.Helpers
         }
 
         // http://james-ramsden.com/c-convert-image-bitmapimage/
-        private BitmapImage ConvertImageToBitmapImage(Image img)
+        private BitmapSource ConvertImageToBitmapImage(Image img)
         {
             using (var memory = new MemoryStream())
             {
-                img.Save(memory, ImageFormat.Png);
+                img.Save(memory, ImageFormat.Jpeg);
                 memory.Position = 0;
 
                 var bitmapImage = new BitmapImage();
@@ -41,6 +41,28 @@ namespace SimpleInventory.Helpers
 
                 return bitmapImage;
             }
+        }
+
+        // based on https://stackoverflow.com/a/24199315/3938401
+        private Bitmap ResizeImage(Image image, int width, int height, int resolution = 96)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+            destImage.SetResolution(resolution, resolution);
+            return destImage;
         }
 
         /// <summary>
@@ -107,9 +129,19 @@ namespace SimpleInventory.Helpers
                         XUnit xCoord = XUnit.FromInch(1);
                         while (!isWidthFull)
                         {
-                            var image = barcodeCreator.Encode(BarcodeType, barcodeToUse.ToString(), 300, 150);
+                            var image = barcodeCreator.Encode(BarcodeType, barcodeToUse.ToString());
                             if (image != null)
                             {
+                                // make sure images are a good size based on DPI
+                                // TODO: There has got to be a better way to make things fairly consistent across computers 
+                                // with different DPI. This is ridiculous. I love WPF most of the time with its DPI
+                                // help, but in this case.......ugh. Images come out a little blurry this way
+                                // on computers with a non-192 DPI.
+                                double ratioTo192 = (192 / image.VerticalResolution);
+                                int resizeHeight = (int)(image.Height / ratioTo192);
+                                int resizeWidth = (int)(image.Width / ratioTo192);
+                                image = ResizeImage(image, resizeWidth, resizeHeight, (int)image.VerticalResolution);
+                                // ok, now we can draw.
                                 XImage pdfImage = XImage.FromBitmapSource(ConvertImageToBitmapImage(image));
                                 gfx.DrawImage(pdfImage, xCoord, yCoord);
                                 xCoord += XUnit.FromPoint(pdfImage.PointWidth);
