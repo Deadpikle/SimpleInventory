@@ -341,7 +341,7 @@ namespace SimpleInventory.Helpers
                         "VALUES (@name, @abbreviation, @symbol, @conversion, @isDefault)";
                     command.CommandText = addCurrency;
                     command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@name", "US Dollars");
+                    command.Parameters.AddWithValue("@name", "US Dollar");
                     command.Parameters.AddWithValue("@abbreviation", "USD");
                     command.Parameters.AddWithValue("@symbol", "$");
                     command.Parameters.AddWithValue("@conversion", "1.0");
