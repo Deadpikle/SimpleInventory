@@ -20,6 +20,11 @@ namespace SimpleInventory.Helpers
             return _directory + "/" + _fileName;
         }
 
+        public string GetDatabaseFilePath()
+        {
+            return GetFilePath();
+        }
+
         private bool DoesDatabaseExist()
         {
             return File.Exists(GetFilePath());

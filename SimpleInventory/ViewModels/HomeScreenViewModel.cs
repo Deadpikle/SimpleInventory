@@ -1,7 +1,9 @@
-﻿using SimpleInventory.Helpers;
+﻿using Microsoft.Win32;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +66,24 @@ namespace SimpleInventory.ViewModels
         private void LoadViewItemTypesScreen()
         {
             PushViewModel(new ViewItemTypesViewModel(ViewModelChanger));
+        }
+
+        public ICommand BackupData
+        {
+            get { return new RelayCommand(BackupDatabase); }
+        }
+
+        private void BackupDatabase()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "SIDB file (*.sidb)|*.sidb";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            saveFileDialog.FileName = "inventory-backup-" + DateTime.Now.ToString("yyyy-MM-dd-H-mm-ss");
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var dbHelper = new DatabaseHelper();
+                File.Copy(dbHelper.GetDatabaseFilePath(), saveFileDialog.FileName);
+            }
         }
     }
 }
