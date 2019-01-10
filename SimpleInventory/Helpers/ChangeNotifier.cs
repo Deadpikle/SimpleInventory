@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleInventory.ViewModels
+namespace SimpleInventory.Helpers
 {
     // https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged?view=netframework-4.7.2
     class ChangeNotifier : INotifyPropertyChanged

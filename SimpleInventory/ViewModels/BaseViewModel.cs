@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Interfaces;
+﻿using SimpleInventory.Helpers;
+using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

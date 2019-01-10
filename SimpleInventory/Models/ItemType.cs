@@ -71,5 +71,99 @@ namespace SimpleInventory.Models
             }
             return items;
         }
+
+        public static ItemType LoadDefaultItemType()
+        {
+            var data = LoadItemTypes(" WHERE IsDefault = @isDefault",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@isDefault", "1") });
+            return data.Count > 0 ? data[0] : null;
+        }
+
+        public void Create()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    if (IsDefault)
+                    {
+                        // need to remove the current default
+                        string removeDefault = "UPDATE ItemTypes SET IsDefault = 0";
+                        command.CommandText = removeDefault;
+                        command.ExecuteNonQuery();
+                    }
+                    string insert = "INSERT INTO ItemTypes (Name, Description, IsDefault) " +
+                        "VALUES (@name, @description, @isDefault)";
+                    command.CommandText = insert;
+                    command.Parameters.AddWithValue("@name", Name);
+                    command.Parameters.AddWithValue("@description", Description);
+                    command.Parameters.AddWithValue("@isDefault", IsDefault);
+                    command.ExecuteNonQuery();
+                    ID = (int)conn.LastInsertRowId;
+                }
+                conn.Close();
+            }
+        }
+
+        public void Save()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    if (IsDefault)
+                    {
+                        // need to remove the current default
+                        string removeDefault = "UPDATE ItemTypes SET IsDefault = 0";
+                        command.CommandText = removeDefault;
+                        command.ExecuteNonQuery();
+                    }
+                    string insert = "UPDATE ItemTypes SET Name = @name, Description = @description, IsDefault = @isDefault " +
+                        "WHERE ID = @itemTypeID";
+                    command.CommandText = insert;
+                    command.Parameters.AddWithValue("@name", Name);
+                    command.Parameters.AddWithValue("@description", Description);
+                    command.Parameters.AddWithValue("@isDefault", IsDefault);
+                    command.Parameters.AddWithValue("@itemTypeID", ID);
+                    command.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// You cannot delete the default ItemType.
+        /// </summary>
+        public void Delete()
+        {
+            if (!IsDefault)
+            {
+                var dbHelper = new DatabaseHelper();
+                using (var conn = dbHelper.GetDatabaseConnection())
+                {
+                    using (var command = dbHelper.GetSQLiteCommand(conn))
+                    {
+                        // move items from this category to the default category
+                        var defaultType = LoadDefaultItemType();
+                        if (defaultType != null)
+                        {
+                            string updateCommand = "UPDATE InventoryItems SET ItemTypeID = @itemTypeID WHERE ItemTypeID = @removingItemID";
+                            command.CommandText = updateCommand;
+                            command.Parameters.AddWithValue("@itemTypeID", defaultType.ID);
+                            command.Parameters.AddWithValue("@removingItemID", ID);
+                            command.ExecuteNonQuery();
+                        }
+                        // ok, now delete this category
+                        string deleteCommand = "DELETE FROM ItemTypes WHERE ID = @itemTypeID";
+                        command.CommandText = deleteCommand;
+                        command.Parameters.AddWithValue("@itemTypeID", ID);
+                        command.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+            }
+        }
     }
 }

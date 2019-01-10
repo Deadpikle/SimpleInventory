@@ -12,6 +12,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
                     Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding GoToMainMenu}"/>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Manage Item Categories" FontWeight="Bold" FontSize="16" 
@@ -33,5 +37,14 @@
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" >
+            <Button Content="Add Item Category" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAddItemCategoryScreen}"
+                    FontSize="13"/>
+            <Button Content="Edit Item Category" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToEditItemCategoryScreen}"
+                    IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
+            <Button Content="Delete Item Category" Margin="5,35,5,0" Padding="10" Height="40"
+                    IsEnabled="{Binding CanDelete}" Click="DeleteItemType_Click"
+                    FontSize="13"/>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -125,6 +125,7 @@
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Interfaces\IChangeViewModel.cs" />
     <Compile Include="Interfaces\ICreatedInventoryItem.cs" />
+    <Compile Include="Interfaces\ICreatedEditedItemType.cs" />
     <Compile Include="Interfaces\IItemsSoldReportData.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DaySales.cs" />
@@ -141,7 +142,7 @@
     <Compile Include="ViewModels\CreateOrEditItemTypeViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\ChangeNotifier.cs" />
+    <Compile Include="Helpers\ChangeNotifier.cs" />
     <Compile Include="ViewModels\GenerateBarcodesViewModel.cs" />
     <Compile Include="ViewModels\HomeScreenViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
