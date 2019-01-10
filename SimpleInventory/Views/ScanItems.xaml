@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SimpleInventory.Views"
+             xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ScanItemsViewModel}, IsDesignTimeCreatable=True}"
@@ -59,8 +60,9 @@
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Quantity Purchased" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
-                             VerticalContentAlignment="Center" FontSize="14"/>
+                    <mahapps:NumericUpDown Width="150" Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
+                                       TextAlignment="Left"
+                                       VerticalContentAlignment="Center" FontSize="14"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
