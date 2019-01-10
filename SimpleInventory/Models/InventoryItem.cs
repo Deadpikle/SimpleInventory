@@ -56,7 +56,7 @@ namespace SimpleInventory.Models
             var items = new List<InventoryItem>();
             string query = "" +
                 "SELECT ii.ID, ii.Name, ii.Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
-                "       ProfitPerItem, ProfitPerItemCurrencyID, " +
+                "       ProfitPerItem, ProfitPerItemCurrencyID, WasDeleted, " +
                 "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
                 "       it.IsDefault AS ItemTypeIsDefault " +
                 "FROM InventoryItems ii " +
@@ -101,6 +101,7 @@ namespace SimpleInventory.Models
                                 dbHelper.ReadString(reader, "ItemTypeName"),
                                 dbHelper.ReadString(reader, "ItemTypeDescription"),
                                 dbHelper.ReadBool(reader, "ItemTypeIsDefault"));
+                            item.WasDeleted = dbHelper.ReadBool(reader, "WasDeleted");
                             items.Add(item);
                         }
                         reader.Close();
@@ -283,6 +284,7 @@ namespace SimpleInventory.Models
                     conn.Close();
                 }
             }
+            items.RemoveAll((item) => item.WasDeleted && item.Quantity == 0);
             items.Sort((left, right) => left.Name.CompareTo(right.Name));
             return items;
         }
