@@ -16,6 +16,7 @@ Feature set:
 ## What sorts of things would be nice to add?
 
 * UI for adding and editing currencies
+* Search field on inventory screen
 * Ability to login/logout so the system tracks which users are doing (supported by the database but not by the UI)
 * More reporting capabilities (details on items purchased including timestamps, etc.)
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
