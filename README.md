@@ -6,7 +6,6 @@ Feature set:
 
 * Manage your current inventory, including current stock/quantity. 
 * Sort your inventory by different categories (drinks, school supplies, etc.) -- these different categories then show up as different subtotals on reports
-  * Note: adding and editing categories doesn't have a UI yet but is easy to do from a SQLite editor
 * Scan items in using a barcode scanner to quickly mark items as sold
 * When purchasing items, you can set the quantity purchased and amount paid, and the software calculates the amount of change you need to give -- including into different currencies
   * Note: modifying currencies doesn't have a UI yet but is easy to do from a SQLite editor
@@ -16,10 +15,9 @@ Feature set:
 
 ## What sorts of things would be nice to add?
 
-* UI for adding and editing item categories
 * UI for adding and editing currencies
 * Ability to login/logout so the system tracks which users are doing (supported by the database but not by the UI)
-* More reporting capabilities
+* More reporting capabilities (details on items purchased including timestamps, etc.)
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
 * Use LINQ or similar to clean up the manual SQLite database calls
 
