@@ -79,12 +79,13 @@ namespace SimpleInventory.Helpers
 
             XUnit xCoord = margin;
             XFont itemFont = new XFont("Segoe UI", 14, XFontStyle.Regular);
+            XFont itemDescriptionFont = new XFont("Segoe UI", 12, XFontStyle.Regular);
 
-            //for (int i = 0; i < 40; i++) // for creating lots of PDF dummy data
-            //{
-                foreach (ReportItemSold itemSold in sales.GetItemsSold())
+            for (int i = 0; i < 40; i++) // for creating lots of PDF dummy data
+            {
+            foreach (ReportItemSold itemSold in sales.GetItemsSold())
                 {
-                    if (yCoord + XUnit.FromInch(0.4) >= page.Height - margin)
+                    if (yCoord + XUnit.FromInch(0.6) >= page.Height - margin)
                     {
                         page = document.AddPage();
                         page.Size = PdfSharp.PageSize.A4;
@@ -94,24 +95,29 @@ namespace SimpleInventory.Helpers
                         yCoord = margin + XUnit.FromInch(1.3);
                         DrawHeaders(yCoord, margin, gfx);
                     }
-                    yCoord += XUnit.FromInch(0.3);
+                    yCoord += XUnit.FromInch(0.5);
                     xCoord = margin;
                     // these could be centered nicely or something, but *shrug*
                     gfx.DrawString(itemSold.Name, itemFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+                    gfx.DrawString(itemSold.Description, itemDescriptionFont, XBrushes.Black,
+                        new XPoint(xCoord, yCoord + XUnit.FromInch(0.25)), XStringFormats.CenterLeft);
                     xCoord += XUnit.FromInch(2.5);
-                    gfx.DrawString(itemSold.QuantityPurchased.ToString(), itemFont, XBrushes.Black, 
-                        new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
+                    gfx.DrawString(itemSold.QuantityPurchased.ToString(), itemFont, XBrushes.Black,
+                        new XRect(xCoord + XUnit.FromInch(0.65), yCoord, XUnit.FromInch(0), XUnit.FromInch(.25)), XStringFormats.CenterRight);
+                        //new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
                     xCoord += XUnit.FromInch(1.5);
                     gfx.DrawString(itemSold.TotalCostWithCurrency, itemFont, XBrushes.Black, 
-                        new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
-                    xCoord += XUnit.FromInch(1.5);
+                        //new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
+                        new XRect(xCoord + XUnit.FromInch(0.85), yCoord, XUnit.FromInch(0), XUnit.FromInch(.25)), XStringFormats.CenterRight);
+            xCoord += XUnit.FromInch(1.5);
                     gfx.DrawString(itemSold.TotalProfitWithCurrency, itemFont, XBrushes.Black, 
-                        new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+                        //new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+                        new XRect(page.Width - margin - XUnit.FromInch(0.05), yCoord, XUnit.FromInch(0), XUnit.FromInch(.25)), XStringFormats.CenterRight);
 
-                    XUnit yCoordForLine = +XUnit.FromInch(0.15);
+            XUnit yCoordForLine = XUnit.FromInch(0.38);
                     gfx.DrawLine(XPens.Black, margin, yCoord + yCoordForLine, page.Width - margin, yCoord + yCoordForLine);
                 }
-            //}
+            }
             // print category totals
             var itemTypeMoneyInfoList = sales.GetItemTypeMoneyInfo();
             foreach (var moneyInfo in itemTypeMoneyInfoList)
