@@ -28,6 +28,7 @@ namespace SimpleInventory.Models
         public ItemType ItemType { get; set; }
 
         public string ItemName { get; set; }
+        public string ItemDescription { get; set; }
 
         public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
         {
@@ -40,7 +41,7 @@ namespace SimpleInventory.Models
                 {
                     string query = "" +
                         "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
-                        "       isi.InventoryItemID, isi.SoldByUserID, i.Name, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID, " +
+                        "       isi.InventoryItemID, isi.SoldByUserID, i.Name, i.Description, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID, " +
                         "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
                         "       it.IsDefault AS ItemTypeIsDefault " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
@@ -56,6 +57,7 @@ namespace SimpleInventory.Models
                             var item = new ItemSoldInfo();
                             item.ID = dbHelper.ReadInt(reader, "ID");
                             item.ItemName = dbHelper.ReadString(reader, "Name");
+                            item.ItemDescription = dbHelper.ReadString(reader, "Description");
                             item.ItemType = new ItemType(
                                 dbHelper.ReadInt(reader, "ItemTypeID"),
                                 dbHelper.ReadString(reader, "ItemTypeName"),

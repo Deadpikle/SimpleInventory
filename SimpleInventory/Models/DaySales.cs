@@ -78,6 +78,7 @@ namespace SimpleInventory.Models
                     itemSold.InventoryItemID = singleItemInfo.InventoryItemID;
                     itemSold.ItemType = singleItemInfo.ItemType;
                     itemSold.Name = singleItemInfo.ItemName;
+                    itemSold.Description = singleItemInfo.ItemDescription;
                     itemSold.QuantityPurchased = 0;
                     itemSold.CostPerItem = singleItemInfo.Cost; // TODO: should be handled as an average!
                     itemSold.CostCurrency = singleItemInfo.CostCurrency;

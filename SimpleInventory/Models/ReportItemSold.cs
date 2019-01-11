@@ -11,6 +11,7 @@ namespace SimpleInventory.Models
         public int InventoryItemID { get; set; }
         public ItemType ItemType { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public decimal QuantityPurchased { get; set; }
         public decimal CostPerItem { get; set; } // in theory, should be an average, as this could change over time
         public Currency CostCurrency { get; set; }
