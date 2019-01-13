@@ -30,10 +30,13 @@ namespace SimpleInventory.ViewModels
         private bool _isChangingPaidFromQuantity;
         private Brush _itemPurchaseStatusBrush;
 
+        private int _amountInventoryChanged;
+
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             _currencies = Currency.LoadCurrencies();
             _currencyIDToIndex = new Dictionary<int, int>();
+            _amountInventoryChanged = 0;
             for (int i = 0; i < _currencies.Count; i++)
             {
                 var currency = _currencies[i];
@@ -270,7 +273,8 @@ namespace SimpleInventory.ViewModels
                         purchaseData.CreateNewSoldInfo();
                         PurchaseInfo = purchaseData;
                         // decrease quantity by 1
-                        item.AdjustQuantityByAmount(-1);
+                        _amountInventoryChanged = 1;
+                        item.AdjustQuantityByAmount(-_amountInventoryChanged);
                         // show info to the user for possible future editing
                         ChangeNeeded = "0"; // TODO: update if paid updated -- might want to bind to a different property for set {} updates
                         SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
@@ -338,6 +342,18 @@ namespace SimpleInventory.ViewModels
                     paidAsDecimal = 0;
                 }
                 PurchaseInfo.Paid = paidAsDecimal;
+                if (_amountInventoryChanged != Quantity)
+                {
+                    if (_amountInventoryChanged < Quantity) // e.g. 1 -> 3 (= diff of 2; needs to be adjusted by -2)
+                    {
+                        PurchasedItem.AdjustQuantityByAmount(_amountInventoryChanged - Quantity);
+                    }
+                    else // e.g. 3 -> 1 (= diff of 2; needs to be adjusted by 2)
+                    {
+                        PurchasedItem.AdjustQuantityByAmount(Quantity - _amountInventoryChanged);
+                    }
+                    _amountInventoryChanged = Quantity;
+                }
                 PurchaseInfo.SaveUpdates();
             }
         }
