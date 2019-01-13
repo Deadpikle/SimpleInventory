@@ -257,7 +257,7 @@ namespace SimpleInventory.ViewModels
                         // create purchase data object and save to the db
                         var purchaseData = new ItemSoldInfo();
                         purchaseData.DateTimeSold = DateTime.Now;
-                        DateTimePurchased = purchaseData.DateTimeSold.ToString("dddd, d MMMM 'at' h:mm tt");
+                        DateTimePurchased = purchaseData.DateTimeSold.ToString("dddd, d MMMM 'at' h:mm:ss tt");
                         purchaseData.InventoryItemID = item.ID;
                         purchaseData.QuantitySold = 1;
                         var userID = CurrentUser != null ? CurrentUser.ID : 1;
