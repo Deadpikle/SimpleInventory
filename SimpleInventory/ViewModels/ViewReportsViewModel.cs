@@ -19,6 +19,7 @@ namespace SimpleInventory.ViewModels
         private DateTime _selectedInventoryStockDate;
         private DaySales _currentDaySalesReport;
         private WeekSales _currentWeeklySalesReport;
+        private int _selectedTabIndex;
 
         private List<InventoryItem> _inventoryStockReport;
 
@@ -63,6 +64,14 @@ namespace SimpleInventory.ViewModels
         {
             get { return _inventoryStockReport; }
             set { _inventoryStockReport = value; NotifyPropertyChanged(); }
+        }
+
+        // for some reason, binding this property fixes an issue where if you leave the screen
+        // and come back, the tab changes to the first tab on you...huh. *shrug*
+        public int SelectedTabIndex
+        {
+            get { return _selectedTabIndex; }
+            set { _selectedTabIndex = value; NotifyPropertyChanged(); }
         }
 
         public ICommand GoToMainMenu
