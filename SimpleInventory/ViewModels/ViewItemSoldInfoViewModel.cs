@@ -15,14 +15,42 @@ namespace SimpleInventory.ViewModels
         private int _inventoryItemID;
         private InventoryItem _item;
         private List<ItemSoldInfo> _itemSoldInfo;
-        private DateTime _date;
+        private DateTime _startDate;
+        private DateTime _endDate;
 
         public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, int inventoryItemID) : base(viewModelChanger)
         {
             _inventoryItemID = inventoryItemID;
             _item = InventoryItem.LoadItemByID(inventoryItemID);
             _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(date, inventoryItemID);
-            _date = date;
+            _startDate = date;
+        }
+
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, int inventoryItemID) : base(viewModelChanger)
+        {
+            _inventoryItemID = inventoryItemID;
+            _item = InventoryItem.LoadItemByID(inventoryItemID);
+            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, inventoryItemID);
+            // THE UNOPTIMIZATION OF THE MODEL CODE BURNS
+            if (endDate > startDate && startDate.Date != endDate.Date)
+            {
+                bool isFinished = false;
+                var movingDate = startDate;
+                while (!isFinished)
+                {
+                    if (movingDate.Date == endDate.Date)
+                    {
+                        isFinished = true;
+                    }
+                    else
+                    {
+                        movingDate = movingDate.AddDays(1);
+                        _itemSoldInfo.AddRange(ItemSoldInfo.LoadInfoForDateAndItem(movingDate, inventoryItemID));
+                    }
+                }
+            }
+            _startDate = startDate;
+            _endDate = endDate;
         }
 
         public List<ItemSoldInfo> ItemSoldInfoData
@@ -47,7 +75,15 @@ namespace SimpleInventory.ViewModels
         {
             get
             {
-                return _date.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+                if (_endDate == null)
+                {
+                    return _startDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+                }
+                else
+                {
+                    return _startDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat()) + " - " +
+                        _endDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+                }
             }
         }
 

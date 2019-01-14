@@ -88,7 +88,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date, string extraWhereClause = "", List<Tuple<string, string>> extraWhereParams = null)
+        private static List<ItemSoldInfo> LoadInfo(DateTime date, string extraWhereClause = "", List<Tuple<string, string>> extraWhereParams = null)
         {
             var items = new List<ItemSoldInfo>();
             var currencies = Currency.GetKeyValueCurrencyList();
@@ -161,10 +161,20 @@ namespace SimpleInventory.Models
             return items;
         }
 
+        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
+        {
+            return LoadInfo(date);
+        }
 
         public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID)
         {
-            return LoadInfoForDate(date, " AND InventoryItemID = @itemID",
+            return LoadInfo(date, " AND InventoryItemID = @itemID",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
+        }
+
+        public static List<ItemSoldInfo> LoadInfoForDateAndItemUntilDate(DateTime startDate, DateTime endDate, int inventoryItemID)
+        {
+            return LoadInfo(startDate, " AND InventoryItemID = @itemID",
                 new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
         }
 

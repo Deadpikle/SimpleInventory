@@ -150,6 +150,15 @@
                             <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
                             <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="125">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="View Details" 
+                                                Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
+                                                CommandParameter="{Binding InventoryItemID}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentWeeklySalesReport.ItemTypeMoneyBreakdown}">

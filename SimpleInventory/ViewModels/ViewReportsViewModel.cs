@@ -141,5 +141,15 @@ namespace SimpleInventory.ViewModels
         {
             PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, inventoryItemID));
         }
+
+        public ICommand ViewPurchaseDetailsForWeek
+        {
+            get { return new RelayCommand<int>(inventoryItemID => LoadViewPurchaseDetailsScreenForWeek(inventoryItemID)); }
+        }
+
+        private void LoadViewPurchaseDetailsScreenForWeek(int inventoryItemID)
+        {
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, SelectedWeeklyReportDate.AddDays(6), inventoryItemID));
+        }
     }
 }
