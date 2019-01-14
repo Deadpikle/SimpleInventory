@@ -66,7 +66,6 @@ namespace SimpleInventory.Models
                             item.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
                             item.SoldByUserID = dbHelper.ReadInt(reader, "SoldByUserID");
                             string dateTimeSold = dbHelper.ReadString(reader, "DateTimeSold");
-                            var t = Convert.ToDateTime(dateTimeSold);
                             item.DateTimeSold = Convert.ToDateTime(dateTimeSold); // DateTime.ParseExact(dateTimeSold, 
                                 //Utilities.DateTimeToDateOnlyStringFormat(), System.Globalization.CultureInfo.InvariantCulture);
                             item.QuantitySold = dbHelper.ReadInt(reader, "QuantitySold");

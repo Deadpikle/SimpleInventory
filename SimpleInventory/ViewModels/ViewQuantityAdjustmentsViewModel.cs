@@ -6,14 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using SimpleInventory.Models;
 
 namespace SimpleInventory.ViewModels
 {
     class ViewQuantityAdjustmentsViewModel : BaseViewModel
     {
 
-        public ViewQuantityAdjustmentsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
+        private List<QuantityAdjustment> _adjustments;
+
+        public ViewQuantityAdjustmentsViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
+            _adjustments = QuantityAdjustment.LoadQuantityAdjustments(item);
+        }
+
+        public List<QuantityAdjustment> Adjustments
+        {
+            get { return _adjustments; }
+            set { _adjustments = value; NotifyPropertyChanged(); }
         }
 
         public ICommand ReturnToManageItems

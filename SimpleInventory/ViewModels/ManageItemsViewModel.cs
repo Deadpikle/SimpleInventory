@@ -109,7 +109,10 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewQuantityChangesScreen()
         {
-
+            if (SelectedItem != null)
+            {
+                PushViewModel(new ViewQuantityAdjustmentsViewModel(ViewModelChanger, SelectedItem));
+            }
         }
     }
 }
