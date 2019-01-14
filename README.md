@@ -4,8 +4,8 @@ SimpleInventory is a small Windows 7+ WPF piece of software to manage small inve
 
 Feature set:
 
-* Manage your current inventory, including current stock/quantity. 
-* Sort your inventory by different categories (drinks, school supplies, etc.) -- these different categories then show up as different subtotals on reports
+* Manage your current inventory, including current stock/quantity
+* Sort your inventory into different categories (drinks, school supplies, etc.) -- these different categories then show up as different subtotals on reports
 * Scan items in using a barcode scanner to quickly mark items as sold
 * When purchasing items, you can set the quantity purchased and amount paid, and the software calculates the amount of change you need to give -- including into different currencies
   * Note: modifying currencies doesn't have a UI yet but is easy to do from a SQLite editor
