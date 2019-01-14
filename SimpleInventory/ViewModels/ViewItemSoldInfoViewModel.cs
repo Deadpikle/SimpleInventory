@@ -30,24 +30,13 @@ namespace SimpleInventory.ViewModels
         {
             _inventoryItemID = inventoryItemID;
             _item = InventoryItem.LoadItemByID(inventoryItemID);
-            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, inventoryItemID);
-            // THE UNOPTIMIZATION OF THE MODEL CODE BURNS
-            if (endDate > startDate && startDate.Date != endDate.Date)
+            if (endDate != null && endDate > startDate && startDate.Date != endDate.Date)
             {
-                bool isFinished = false;
-                var movingDate = startDate;
-                while (!isFinished)
-                {
-                    if (movingDate.Date == endDate.Date)
-                    {
-                        isFinished = true;
-                    }
-                    else
-                    {
-                        movingDate = movingDate.AddDays(1);
-                        _itemSoldInfo.AddRange(ItemSoldInfo.LoadInfoForDateAndItem(movingDate, inventoryItemID));
-                    }
-                }
+                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItemUntilDate(startDate, endDate, inventoryItemID);
+            }
+            else
+            {
+                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, inventoryItemID);
             }
             _startDate = startDate;
             _endDate = endDate;

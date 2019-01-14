@@ -88,7 +88,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        private static List<ItemSoldInfo> LoadInfo(DateTime date, string extraWhereClause = "", List<Tuple<string, string>> extraWhereParams = null)
+        private static List<ItemSoldInfo> LoadInfo(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var items = new List<ItemSoldInfo>();
             var currencies = Currency.GetKeyValueCurrencyList();
@@ -104,14 +104,13 @@ namespace SimpleInventory.Models
                         "       it.IsDefault AS ItemTypeIsDefault " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
                         "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
-                        "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' " +
-                        (string.IsNullOrWhiteSpace(extraWhereClause) ? "" : extraWhereClause + " ") +
+                        (string.IsNullOrWhiteSpace(whereClause) ? "" : whereClause + " ") +
                         "ORDER BY i.Name, isi.DateTimeSold";
 
                     command.CommandText = query;
-                    if (!string.IsNullOrEmpty(extraWhereClause) && extraWhereParams != null)
+                    if (!string.IsNullOrEmpty(whereClause) && whereParams != null)
                     {
-                        foreach (Tuple<string, string> keyValuePair in extraWhereParams)
+                        foreach (Tuple<string, string> keyValuePair in whereParams)
                         {
                             command.Parameters.AddWithValue(keyValuePair.Item1, keyValuePair.Item2);
                         }
@@ -163,19 +162,24 @@ namespace SimpleInventory.Models
 
         public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
         {
-            return LoadInfo(date);
+            return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
         }
 
         public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID)
         {
-            return LoadInfo(date, " AND InventoryItemID = @itemID",
+            return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' AND InventoryItemID = @itemID",
                 new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
         }
 
         public static List<ItemSoldInfo> LoadInfoForDateAndItemUntilDate(DateTime startDate, DateTime endDate, int inventoryItemID)
         {
-            return LoadInfo(startDate, " AND InventoryItemID = @itemID",
-                new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
+            if (endDate != null && startDate.Date != endDate.Date && endDate > startDate)
+            {
+                return LoadInfo("WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
+                    endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND InventoryItemID = @itemID",
+                    new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
+            }
+            return LoadInfoForDateAndItem(startDate, inventoryItemID);
         }
 
         public void CreateNewSoldInfo()
