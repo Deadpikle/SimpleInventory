@@ -27,7 +27,7 @@ namespace SimpleInventory.Helpers
 
         public static string DateTimeToFriendlyFullDateTimeStringFormat()
         {
-            return "dddd, d MMMM, yyyy 'at' h:mm tt";
+            return "dddd, d MMMM, yyyy 'at' h:mm:ss tt";
         }
 
         public static string DateTimeToFriendlyJustDateStringFormat()
