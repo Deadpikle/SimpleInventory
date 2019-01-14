@@ -27,7 +27,7 @@ namespace SimpleInventory.Helpers
 
         public static string DateTimeToFriendlyStringFormat()
         {
-            return "dddd, d MMMM yyyy 'at' h:mm tt";
+            return "dddd, d MMMM, yyyy 'at' h:mm tt";
         }
 
         public static decimal ConvertAmount(decimal amount, Currency initialCurrency, Currency toCurrency)
