@@ -248,6 +248,41 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 5:
+                            command.CommandText = "PRAGMA foreign_keys = 0";
+                            command.ExecuteNonQuery();
+                            // oh bother, AmountChanged is the wrong column type. Should be int, is text. -_-
+                            // Gotta recreate THAT table too...
+                            string recreateQuantityAdjustmentsTable = "CREATE TABLE New_QuantityAdjustments (" +
+                                "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                "AmountChanged INTEGER," +
+                                "DateTimeChanged TEXT," +
+                                "InventoryItemID INTEGER REFERENCES InventoryItems(ID)," +
+                                "AdjustedByUserID INTEGER REFERENCES Users(ID))";
+                            command.CommandText = recreateQuantityAdjustmentsTable;
+                            command.ExecuteNonQuery();
+                            string moveQuantityAdjustmentData = "" +
+                                "INSERT INTO New_QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID) " +
+                                "SELECT AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID " +
+                                "FROM QuantityAdjustments " +
+                                "ORDER BY ID;";
+                            command.CommandText = moveQuantityAdjustmentData;
+                            command.ExecuteNonQuery();
+                            string removeOldQuantityAdjustmentTable = "" +
+                                "DROP TABLE QuantityAdjustments;";
+                            command.CommandText = removeOldQuantityAdjustmentTable;
+                            command.ExecuteNonQuery();
+                            string renameNewQuantityAdjustmentsTable = "" +
+                                "ALTER TABLE New_QuantityAdjustments RENAME TO QuantityAdjustments;";
+                            command.CommandText = renameNewQuantityAdjustmentsTable;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 5;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            command.CommandText = "PRAGMA foreign_keys = 1";
+                            command.ExecuteNonQuery();
+                            break;
                     }
                 }
                 else
