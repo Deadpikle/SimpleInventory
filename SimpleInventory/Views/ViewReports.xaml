@@ -8,7 +8,8 @@
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Name="ReportsUserControl">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -69,6 +70,15 @@
                             <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
                             <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="125">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="View Details" 
+                                                Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetails}"
+                                                CommandParameter="{Binding InventoryItemID}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}">

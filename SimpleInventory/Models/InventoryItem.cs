@@ -119,7 +119,7 @@ namespace SimpleInventory.Models
 
         public static InventoryItem LoadItemByID(int id)
         {
-            var data = LoadItems(" WHERE WasDeleted = 0 AND ID = @id ", 
+            var data = LoadItems(" WHERE WasDeleted = 0 AND ii.ID = @id ", 
                 new List<Tuple<string, string>>() { new Tuple<string, string>("@id", id.ToString()) });
             return data.Count > 0 ? data[0] : null;
         }

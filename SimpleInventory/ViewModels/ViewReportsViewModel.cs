@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
@@ -129,6 +130,16 @@ namespace SimpleInventory.ViewModels
         private void RunStockReport()
         {
             InventoryStockReport = InventoryItem.GetStockByEndOfDate(SelectedInventoryStockDate);
+        }
+
+        public ICommand ViewPurchaseDetails
+        {
+            get { return new RelayCommand<int>(inventoryItemID => LoadViewPurchaseDetailsScreen(inventoryItemID)); }
+        }
+
+        private void LoadViewPurchaseDetailsScreen(int inventoryItemID)
+        {
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, inventoryItemID));
         }
     }
 }
