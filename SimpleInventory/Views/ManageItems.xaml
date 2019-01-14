@@ -49,7 +49,9 @@
                     FontSize="13"/>
             <Button Content="Edit Item" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToEditItemScreen}"
                     IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
-            <Button Content="Adjust Quantity" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAdjustQuantityScreen}"
+            <Button Content="Change Quantity" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAdjustQuantityScreen}"
+                    IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
+            <Button Content="Quantity Changes" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToViewQuantityChangesScreen}"
                     IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
             <Button Content="Delete Item" Margin="5,35,5,0" Padding="10" Height="40"
                     IsEnabled="{Binding IsItemSelected}" Click="DeleteItem_Click"

@@ -101,5 +101,15 @@ namespace SimpleInventory.ViewModels
                 Items.Remove(item);
             }
         }
+
+        public ICommand MoveToViewQuantityChangesScreen
+        {
+            get { return new RelayCommand(LoadViewQuantityChangesScreen); }
+        }
+
+        private void LoadViewQuantityChangesScreen()
+        {
+
+        }
     }
 }

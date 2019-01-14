@@ -35,6 +35,9 @@
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemTypeViewModel}">
                 <views:CreateOrEditItemType/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ViewQuantityAdjustmentsViewModel}">
+                <views:ViewQuantityAdjustments/>
+            </DataTemplate>
             <Style TargetType="{x:Type mahapps:WindowButtonCommands}" BasedOn="{StaticResource MahApps.Metro.Styles.WindowButtonCommands.Win10}" />
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}">
                 <Setter Property="FontSize" Value="14"/>
