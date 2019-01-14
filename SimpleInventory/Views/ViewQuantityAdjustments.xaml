@@ -25,7 +25,7 @@
         <DataGrid Grid.Row="1" Grid.Column="0" Name="ItemsGrid" ItemsSource="{Binding Adjustments}" 
                   d:DataContext="{d:DesignInstance Type={x:Type models:QuantityAdjustment}}"
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
-                  SelectionUnit="FullRow" 
+                  SelectionUnit="FullRow" CanUserSortColumns="False"
                   SelectionMode="Single" GridLinesVisibility="All" 
                   RowHeaderWidth="0" Background="LightGray" BorderBrush="Gray" BorderThickness="1"
                   ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
