@@ -143,22 +143,22 @@ namespace SimpleInventory.ViewModels
 
         public ICommand ViewPurchaseDetails
         {
-            get { return new RelayCommand<int>(inventoryItemID => LoadViewPurchaseDetailsScreen(inventoryItemID)); }
+            get { return new RelayCommand<ReportItemSold>(reportForItem => LoadViewPurchaseDetailsScreen(reportForItem)); }
         }
 
-        private void LoadViewPurchaseDetailsScreen(int inventoryItemID)
+        private void LoadViewPurchaseDetailsScreen(ReportItemSold reportForItem)
         {
-            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, inventoryItemID));
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, reportForItem));
         }
 
         public ICommand ViewPurchaseDetailsForWeek
         {
-            get { return new RelayCommand<int>(inventoryItemID => LoadViewPurchaseDetailsScreenForWeek(inventoryItemID)); }
+            get { return new RelayCommand<ReportItemSold>(reportForItem => LoadViewPurchaseDetailsScreenForWeek(reportForItem)); }
         }
 
-        private void LoadViewPurchaseDetailsScreenForWeek(int inventoryItemID)
+        private void LoadViewPurchaseDetailsScreenForWeek(ReportItemSold reportForItem)
         {
-            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, SelectedWeeklyReportDate.AddDays(6), inventoryItemID));
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, SelectedWeeklyReportDate.AddDays(6), reportForItem));
         }
     }
 }

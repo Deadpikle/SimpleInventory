@@ -31,13 +31,10 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Content="Daily Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Daily Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     <DatePicker Grid.Row="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center"  VerticalAlignment="Top"
                         SelectedDate="{Binding SelectedDailyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
-                        Name="DailyReportDatePicker">
+                        Name="DailyReportDatePicker" Grid.Column="1">
                         <DatePicker.Resources>
                             <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
                                 <Setter Property="Control.Template">
@@ -58,7 +55,7 @@
                       RowHeaderWidth="0"
                       d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
                       Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                  ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                      ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}" Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <DataGrid.Style>
                             <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
                                 <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
@@ -76,13 +73,13 @@
                                     <DataTemplate>
                                         <Button Content="View Details" 
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetails}"
-                                                CommandParameter="{Binding InventoryItemID}"/>
+                                                CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}">
+                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}" Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
@@ -92,12 +89,12 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <TextBlock Grid.Row="4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,5">
+                    <TextBlock Grid.Row="4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Grid.Column="1" Margin="0,5,0,5">
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentDaySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"  
-                    Content="Save Daily Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="200" Command="{Binding SaveDayReportToPDF}"/>
+                    <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center"  
+                    Content="Save Daily Report to PDF" Padding="10" Height="40" Width="200" Margin="5" Command="{Binding SaveDayReportToPDF}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Weekly Report">
@@ -110,9 +107,6 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="1" Content="Weekly Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     <DatePicker Grid.Row="1" Grid.Column="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center"  VerticalAlignment="Top"
                         SelectedDate="{Binding SelectedWeeklyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
@@ -156,7 +150,7 @@
                                     <DataTemplate>
                                         <Button Content="View Details" 
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
-                                                CommandParameter="{Binding InventoryItemID}"/>
+                                                CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -177,7 +171,7 @@
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
                     <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
-                    Content="Save Weekly Report to PDF" Margin="15,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"/>
+                    Content="Save Weekly Report to PDF" Margin="5,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Inventory Stock Report">

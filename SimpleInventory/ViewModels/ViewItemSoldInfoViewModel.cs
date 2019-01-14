@@ -18,25 +18,29 @@ namespace SimpleInventory.ViewModels
         private DateTime _startDate;
         private DateTime _endDate;
 
-        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, int inventoryItemID) : base(viewModelChanger)
+        private ReportItemSold _reportForItem;
+
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, ReportItemSold reportForItem) : base(viewModelChanger)
         {
-            _inventoryItemID = inventoryItemID;
-            _item = InventoryItem.LoadItemByID(inventoryItemID);
-            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(date, inventoryItemID);
+            _reportForItem = reportForItem;
+            _inventoryItemID = reportForItem.InventoryItemID;
+            _item = InventoryItem.LoadItemByID(_inventoryItemID);
+            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(date, _inventoryItemID);
             _startDate = date;
         }
 
-        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, int inventoryItemID) : base(viewModelChanger)
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, ReportItemSold reportForItem) : base(viewModelChanger)
         {
-            _inventoryItemID = inventoryItemID;
-            _item = InventoryItem.LoadItemByID(inventoryItemID);
+            _reportForItem = reportForItem;
+            _inventoryItemID = reportForItem.InventoryItemID;
+            _item = InventoryItem.LoadItemByID(_inventoryItemID);
             if (endDate != null && endDate > startDate && startDate.Date != endDate.Date)
             {
-                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItemUntilDate(startDate, endDate, inventoryItemID);
+                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItemUntilDate(startDate, endDate, _inventoryItemID);
             }
             else
             {
-                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, inventoryItemID);
+                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, _inventoryItemID);
             }
             _startDate = startDate;
             _endDate = endDate;
@@ -74,6 +78,12 @@ namespace SimpleInventory.ViewModels
                         _endDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
                 }
             }
+        }
+
+        public ReportItemSold ReportForItem
+        {
+            get { return _reportForItem; }
+            set { _reportForItem = value; NotifyPropertyChanged(); }
         }
 
         public ICommand ReturnToReports
