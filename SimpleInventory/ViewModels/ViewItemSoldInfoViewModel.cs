@@ -14,12 +14,41 @@ namespace SimpleInventory.ViewModels
     {
         private int _inventoryItemID;
         private InventoryItem _item;
+        private List<ItemSoldInfo> _itemSoldInfo;
+        private DateTime _date;
 
-        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, int inventoryItemID) : base(viewModelChanger)
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, int inventoryItemID) : base(viewModelChanger)
         {
             _inventoryItemID = inventoryItemID;
             _item = InventoryItem.LoadItemByID(inventoryItemID);
+            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(date, inventoryItemID);
+            _date = date;
+        }
 
+        public List<ItemSoldInfo> ItemSoldInfoData
+        {
+            get { return _itemSoldInfo; }
+            set { _itemSoldInfo = value; NotifyPropertyChanged(); }
+        }
+
+        public string ItemNameAndDescription
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_item.Description))
+                {
+                    return _item.Name;
+                }
+                return _item.Name + " - " + _item.Description;
+            }
+        }
+
+        public string DateDisplay
+        {
+            get
+            {
+                return _date.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+            }
         }
 
         public ICommand ReturnToReports

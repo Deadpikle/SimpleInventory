@@ -18,7 +18,7 @@ namespace SimpleInventory.Models
 
         public string FriendlyDateTime
         {
-            get { return DateTimeChanged.ToString(Utilities.DateTimeToFriendlyStringFormat()); }
+            get { return DateTimeChanged.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()); }
         }
 
         public static void UpdateQuantity(int quantity, int itemID, int userID)

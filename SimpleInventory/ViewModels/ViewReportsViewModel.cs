@@ -139,7 +139,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewPurchaseDetailsScreen(int inventoryItemID)
         {
-            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, inventoryItemID));
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, inventoryItemID));
         }
     }
 }

@@ -30,7 +30,60 @@ namespace SimpleInventory.Models
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }
 
-        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
+        public string FriendlyTime
+        {
+            get { return DateTimeSold.ToLongTimeString(); }
+        }
+
+        public string CostWithCurrency
+        {
+            get
+            {
+                if (CostCurrency != null)
+                {
+                    return Cost.ToString() + " (" + CostCurrency?.Symbol + ")";
+                }
+                return Cost.ToString();
+            }
+        }
+
+        public string TotalCostWithCurrency
+        {
+            get
+            {
+                if (CostCurrency != null)
+                {
+                    return (Cost * QuantitySold).ToString() + " (" + CostCurrency?.Symbol + ")";
+                }
+                return (Cost * QuantitySold).ToString();
+            }
+        }
+
+        public string ProfitWithCurrency
+        {
+            get
+            {
+                if (ProfitPerItemCurrency != null)
+                {
+                    return ProfitPerItem.ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                }
+                return ProfitPerItem.ToString();
+            }
+        }
+
+        public string TotalProfitWithCurrency
+        {
+            get
+            {
+                if (ProfitPerItemCurrency != null)
+                {
+                    return (ProfitPerItem * QuantitySold).ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                }
+                return (ProfitPerItem * QuantitySold).ToString();
+            }
+        }
+
+        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date, string extraWhereClause = "", List<Tuple<string, string>> extraWhereParams = null)
         {
             var items = new List<ItemSoldInfo>();
             var currencies = Currency.GetKeyValueCurrencyList();
@@ -47,9 +100,17 @@ namespace SimpleInventory.Models
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
                         "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
                         "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' " +
-                        "ORDER BY i.Name";
+                        (string.IsNullOrWhiteSpace(extraWhereClause) ? "" : extraWhereClause + " ") +
+                        "ORDER BY i.Name, isi.DateTimeSold";
 
                     command.CommandText = query;
+                    if (!string.IsNullOrEmpty(extraWhereClause) && extraWhereParams != null)
+                    {
+                        foreach (Tuple<string, string> keyValuePair in extraWhereParams)
+                        {
+                            command.Parameters.AddWithValue(keyValuePair.Item1, keyValuePair.Item2);
+                        }
+                    }
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -93,6 +154,13 @@ namespace SimpleInventory.Models
                 }
             }
             return items;
+        }
+
+
+        public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID)
+        {
+            return LoadInfoForDate(date, " AND InventoryItemID = @itemID",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
         }
 
         public void CreateNewSoldInfo()

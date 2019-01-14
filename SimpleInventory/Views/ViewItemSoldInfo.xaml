@@ -12,13 +12,19 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
                     Content="Return to Reports" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding ReturnToReports}"/>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="View Purchase Details" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <DataGrid Grid.Row="1" Grid.Column="0" Name="ItemsGrid" ItemsSource="{Binding Adjustments}" 
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ItemNameAndDescription}" FontSize="16" 
+               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding DateDisplay}"  FontSize="14" 
+               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <DataGrid Grid.Row="3" Grid.Column="0" Name="ItemsGrid" ItemsSource="{Binding ItemSoldInfoData}" 
                   d:DataContext="{d:DesignInstance Type={x:Type models:QuantityAdjustment}}"
                   IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" CanUserDeleteRows="False"
                   SelectionUnit="FullRow" CanUserSortColumns="False"
@@ -31,8 +37,14 @@
                 </Style>
             </DataGrid.Style>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding FriendlyDateTime}"/>
-                <DataGridTextColumn Header="Number Purchased" Binding="{Binding AmountChanged}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding FriendlyTime}"/>
+                <DataGridTextColumn Header="Number Purchased" Binding="{Binding QuantitySold}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Income" Binding="{Binding TotalCostWithCurrency}"/>
                 <DataGridTextColumn Header="Profit" Binding="{Binding TotalProfitWithCurrency}"/>
             </DataGrid.Columns>

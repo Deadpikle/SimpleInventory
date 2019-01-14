@@ -25,9 +25,14 @@ namespace SimpleInventory.Helpers
             return "yyyy-MM-dd";
         }
 
-        public static string DateTimeToFriendlyStringFormat()
+        public static string DateTimeToFriendlyFullDateTimeStringFormat()
         {
             return "dddd, d MMMM, yyyy 'at' h:mm tt";
+        }
+
+        public static string DateTimeToFriendlyJustDateStringFormat()
+        {
+            return "dddd, d MMMM, yyyy";
         }
 
         public static decimal ConvertAmount(decimal amount, Currency initialCurrency, Currency toCurrency)
