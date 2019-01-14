@@ -1,6 +1,6 @@
 # SimpleInventory
 
-SimpleInventory is a small Windows 7+ WPF piece of software to manage small inventories/stores where items are purchased on a regular basis. It runs on the .NET 4.7.1 framework and uses a SQLite database for data storage. SimpleInventory was built for a small school in Mondulkiri, Cambodia for use in the school store. As such, Riel is the default currency, and A4 is the default paper size.
+SimpleInventory is a small Windows 7+ WPF piece of software to manage small inventories/stores where items are purchased on a regular basis. It runs on the .NET 4.7.1 framework and uses a SQLite database for data storage. SimpleInventory was built for a small school in Mondulkiri, Cambodia for use in the school store. Because of the school's location, Riel is the default currency, and A4 is the default paper size.
 
 Feature set:
 
@@ -12,15 +12,17 @@ Feature set:
 * Generate PDFs of barcodes to print out for use with your barcode scanner
 * Run daily or weekly reports to see how much income you generated, how many items were sold, and how much profit you made
 * Run inventory reports to see how much was in stock on any given date
+* View details on when items were sold or when the quantity of an item was adjusted down to the second
 
 ## What sorts of things would be nice to add?
 
 * UI for adding and editing currencies
 * Search field on inventory screen
-* Ability to login/logout so the system tracks which users are doing (supported by the database but not by the UI)
+* Ability to login/logout so the system tracks which users are doing what things (supported by the database but not by the UI and only somewhat by the view model code)
 * More reporting capabilities (details on items purchased including timestamps, etc.)
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
 * Use LINQ or similar to clean up the manual SQLite database calls
+* Settings to change default paper size, date format, etc. throughout the app
 
 ## Can I help contribute?
 
