@@ -35,6 +35,11 @@ namespace SimpleInventory.Models
             get { return DateTimeSold.ToLongTimeString(); }
         }
 
+        public string FriendlyDateTime
+        {
+            get { return DateTimeSold.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()); }
+        }
+
         public string CostWithCurrency
         {
             get

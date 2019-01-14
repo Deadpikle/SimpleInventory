@@ -37,7 +37,7 @@
                 </Style>
             </DataGrid.Style>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding FriendlyTime}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding FriendlyDateTime}"/>
                 <DataGridTextColumn Header="Number Purchased" Binding="{Binding QuantitySold}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
