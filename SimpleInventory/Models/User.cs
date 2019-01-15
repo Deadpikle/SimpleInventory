@@ -48,7 +48,7 @@ namespace SimpleInventory.Models
                         {
                             user = new User();
                             user.ID = dbHelper.ReadInt(reader, "UserID");
-                            user.Name = dbHelper.ReadString(reader, "UserID");
+                            user.Name = dbHelper.ReadString(reader, "Name");
                             user.Username = dbHelper.ReadString(reader, "Username");
                             // ALL the permissions!
                             user.Permissions = new UserPermissions();

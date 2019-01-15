@@ -137,6 +137,7 @@
     <Compile Include="Models\QuantityAdjustment.cs" />
     <Compile Include="Models\ReportItemSold.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserPermissions.cs" />
     <Compile Include="Models\WeekSales.cs" />
     <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemTypeViewModel.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Helpers\ChangeNotifier.cs" />
     <Compile Include="ViewModels\GenerateBarcodesViewModel.cs" />
     <Compile Include="ViewModels\HomeScreenViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageItemsViewModel.cs" />
     <Compile Include="ViewModels\ScanItemsViewModel.cs" />
@@ -166,6 +168,9 @@
     </Compile>
     <Compile Include="Views\HomeScreen.xaml.cs">
       <DependentUpon>HomeScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManageItems.xaml.cs">
       <DependentUpon>ManageItems.xaml</DependentUpon>
@@ -214,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomeScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

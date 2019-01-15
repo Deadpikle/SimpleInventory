@@ -8,6 +8,9 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+                <views:Login/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemViewModel}">
                 <views:CreateOrEditItem/>
             </DataTemplate>
