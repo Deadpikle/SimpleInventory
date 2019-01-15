@@ -39,7 +39,6 @@ namespace SimpleInventory.Models
                 "FROM ItemTypes " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
                 "ORDER BY Name, Description";
-            var currencies = Currency.GetKeyValueCurrencyList();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {

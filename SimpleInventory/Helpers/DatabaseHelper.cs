@@ -283,6 +283,38 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA foreign_keys = 1";
                             command.ExecuteNonQuery();
                             break;
+                        case 6:
+                            // add user permissions table
+                            string addUserPermissionsTable = "" +
+                                "CREATE TABLE UserPermissions (" +
+                                    "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                    "CanAddEditItems INTEGER," +
+                                    "CanAdjustItemQuantity INTEGER," +
+                                    "CanViewDetailedItemQuantityAdjustments INTEGER," +
+                                    "CanScanItems INTEGER," +
+                                    "CanGenerateBarcodes INTEGER," +
+                                    "CanViewReports INTEGER," +
+                                    "CanViewDetailedItemSoldInfo INTEGER," +
+                                    "CanSaveReportsToPDF INTEGER," +
+                                    "CanDeleteItemsFromInventory INTEGER," +
+                                    "CanManageItemCategories INTEGER," +
+                                    "UserID INTEGER REFERENCES Users(ID))";
+                            command.CommandText = addUserPermissionsTable;
+                            command.ExecuteNonQuery();
+                            // add default user permission for default user
+                            string addDefaultPermissions = "" +
+                                "INSERT INTO UserPermissions (CanAddEditItems, CanAdjustItemQuantity, " +
+                                "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
+                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories," +
+                                "UserID) " +
+                                "VALUES (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)";
+                            command.CommandText = addDefaultPermissions;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 6;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else
