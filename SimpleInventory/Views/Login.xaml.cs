@@ -34,5 +34,17 @@ namespace SimpleInventory.Views
                 dataContext.Password = PasswordInput.SecurePassword;
             }
         }
+
+        private void PasswordInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var dataContext = DataContext as LoginViewModel;
+                if (dataContext != null)
+                {
+                    dataContext.AttemptLogin.Execute(null);
+                }
+            }
+        }
     }
 }

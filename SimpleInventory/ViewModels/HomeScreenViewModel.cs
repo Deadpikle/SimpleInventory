@@ -85,5 +85,15 @@ namespace SimpleInventory.ViewModels
                 File.Copy(dbHelper.GetDatabaseFilePath(), saveFileDialog.FileName);
             }
         }
+
+        public ICommand Logout
+        {
+            get { return new RelayCommand(PerformLogout); }
+        }
+        
+        private void PerformLogout()
+        {
+            PopViewModel();
+        }
     }
 }

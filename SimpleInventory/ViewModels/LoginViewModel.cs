@@ -66,6 +66,8 @@ namespace SimpleInventory.ViewModels
             var user = User.LoadUser(Username, SecureStringToString(Password));
             if (user != null)
             {
+                Username = "";
+                Password.Clear();
                 PushViewModel(new HomeScreenViewModel(ViewModelChanger));
             }
             else
