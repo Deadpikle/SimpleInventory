@@ -141,6 +141,7 @@
     <Compile Include="Models\UserPermissions.cs" />
     <Compile Include="Models\WeekSales.cs" />
     <Compile Include="ViewModels\AdjustQuantityViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemTypeViewModel.cs" />
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -159,6 +160,9 @@
     <Compile Include="ViewModels\ViewReportsViewModel.cs" />
     <Compile Include="Views\AdjustQuantity.xaml.cs">
       <DependentUpon>AdjustQuantity.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChangePassword.xaml.cs">
+      <DependentUpon>ChangePassword.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateOrEditItem.xaml.cs">
       <DependentUpon>CreateOrEditItem.xaml</DependentUpon>
@@ -212,6 +216,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\AdjustQuantity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChangePassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

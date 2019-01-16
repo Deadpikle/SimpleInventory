@@ -180,6 +180,23 @@ namespace SimpleInventory.Models
             }
         }
 
+        public void UpdatePassword(string password)
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string update = "UPDATE Users SET PasswordHash = @password WHERE ID = @userID";
+                    command.CommandText = update;
+                    command.Parameters.AddWithValue("@password", HashPassword(password));
+                    command.Parameters.AddWithValue("@userID", ID);
+                    command.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
+
         public void Delete()
         {
             var dbHelper = new DatabaseHelper();

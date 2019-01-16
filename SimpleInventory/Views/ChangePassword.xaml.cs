@@ -17,18 +17,17 @@ using System.Windows.Shapes;
 namespace SimpleInventory.Views
 {
     /// <summary>
-    /// Interaction logic for CreateOrEditUser.xaml
+    /// Interaction logic for ChangePassword.xaml
     /// </summary>
-    public partial class CreateOrEditUser : UserControl
+    public partial class ChangePassword : UserControl
     {
-        public CreateOrEditUser()
+        public ChangePassword()
         {
             InitializeComponent();
         }
-
         private void PasswordInput_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            var dataContext = DataContext as CreateOrEditUserViewModel;
+            var dataContext = DataContext as ChangePasswordViewModel;
             if (dataContext != null)
             {
                 dataContext.Password = PasswordInput.SecurePassword;
@@ -37,7 +36,7 @@ namespace SimpleInventory.Views
 
         private void ConfirmPasswordInput_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            var dataContext = DataContext as CreateOrEditUserViewModel;
+            var dataContext = DataContext as ChangePasswordViewModel;
             if (dataContext != null)
             {
                 dataContext.ConfirmPassword = ConfirmPasswordInput.SecurePassword;

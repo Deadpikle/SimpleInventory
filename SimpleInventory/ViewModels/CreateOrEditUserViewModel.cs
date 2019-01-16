@@ -127,11 +127,12 @@ namespace SimpleInventory.ViewModels
 
         private void SaveAndGoBack()
         {
-            if (_shouldShowPasswordFields && Utilities.SecureStringToString(Password) != Utilities.SecureStringToString(ConfirmPassword))
+            var password = Utilities.SecureStringToString(Password);
+            if (_shouldShowPasswordFields && password != Utilities.SecureStringToString(ConfirmPassword))
             {
                 ErrorMessage = "Password and Confirm Password must match";
             }
-            else if (_shouldShowPasswordFields && (Password == null || Utilities.SecureStringToString(Password) == ""))
+            else if (_shouldShowPasswordFields && (Password == null || password == ""))
             {
                 ErrorMessage = "Password cannot be blank";
             }
@@ -140,7 +141,7 @@ namespace SimpleInventory.ViewModels
                 ErrorMessage = "";
                 if (_isCreating)
                 {
-                    _user.Create(Utilities.SecureStringToString(Password));
+                    _user.Create(password);
                     _createdUserCallback?.CreatedUser(_user);
                 }
                 else
@@ -148,7 +149,7 @@ namespace SimpleInventory.ViewModels
                     // save updates
                     if (_shouldShowPasswordFields)
                     {
-                        _user.Save(Utilities.SecureStringToString(Password));
+                        _user.Save(password);
                     }
                     else
                     {
