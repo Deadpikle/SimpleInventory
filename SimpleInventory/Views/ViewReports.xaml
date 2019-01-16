@@ -10,6 +10,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Name="ReportsUserControl">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -73,7 +76,10 @@
                                     <DataTemplate>
                                         <Button Content="View Details" 
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetails}"
-                                                CommandParameter="{Binding}"/>
+                                                CommandParameter="{Binding}"
+                                                Visibility="{Binding ElementName=ReportsUserControl, 
+                                                    Path=DataContext.CurrentUser.Permissions.CanViewDetailedItemSoldInfo, 
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -94,7 +100,8 @@
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
                     <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center"  
-                    Content="Save Daily Report to PDF" Padding="10" Height="40" Width="200" Margin="5" Command="{Binding SaveDayReportToPDF}"/>
+                    Content="Save Daily Report to PDF" Padding="10" Height="40" Width="200" Margin="5" Command="{Binding SaveDayReportToPDF}"
+                    Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Weekly Report">
@@ -150,7 +157,10 @@
                                     <DataTemplate>
                                         <Button Content="View Details" 
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
-                                                CommandParameter="{Binding}"/>
+                                                CommandParameter="{Binding}"
+                                                Visibility="{Binding ElementName=ReportsUserControl, 
+                                                    Path=DataContext.CurrentUser.Permissions.CanViewDetailedItemSoldInfo, 
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -171,7 +181,8 @@
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
                     <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
-                    Content="Save Weekly Report to PDF" Margin="5,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"/>
+                    Content="Save Weekly Report to PDF" Margin="5,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"
+                    Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Inventory Stock Report">

@@ -10,6 +10,9 @@
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ManageItemsViewModel}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -46,15 +49,20 @@
         </DataGrid>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" >
             <Button Content="Add Item" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAddItemScreen}"
-                    FontSize="13"/>
+                    FontSize="13"
+                    Visibility="{Binding CurrentUser.Permissions.CanAddEditItems, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Edit Item" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToEditItemScreen}"
-                    IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
+                    IsEnabled="{Binding IsItemSelected}" FontSize="13"
+                    Visibility="{Binding CurrentUser.Permissions.CanAddEditItems, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Change Quantity" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToAdjustQuantityScreen}"
-                    IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
+                    IsEnabled="{Binding IsItemSelected}" FontSize="13"
+                    Visibility="{Binding CurrentUser.Permissions.CanAdjustItemQuantity, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Quantity Changes" Margin="5,35,5,0" Padding="10" Height="40" Command="{Binding MoveToViewQuantityChangesScreen}"
-                    IsEnabled="{Binding IsItemSelected}" FontSize="13"/>
+                    IsEnabled="{Binding IsItemSelected}" FontSize="13"
+                    Visibility="{Binding CurrentUser.Permissions.CanViewDetailedItemQuantityAdjustments, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Delete Item" Margin="5,35,5,0" Padding="10" Height="40"
                     IsEnabled="{Binding IsItemSelected}" Click="DeleteItem_Click"
+                    Visibility="{Binding CurrentUser.Permissions.CanDeleteItemsFromInventory, Converter={StaticResource BooleanToVisibilityConverter}}"
                     FontSize="13"/>
         </StackPanel>
     </Grid>
