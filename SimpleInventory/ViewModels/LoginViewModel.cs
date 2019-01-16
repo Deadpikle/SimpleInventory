@@ -45,24 +45,6 @@ namespace SimpleInventory.ViewModels
             get { return new RelayCommand(TryLogin); }
         }
 
-        // https://stackoverflow.com/a/819705
-        // I don't care _that_ much about this string being in RAM for a short time. :)
-        private string SecureStringToString(SecureString value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(Password);
-                return Marshal.PtrToStringUni(valuePtr);
-            }
-            catch { }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
-            return "";
-        }
-
         private void TryLogin()
         {
             if (string.IsNullOrWhiteSpace(Username))
@@ -75,7 +57,7 @@ namespace SimpleInventory.ViewModels
             }
             else
             {
-                var user = User.LoadUser(Username, SecureStringToString(Password));
+                var user = User.LoadUser(Username, Utilities.SecureStringToString(Password));
                 if (user != null)
                 {
                     Username = "";

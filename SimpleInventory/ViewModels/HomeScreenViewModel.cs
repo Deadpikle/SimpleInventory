@@ -96,5 +96,15 @@ namespace SimpleInventory.ViewModels
         {
             PopViewModel();
         }
+
+        public ICommand MoveToManageUsersScreen
+        {
+            get { return new RelayCommand(LoadManageUsersScreen); }
+        }
+
+        private void LoadManageUsersScreen()
+        {
+            PushViewModel(new ManageUsersViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
+        }
     }
 }

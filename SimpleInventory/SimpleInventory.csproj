@@ -144,11 +144,13 @@
     <Compile Include="ViewModels\CreateOrEditItemViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Helpers\ChangeNotifier.cs" />
+    <Compile Include="ViewModels\CreateOrEditUserViewModel.cs" />
     <Compile Include="ViewModels\GenerateBarcodesViewModel.cs" />
     <Compile Include="ViewModels\HomeScreenViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ManageItemsViewModel.cs" />
+    <Compile Include="ViewModels\ManageUsersViewModel.cs" />
     <Compile Include="ViewModels\ScanItemsViewModel.cs" />
     <Compile Include="ViewModels\ViewItemSoldInfoViewModel.cs" />
     <Compile Include="ViewModels\ViewItemTypesViewModel.cs" />
@@ -163,6 +165,9 @@
     <Compile Include="Views\CreateOrEditItemType.xaml.cs">
       <DependentUpon>CreateOrEditItemType.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CreateOrEditUser.xaml.cs">
+      <DependentUpon>CreateOrEditUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GenerateBarcodes.xaml.cs">
       <DependentUpon>GenerateBarcodes.xaml</DependentUpon>
     </Compile>
@@ -174,6 +179,9 @@
     </Compile>
     <Compile Include="Views\ManageItems.xaml.cs">
       <DependentUpon>ManageItems.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManageUsers.xaml.cs">
+      <DependentUpon>ManageUsers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ScanItems.xaml.cs">
       <DependentUpon>ScanItems.xaml</DependentUpon>
@@ -214,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CreateOrEditUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GenerateBarcodes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -227,6 +239,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ManageItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageUsers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

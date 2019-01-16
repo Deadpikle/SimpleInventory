@@ -27,7 +27,15 @@ namespace SimpleInventory.Models
 
         public static User LoadUser(string username, string password)
         {
-            User user = null;
+            var data = LoadUsers(" WHERE u.Username = @username AND u.PasswordHash = @passwordHash ",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@username", username),
+                                                    new Tuple<string, string>("@passwordHash", HashPassword(password))});
+            return data.Count > 0 ? data[0] : null;
+        }
+
+        public static List<User> LoadUsers(string whereClause = "", List<Tuple<string, string>> whereParams = null)
+        {
+            var users = new List<User>();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
@@ -38,15 +46,21 @@ namespace SimpleInventory.Models
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
                                 "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers " +
                         "FROM Users u JOIN UserPermissions up ON u.ID = up.UserID " +
-                        "WHERE u.Username = @username AND u.PasswordHash = @passwordHash";
+                            (string.IsNullOrEmpty(whereClause) ? " " : whereClause) + " " +
+                        "ORDER BY u.Username, u.Name";
                     command.CommandText = query;
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@passwordHash", HashPassword(password));
+                    if (!string.IsNullOrEmpty(whereClause) && whereParams != null)
+                    {
+                        foreach (Tuple<string, string> keyValuePair in whereParams)
+                        {
+                            command.Parameters.AddWithValue(keyValuePair.Item1, keyValuePair.Item2);
+                        }
+                    }
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            user = new User();
+                            var user = new User();
                             user.ID = dbHelper.ReadInt(reader, "UserID");
                             user.Name = dbHelper.ReadString(reader, "Name");
                             user.Username = dbHelper.ReadString(reader, "Username");
@@ -65,13 +79,14 @@ namespace SimpleInventory.Models
                             user.Permissions.CanDeleteItemsFromInventory = dbHelper.ReadBool(reader, "CanDeleteItemsFromInventory");
                             user.Permissions.CanManageItemCategories = dbHelper.ReadBool(reader, "CanManageItemCategories");
                             user.Permissions.CanManageUsers = dbHelper.ReadBool(reader, "CanManageUsers");
+                            users.Add(user);
                         }
                         reader.Close();
                     }
                 }
                 conn.Close();
             }
-            return user;
+            return users;
         }
     }
 }

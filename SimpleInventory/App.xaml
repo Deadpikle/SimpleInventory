@@ -44,6 +44,12 @@
             <DataTemplate DataType="{x:Type viewModels:ViewItemSoldInfoViewModel}">
                 <views:ViewItemSoldInfo/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ManageUsersViewModel}">
+                <views:ManageUsers/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:CreateOrEditUserViewModel}">
+                <views:CreateOrEditUser/>
+            </DataTemplate>
             <Style TargetType="{x:Type mahapps:WindowButtonCommands}" BasedOn="{StaticResource MahApps.Metro.Styles.WindowButtonCommands.Win10}" />
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}">
                 <Setter Property="FontSize" Value="14"/>
