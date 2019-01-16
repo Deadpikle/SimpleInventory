@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
+using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,13 @@ namespace SimpleInventory.ViewModels
 
         public HomeScreenViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
+        }
+
+        public User User { get; set; }
+
+        public string Username
+        {
+            get { return User?.Username; }
         }
 
         public ICommand MoveToManageItemsScreen

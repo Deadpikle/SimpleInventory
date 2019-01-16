@@ -12,7 +12,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Simple Inventory" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0 5 0 10"/>
+        <Label Grid.Row="0" Content="Simple Inventory" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,5,0,10"/>
+        <StackPanel Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" Orientation="Vertical" Margin="0,0,5,0">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Logged in as:" HorizontalAlignment="Right" FontSize="12"  Margin="0,0,0,2" FontStyle="Italic"/>
+                <Label Content="{Binding Username}" HorizontalAlignment="Right" FontSize="12" Margin="0,0,0,0"/>
+            </StackPanel>
+            <Button Content="Change Password" Command="{Binding MoveToManageItemsScreen}" FontSize="12" Padding="2" Margin="0,0,0,0"
+                    BorderBrush="Transparent" Background="Transparent"
+                    HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
+        </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <Button Content="Manage Inventory" Margin="0 0 0 10" Width="200" Command="{Binding MoveToManageItemsScreen}" FontSize="16"/>
             <Button Content="Scan Items" Margin="0 0 0 10" Width="200" Command="{Binding MoveToScanItemsScreen}" FontSize="16"/>
