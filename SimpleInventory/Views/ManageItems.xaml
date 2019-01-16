@@ -44,6 +44,7 @@
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Sale Price" Binding="{Binding CostWithCurrency}"/>
                 <DataGridTextColumn Header="Profit / Item" Binding="{Binding ProfitPerItemWithCurrency}"/>
+                <DataGridTextColumn Header="Added By" Binding="{Binding CreatedByUserName}"/>
                 <DataGridTextColumn Header="Barcode" Binding="{Binding BarcodeNumber}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>

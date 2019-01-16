@@ -15,6 +15,7 @@ namespace SimpleInventory.Models
         public string Description { get; set; }
         public string PicturePath { get; set; }
         public int CreatedByUserID { get; set; }
+        public string CreatedByUserName { get; set; }
         public ItemType Type { get; set; }
 
         public decimal Cost { get; set; }
@@ -58,7 +59,7 @@ namespace SimpleInventory.Models
                 "SELECT ii.ID, ii.Name, ii.Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
                 "       ProfitPerItem, ProfitPerItemCurrencyID, ii.WasDeleted, " +
                 "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
-                "       it.IsDefault AS ItemTypeIsDefault " +
+                "       it.IsDefault AS ItemTypeIsDefault, u.Name AS UserName " +
                 "FROM InventoryItems ii " +
                 "   LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
                 "   LEFT JOIN ItemTypes it ON ii.ItemTypeID = it.ID " +
@@ -96,6 +97,7 @@ namespace SimpleInventory.Models
                             item.Quantity = dbHelper.ReadInt(reader, "Quantity");
                             item.BarcodeNumber = dbHelper.ReadString(reader, "BarcodeNumber");
                             item.CreatedByUserID = dbHelper.ReadInt(reader, "CreatedByUserID");
+                            item.CreatedByUserName = dbHelper.ReadString(reader, "UserName");
                             item.Type = new ItemType(
                                 dbHelper.ReadInt(reader, "ItemTypeID"),
                                 dbHelper.ReadString(reader, "ItemTypeName"),

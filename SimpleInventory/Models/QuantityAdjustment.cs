@@ -15,6 +15,7 @@ namespace SimpleInventory.Models
         public DateTime DateTimeChanged { get; set; }
         public int InventoryItemID { get; set; }
         public int UserID { get; set; }
+        public string UserName { get; set; }
 
         public string FriendlyDateTime
         {
@@ -49,8 +50,8 @@ namespace SimpleInventory.Models
                 return adjustments;
             }
             string query = "" +
-                "SELECT ID, AmountChanged, DateTimeChanged, AdjustedByUserID " +
-                "FROM QuantityAdjustments " +
+                "SELECT qa.ID, AmountChanged, DateTimeChanged, AdjustedByUserID, u.Name AS UserName " +
+                "FROM QuantityAdjustments qa JOIN Users u ON qa.AdjustedByUserID = u.ID " +
                 "WHERE InventoryItemID = @id " +
                 "ORDER BY DateTimeChanged";
             var currencies = Currency.GetKeyValueCurrencyList();
@@ -71,6 +72,7 @@ namespace SimpleInventory.Models
                             adjustment.DateTimeChanged = Convert.ToDateTime(dbHelper.ReadString(reader, "DateTimeChanged"));
                             adjustment.UserID = dbHelper.ReadInt(reader, "AdjustedByUserID");
                             adjustment.InventoryItemID = item.ID;
+                            adjustment.UserName = dbHelper.ReadString(reader, "UserName");
                             adjustments.Add(adjustment);
                         }
                         reader.Close();
