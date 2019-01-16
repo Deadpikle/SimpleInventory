@@ -4,6 +4,7 @@ SimpleInventory is a small Windows 7+ WPF software application to manage small i
 
 Feature set:
 
+* Multiple users, each of which can be set with different permissions for the different software features available
 * Manage your current inventory, including current stock/quantity
 * Sort your inventory into different categories (drinks, school supplies, etc.) -- these different categories then show up as different subtotals on reports
 * Scan items in using a barcode scanner to quickly mark items as sold
@@ -13,6 +14,10 @@ Feature set:
 * Run daily or weekly reports to see how much income you generated, how many items were sold, and how much profit you made
 * Run inventory reports to see how much was in stock on any given date
 * View details on when items were sold or when the quantity of an item was adjusted down to the second
+
+## Default username and password
+
+The default username is `admin`, and the default password is `changeme`. Please change the password before you use this in real life!
 
 ## What sorts of things would be nice to add?
 
