@@ -10,7 +10,7 @@
         <StackPanel Orientation="Vertical" Margin="0,20,0,0">
             <Label Content="Simple Inventory Login" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center"/>
             <TextBox Width="300" mahapps:TextBoxHelper.Watermark="Username" Margin="10" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                     KeyDown="UsernameTextbox_KeyDown"/>
+                     KeyDown="UsernameTextbox_KeyDown" Name="UsernameInput"/>
             <PasswordBox Name="PasswordInput" Width="300" mahapps:TextBoxHelper.Watermark="Password" Margin="10" PasswordChanged="PasswordInput_PasswordChanged"
                          KeyDown="PasswordInput_KeyDown"/>
             <Button Content="Login" Width="150" Command="{Binding AttemptLogin}"/>

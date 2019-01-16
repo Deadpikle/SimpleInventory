@@ -24,6 +24,13 @@ namespace SimpleInventory.Views
         public Login()
         {
             InitializeComponent();
+            Loaded += Login_Loaded;
+        }
+
+        private void Login_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(UsernameInput);
+            Loaded -= Login_Loaded;
         }
 
         private void PasswordInput_PasswordChanged(object sender, RoutedEventArgs e)

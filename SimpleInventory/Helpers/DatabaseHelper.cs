@@ -327,6 +327,18 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 8:
+                            // add WasDeleted column to Users
+                            string addWasDeletedUsersColumn = "" +
+                                "ALTER TABLE Users " +
+                                "ADD COLUMN WasDeleted INTEGER DEFAULT 0;";
+                            command.CommandText = addWasDeletedUsersColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 8;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else

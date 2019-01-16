@@ -56,7 +56,7 @@ namespace SimpleInventory.Models
             var items = new List<InventoryItem>();
             string query = "" +
                 "SELECT ii.ID, ii.Name, ii.Description, PicturePath, Cost, CostCurrencyID, Quantity, BarcodeNumber, CreatedByUserID," +
-                "       ProfitPerItem, ProfitPerItemCurrencyID, WasDeleted, " +
+                "       ProfitPerItem, ProfitPerItemCurrencyID, ii.WasDeleted, " +
                 "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
                 "       it.IsDefault AS ItemTypeIsDefault " +
                 "FROM InventoryItems ii " +
@@ -114,19 +114,19 @@ namespace SimpleInventory.Models
 
         public static List<InventoryItem> LoadItemsNotDeleted()
         {
-            return LoadItems(" WHERE WasDeleted = 0");
+            return LoadItems(" WHERE ii.WasDeleted = 0");
         }
 
         public static InventoryItem LoadItemByID(int id)
         {
-            var data = LoadItems(" WHERE WasDeleted = 0 AND ii.ID = @id ", 
+            var data = LoadItems(" WHERE ii.WasDeleted = 0 AND ii.ID = @id ", 
                 new List<Tuple<string, string>>() { new Tuple<string, string>("@id", id.ToString()) });
             return data.Count > 0 ? data[0] : null;
         }
 
         public static InventoryItem LoadItemByBarcode(string barcode)
         {
-            var data = LoadItems(" WHERE WasDeleted = 0 AND BarcodeNumber = @barcode ",
+            var data = LoadItems(" WHERE ii.WasDeleted = 0 AND BarcodeNumber = @barcode ",
                 new List<Tuple<string, string>>() { new Tuple<string, string>("@barcode", barcode) });
             return data.Count > 0 ? data[0] : null;
         }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
-    class ManageUsersViewModel : BaseViewModel
+    class ManageUsersViewModel : BaseViewModel, ICreatedUser
     {
         private List<User> _users;
         private User _selectedUser;
@@ -29,12 +29,12 @@ namespace SimpleInventory.ViewModels
         public User SelectedUser
         {
             get { return _selectedUser; }
-            set { _selectedUser = value; NotifyPropertyChanged(); }
+            set { _selectedUser = value; NotifyPropertyChanged(); NotifyPropertyChanged(nameof(CanEditDeleteCurrentUser)); }
         }
 
         public bool CanEditDeleteCurrentUser
         {
-            get { return _selectedUser != null && _selectedUser.ID == CurrentUser.ID; }
+            get { return _selectedUser != null && _selectedUser.ID != CurrentUser.ID; }
         }
 
         public ICommand GoToMainMenu
@@ -59,12 +59,17 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAddUserScreen()
         {
-            PushViewModel(new CreateOrEditUserViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
+            PushViewModel(new CreateOrEditUserViewModel(ViewModelChanger, this) { CurrentUser = CurrentUser });
         }
 
         private void LoadEditUserScreen()
         {
-            PushViewModel(new CreateOrEditUserViewModel(ViewModelChanger, SelectedUser) { CurrentUser = CurrentUser });
+            PushViewModel(new CreateOrEditUserViewModel(ViewModelChanger, SelectedUser, this) { CurrentUser = CurrentUser });
+        }
+
+        public void CreatedUser(User user)
+        {
+            Users.Add(user);
         }
     }
 }

@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:SimpleInventory.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -32,19 +34,24 @@
                 <TextBox Width="300" Text="{Binding User.Username}" VerticalContentAlignment="Center" FontSize="14"
                          TabIndex="1"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <CheckBox Grid.Row="0" Grid.Column="0" Margin="6,4,0,0" 
+                      Content="Change Password?" FontSize="14" IsChecked="{Binding ShouldShowPasswordFields}"
+                      Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" 
+                        Visibility="{Binding ShouldShowPasswordFields, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Password" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <PasswordBox Width="300" VerticalContentAlignment="Center" FontSize="14"
-                         TabIndex="2"/>
+                         TabIndex="2" Name="PasswordInput" PasswordChanged="PasswordInput_PasswordChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" 
+                        Visibility="{Binding ShouldShowPasswordFields, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Confirm Password" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"
                        Visibility="Visible"/>
                 <PasswordBox Width="300" VerticalContentAlignment="Center" FontSize="14"
-                         TabIndex="3"/>
+                         TabIndex="3" Name="ConfirmPasswordInput" PasswordChanged="ConfirmPasswordInput_PasswordChanged"/>
             </StackPanel>
             <StackPanel Orientation="Vertical">
-                <Label Content="Permissions" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <Label Content="Permissions" Margin="0,0,10,0" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                 <Grid Margin="8,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -55,35 +62,36 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Add/Edit Items" FontSize="14" IsChecked="{Binding User.Permissions.CanAddEditItems}"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" 
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" 
                               Content="Change Item Quantity" FontSize="14" IsChecked="{Binding User.Permissions.CanAdjustItemQuantity}"/>
                     <CheckBox Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" 
                               Content="View Details on Item Quantity Changes" FontSize="14" IsChecked="{Binding User.Permissions.CanViewDetailedItemQuantityAdjustments}"/>
-                    <CheckBox Grid.Row="1" Grid.Column="1" 
+                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" 
                               Content="Delete Items from Inventory" FontSize="14" IsChecked="{Binding User.Permissions.CanDeleteItemsFromInventory}"/>
                     <CheckBox Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Scan Items" FontSize="14" IsChecked="{Binding User.Permissions.CanScanItems}"/>
-                    <CheckBox Grid.Row="2" Grid.Column="1" 
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
                               Content="Generate Barcodes" FontSize="14" IsChecked="{Binding User.Permissions.CanGenerateBarcodes}"/>
                     <CheckBox Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" 
                               Content="View Reports" FontSize="14" IsChecked="{Binding User.Permissions.CanViewReports}"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" 
+                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
                               Content="View Details on Item Sales Info (Reports)" FontSize="14" IsChecked="{Binding User.Permissions.CanViewDetailedItemSoldInfo}"/>
                     <CheckBox Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Save Reports to PDF" FontSize="14" IsChecked="{Binding User.Permissions.CanSaveReportsToPDF}"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" 
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5,0,0,0"
                               Content="Manage Item Categories" FontSize="14" IsChecked="{Binding User.Permissions.CanManageItemCategories}"/>
-                    <CheckBox Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" 
+                    <CheckBox Grid.Row="5" Grid.Column="0" 
                               Content="Manage Users" FontSize="14" IsChecked="{Binding User.Permissions.CanManageUsers}"/>
                 </Grid>
             </StackPanel>
+            <Label FontSize="12" Content="{Binding ErrorMessage}" HorizontalAlignment="Center" Foreground="IndianRed" FontWeight="Bold"/>
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" IsTabStop="False"
-                Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveUser}"/>
+                Content="Save" Margin="15,5,5,5" Padding="5" Height="35" Width="150" Command="{Binding SaveUser}"/>
         </StackPanel>
     </Grid>
 </UserControl>

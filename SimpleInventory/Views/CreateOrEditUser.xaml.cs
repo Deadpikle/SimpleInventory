@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,29 @@ namespace SimpleInventory.Views
         public CreateOrEditUser()
         {
             InitializeComponent();
+        }
+
+        private void PasswordInput_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var dataContext = DataContext as CreateOrEditUserViewModel;
+            if (dataContext != null)
+            {
+                dataContext.Password = PasswordInput.SecurePassword;
+            }
+        }
+
+        private void ConfirmPasswordInput_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var dataContext = DataContext as CreateOrEditUserViewModel;
+            if (dataContext != null)
+            {
+                dataContext.ConfirmPassword = ConfirmPasswordInput.SecurePassword;
+            }
+        }
+
+        private void PasswordInput_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }
