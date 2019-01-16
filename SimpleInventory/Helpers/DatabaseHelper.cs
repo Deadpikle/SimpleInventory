@@ -327,7 +327,6 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
-
                     }
                 }
                 else

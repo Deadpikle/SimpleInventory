@@ -35,6 +35,14 @@ namespace SimpleInventory.Views
             }
         }
 
+        private void UsernameTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Keyboard.Focus(PasswordInput);
+            }
+        }
+
         private void PasswordInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

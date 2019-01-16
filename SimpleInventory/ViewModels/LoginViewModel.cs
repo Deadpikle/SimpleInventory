@@ -55,24 +55,38 @@ namespace SimpleInventory.ViewModels
                 valuePtr = Marshal.SecureStringToGlobalAllocUnicode(Password);
                 return Marshal.PtrToStringUni(valuePtr);
             }
+            catch { }
             finally
             {
                 Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
             }
+            return "";
         }
 
         private void TryLogin()
         {
-            var user = User.LoadUser(Username, SecureStringToString(Password));
-            if (user != null)
+            if (string.IsNullOrWhiteSpace(Username))
             {
-                Username = "";
-                Password.Clear();
-                PushViewModel(new HomeScreenViewModel(ViewModelChanger));
+                Error = "Username is required";
+            }
+            else if (Password == null)
+            {
+                Error = "Password is required";
             }
             else
             {
-                Error = "Invalid username or password";
+                var user = User.LoadUser(Username, SecureStringToString(Password));
+                if (user != null)
+                {
+                    Username = "";
+                    Password.Clear();
+                    Error = "";
+                    PushViewModel(new HomeScreenViewModel(ViewModelChanger));
+                }
+                else
+                {
+                    Error = "Invalid username or password";
+                }
             }
         }
     }
