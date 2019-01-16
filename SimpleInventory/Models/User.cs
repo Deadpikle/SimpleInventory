@@ -36,7 +36,7 @@ namespace SimpleInventory.Models
                     string query = "" +
                         "SELECT u.ID AS UserID, u.Name, u.Username, up.ID AS PermissionID, CanAddEditItems, CanAdjustItemQuantity, " +
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
-                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories " +
+                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers " +
                         "FROM Users u JOIN UserPermissions up ON u.ID = up.UserID " +
                         "WHERE u.Username = @username AND u.PasswordHash = @passwordHash";
                     command.CommandText = query;
