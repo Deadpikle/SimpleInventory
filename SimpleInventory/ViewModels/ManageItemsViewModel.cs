@@ -52,7 +52,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAddItemScreen()
         {
-            PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger, this));
+            PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger, this) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToEditItemScreen
@@ -64,7 +64,7 @@ namespace SimpleInventory.ViewModels
         {
             if (SelectedItem != null)
             {
-                PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger, SelectedItem));
+                PushViewModel(new CreateOrEditItemViewModel(ViewModelChanger, SelectedItem) { CurrentUser = CurrentUser });
             }
         }
 
@@ -75,7 +75,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAdjustQuantityScreen()
         {
-            PushViewModel(new AdjustQuantityViewModel(ViewModelChanger, SelectedItem));
+            PushViewModel(new AdjustQuantityViewModel(ViewModelChanger, SelectedItem) { CurrentUser = CurrentUser });
         }
 
         public ICommand GoToMainMenu
@@ -111,7 +111,7 @@ namespace SimpleInventory.ViewModels
         {
             if (SelectedItem != null)
             {
-                PushViewModel(new ViewQuantityAdjustmentsViewModel(ViewModelChanger, SelectedItem));
+                PushViewModel(new ViewQuantityAdjustmentsViewModel(ViewModelChanger, SelectedItem) { CurrentUser = CurrentUser });
             }
         }
     }

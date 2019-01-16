@@ -52,8 +52,6 @@ namespace SimpleInventory.ViewModels
 
         #region Properties
 
-        public User CurrentUser { get; set; }
-
         public List<Currency> Currencies
         {
             get { return _currencies; }

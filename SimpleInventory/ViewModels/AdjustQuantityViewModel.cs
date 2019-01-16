@@ -21,8 +21,6 @@ namespace SimpleInventory.ViewModels
             Quantity = item?.Quantity ?? 0;
         }
 
-        public User CurrentUser { get; set; }
-
         public string ItemName
         {
             get { return _item?.Name; }

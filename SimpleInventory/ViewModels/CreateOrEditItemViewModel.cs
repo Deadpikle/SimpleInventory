@@ -74,8 +74,6 @@ namespace SimpleInventory.ViewModels
 
         #region Properties
 
-        public User CurrentUser { get; set; }
-
         public string ScreenTitle
         {
             get { return _screenTitle; }

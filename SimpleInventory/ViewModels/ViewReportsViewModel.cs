@@ -148,7 +148,8 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewPurchaseDetailsScreen(ReportItemSold reportForItem)
         {
-            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, reportForItem));
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, 
+                reportForItem) { CurrentUser = CurrentUser });
         }
 
         public ICommand ViewPurchaseDetailsForWeek
@@ -158,7 +159,8 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewPurchaseDetailsScreenForWeek(ReportItemSold reportForItem)
         {
-            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, SelectedWeeklyReportDate.AddDays(6), reportForItem));
+            PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, 
+                SelectedWeeklyReportDate.AddDays(6), reportForItem) { CurrentUser = CurrentUser });
         }
     }
 }

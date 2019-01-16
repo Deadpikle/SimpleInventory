@@ -19,13 +19,6 @@ namespace SimpleInventory.ViewModels
         {
         }
 
-        public User User { get; set; }
-
-        public string Username
-        {
-            get { return User?.Username; }
-        }
-
         public ICommand MoveToManageItemsScreen
         {
             get { return new RelayCommand(LoadManageItemsScreen); }
@@ -33,7 +26,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadManageItemsScreen()
         {
-            PushViewModel(new ManageItemsViewModel(ViewModelChanger));
+            PushViewModel(new ManageItemsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToScanItemsScreen
@@ -43,7 +36,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadScanItemsScreen()
         {
-            PushViewModel(new ScanItemsViewModel(ViewModelChanger));
+            PushViewModel(new ScanItemsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToGenerateBarcodesScreen
@@ -53,7 +46,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadGenerateBarcodesScreen()
         {
-            PushViewModel(new GenerateBarcodesViewModel(ViewModelChanger));
+            PushViewModel(new GenerateBarcodesViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToReportsScreen
@@ -63,7 +56,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadReportsScreen()
         {
-            PushViewModel(new ViewReportsViewModel(ViewModelChanger));
+            PushViewModel(new ViewReportsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToManageItemCategoriesScreen
@@ -73,7 +66,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewItemTypesScreen()
         {
-            PushViewModel(new ViewItemTypesViewModel(ViewModelChanger));
+            PushViewModel(new ViewItemTypesViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
         public ICommand BackupData

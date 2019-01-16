@@ -76,7 +76,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadAddItemCategoryScreen()
         {
-            PushViewModel(new CreateOrEditItemTypeViewModel(ViewModelChanger, this));
+            PushViewModel(new CreateOrEditItemTypeViewModel(ViewModelChanger, this) { CurrentUser = CurrentUser });
         }
 
         public ICommand MoveToEditItemCategoryScreen
@@ -86,7 +86,7 @@ namespace SimpleInventory.ViewModels
 
         private void LoadEditItemCategoryScreen()
         {
-            PushViewModel(new CreateOrEditItemTypeViewModel(ViewModelChanger, this, SelectedItem));
+            PushViewModel(new CreateOrEditItemTypeViewModel(ViewModelChanger, this, SelectedItem) { CurrentUser = CurrentUser });
         }
 
         public void DeleteItem(ItemType itemType)
