@@ -131,6 +131,10 @@ namespace SimpleInventory.ViewModels
             {
                 ErrorMessage = "Password and Confirm Password must match";
             }
+            else if (_shouldShowPasswordFields && (Password == null || Utilities.SecureStringToString(Password) == ""))
+            {
+                ErrorMessage = "Password cannot be blank";
+            }
             else
             {
                 ErrorMessage = "";

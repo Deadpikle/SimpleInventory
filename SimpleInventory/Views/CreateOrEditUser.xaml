@@ -91,7 +91,7 @@
             </StackPanel>
             <Label FontSize="12" Content="{Binding ErrorMessage}" HorizontalAlignment="Center" Foreground="IndianRed" FontWeight="Bold"/>
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" IsTabStop="False"
-                Content="Save" Margin="15,5,5,5" Padding="5" Height="35" Width="150" Command="{Binding SaveUser}"/>
+                Content="Save" Margin="5" Padding="5" Height="35" Width="150" Command="{Binding SaveUser}"/>
         </StackPanel>
     </Grid>
 </UserControl>
