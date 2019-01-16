@@ -315,6 +315,19 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 7:
+                            // add CanManageUsers column to UserPermissions
+                            string addCanManageUsersColumn = "" +
+                                "ALTER TABLE UserPermissions " +
+                                "ADD COLUMN CanManageUsers INTEGER DEFAULT 1;";
+                            command.CommandText = addCanManageUsersColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 7;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
+
                     }
                 }
                 else

@@ -21,6 +21,7 @@ namespace SimpleInventory.Models
         public bool CanSaveReportsToPDF { get; set; }
         public bool CanDeleteItemsFromInventory { get; set; }
         public bool CanManageItemCategories { get; set; }
+        public bool CanManageUsers { get; set; }
 
         public UserPermissions()
         {
@@ -37,6 +38,7 @@ namespace SimpleInventory.Models
             CanSaveReportsToPDF = false;
             CanDeleteItemsFromInventory = false;
             CanManageItemCategories = false;
+            CanManageUsers = false;
         }
     }
 }

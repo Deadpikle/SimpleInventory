@@ -64,6 +64,7 @@ namespace SimpleInventory.Models
                             user.Permissions.CanSaveReportsToPDF = dbHelper.ReadBool(reader, "CanSaveReportsToPDF");
                             user.Permissions.CanDeleteItemsFromInventory = dbHelper.ReadBool(reader, "CanDeleteItemsFromInventory");
                             user.Permissions.CanManageItemCategories = dbHelper.ReadBool(reader, "CanManageItemCategories");
+                            user.Permissions.CanManageUsers = dbHelper.ReadBool(reader, "CanManageUsers");
                         }
                         reader.Close();
                     }
