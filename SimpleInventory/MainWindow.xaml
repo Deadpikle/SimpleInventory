@@ -8,7 +8,7 @@
         xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
         mc:Ignorable="d"
         Title="Simple Inventory" Height="450" Width="800" MinHeight="480" MinWidth="680"
-        TitleCaps="False" GlowBrush="SkyBlue">
+        TitleCaps="False" GlowBrush="SkyBlue" Icon="Graphics/icons8_pos_terminal_96_ahu_icon.ico">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>

@@ -35,6 +35,10 @@ The default username is `admin`, and the default password is `changeme`. Please 
 
 Glad you asked! There are always things that can be done on an open-source project: fix bugs, add new features, and more! Check out the issues tab of this repository and take a look at what bugs have been reported and which features have been requested. If you'd like to request a feature or file a bug, by all means, please do so!
 
+## Special Thanks
+
+The icon for this software was created by [Icons8](https://icons8.com) and is their POS Terminal icon. Thank you! :)
+
 ## License
 
 MIT License. Thanks for using the software!

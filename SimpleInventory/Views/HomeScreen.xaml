@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Simple Inventory" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="0,5,0,10"/>
         <StackPanel Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right" Orientation="Vertical" Margin="0,0,5,0">
@@ -43,5 +44,7 @@
                     Visibility="{Binding CurrentUser.Permissions.CanManageUsers, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Logout" Margin="0 0 0 5" Width="200" Command="{Binding Logout}" FontSize="16"/>
         </StackPanel>
+        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+               Content="The icon for this software was created by Icons8 (https://icons8.com) and is their POS Terminal icon. Thank you! :)"/>
     </Grid>
 </UserControl>

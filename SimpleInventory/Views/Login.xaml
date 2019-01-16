@@ -16,5 +16,7 @@
             <Button Content="Login" Width="150" Command="{Binding AttemptLogin}"/>
             <Label Content="{Binding Error}" Foreground="IndianRed" FontWeight="Bold" FontSize="16" FontStyle="Italic" HorizontalAlignment="Center"/>
         </StackPanel>
+        <Label HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+               Content="The icon for this software was created by Icons8 (https://icons8.com) and is their POS Terminal icon. Thank you! :)"/>
     </Grid>
 </UserControl>
