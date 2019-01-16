@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleInventory.Models;
+using SimpleInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,15 @@ namespace SimpleInventory.Views
         public ManageUsers()
         {
             InitializeComponent();
+        }
+
+        private void DeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to delete this user?", "Delete User", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+            {
+                (DataContext as ManageUsersViewModel)?.DeleteUser(UsersGrid.SelectedValue as User);
+            }
         }
     }
 }

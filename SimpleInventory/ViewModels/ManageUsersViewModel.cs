@@ -3,6 +3,7 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,15 +13,15 @@ namespace SimpleInventory.ViewModels
 {
     class ManageUsersViewModel : BaseViewModel, ICreatedUser
     {
-        private List<User> _users;
+        private ObservableCollection<User> _users;
         private User _selectedUser;
 
         public ManageUsersViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
-            _users = User.LoadUsers();
+            _users = new ObservableCollection<User>(User.LoadUsers());
         }
 
-        public List<User> Users
+        public ObservableCollection<User> Users
         {
             get { return _users; }
             set { _users = value; NotifyPropertyChanged(); }
@@ -70,6 +71,12 @@ namespace SimpleInventory.ViewModels
         public void CreatedUser(User user)
         {
             Users.Add(user);
+        }
+
+        public void DeleteUser(User user)
+        {
+            user.Delete();
+            Users.Remove(user);
         }
     }
 }
