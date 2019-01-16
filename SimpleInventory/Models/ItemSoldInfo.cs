@@ -15,6 +15,7 @@ namespace SimpleInventory.Models
         public int QuantitySold { get; set; } // defaults to 1
         public int InventoryItemID { get; set; }
         public int SoldByUserID { get; set; }
+        public string SoldByUserName { get; set; }
 
         // we remember the cost of things in case it changes over time so we have the original info :)
         /// <summary>
@@ -107,9 +108,10 @@ namespace SimpleInventory.Models
                         "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
                         "       isi.InventoryItemID, isi.SoldByUserID, i.Name, i.Description, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID, " +
                         "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
-                        "       it.IsDefault AS ItemTypeIsDefault " +
+                        "       it.IsDefault AS ItemTypeIsDefault, u.Name AS UserName " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
                         "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
+                        "   JOIN Users u ON isi.SoldByUserID = u.ID " +
                         (string.IsNullOrWhiteSpace(whereClause) ? "" : whereClause + " ") +
                         "ORDER BY i.Name, isi.DateTimeSold";
 
@@ -136,6 +138,7 @@ namespace SimpleInventory.Models
                                 dbHelper.ReadBool(reader, "ItemTypeIsDefault"));
                             item.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
                             item.SoldByUserID = dbHelper.ReadInt(reader, "SoldByUserID");
+                            item.SoldByUserName = dbHelper.ReadString(reader, "UserName");
                             string dateTimeSold = dbHelper.ReadString(reader, "DateTimeSold");
                             item.DateTimeSold = Convert.ToDateTime(dateTimeSold); // DateTime.ParseExact(dateTimeSold, 
                                 //Utilities.DateTimeToDateOnlyStringFormat(), System.Globalization.CultureInfo.InvariantCulture);
