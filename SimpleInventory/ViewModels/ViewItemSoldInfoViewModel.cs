@@ -119,7 +119,7 @@ namespace SimpleInventory.ViewModels
         {
             info.Delete();
             ItemSoldInfoData.Remove(info);
-            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info); // returns null if no updated report (e.g. you deleted the last item of that type that was sold)
+            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info); 
             if (ReportForItem == null)
             {
                 PopViewModel();
