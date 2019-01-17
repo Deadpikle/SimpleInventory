@@ -53,10 +53,10 @@
                 <DataGridTextColumn Header="Income" Binding="{Binding TotalCostWithCurrency}"/>
                 <DataGridTextColumn Header="Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                 <DataGridTextColumn Header="Sold By" Binding="{Binding SoldByUserName}"/>
-                <DataGridTemplateColumn Header="" CanUserResize="False" Width="100">
+                <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" 
+                            <Button Content="Delete" Width="100" HorizontalAlignment="Left" Margin="5,0,0,0"
                                     Command="{Binding ElementName=ViewPurchaseDetailsControl, Path=DataContext.ConfirmDeleteItemSoldInfo}"
                                     CommandParameter="{Binding}"
                                     Visibility="{Binding ElementName=ViewPurchaseDetailsControl, 

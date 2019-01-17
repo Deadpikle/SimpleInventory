@@ -71,10 +71,10 @@
                             <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
                             <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
                             <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
-                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="125">
+                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="View Details" 
+                                        <Button Content="View Details" Width="125" HorizontalAlignment="Left" Margin="5,0,0,0"
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetails}"
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding ElementName=ReportsUserControl, 
