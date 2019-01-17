@@ -23,13 +23,14 @@ The default username is `admin`, and the default password is `changeme`. Please 
 
 * UI for adding and editing currencies
 * Search field on inventory screen
-* Ability to login/logout so the system tracks which users are doing what things (supported by the database but not by the UI and only somewhat by the view model code)
-  * Also need to add/edit/update these users
-  * Add user permission levels so that people who just run the scanning can't view all the reports/extra info?
-* More reporting capabilities (details on items purchased including timestamps, etc.)
+* More reporting capabilities?
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
-* Use LINQ or similar to clean up the manual SQLite database calls
 * Settings to change default paper size, date format, etc. throughout the app
+
+### Code enhancements
+
+* Use LINQ or similar to clean up the manual SQLite database calls
+* Use a templated interface for creating an item (e.g. `ICreatedUser`) instead of one interface per type
 
 ## Can I help contribute?
 

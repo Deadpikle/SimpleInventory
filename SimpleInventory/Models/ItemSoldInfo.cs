@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SimpleInventory.Models
 {
-    class ItemSoldInfo
+    public class ItemSoldInfo
     {
         public int ID { get; set; }
         public DateTime DateTimeSold { get; set; }

@@ -8,7 +8,11 @@
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Name="ViewPurchaseDetailsControl">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -49,6 +53,18 @@
                 <DataGridTextColumn Header="Income" Binding="{Binding TotalCostWithCurrency}"/>
                 <DataGridTextColumn Header="Profit" Binding="{Binding TotalProfitWithCurrency}"/>
                 <DataGridTextColumn Header="Sold By" Binding="{Binding SoldByUserName}"/>
+                <DataGridTemplateColumn Header="" CanUserResize="False" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" 
+                                    Command="{Binding ElementName=ViewPurchaseDetailsControl, Path=DataContext.ConfirmDeleteItemSoldInfo}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding ElementName=ViewPurchaseDetailsControl, 
+                                        Path=DataContext.CurrentUser.Permissions.CanDeleteItemsSold, 
+                                        Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <TextBlock Grid.Row="4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,5">

@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
 {
-    class ViewReportsViewModel : BaseViewModel
+    class ViewReportsViewModel : BaseViewModel, IDeletedItemSoldInfo
     {
         private DateTime _selectedDailyReportDate;
         private DateTime _selectedWeeklyReportDate;
@@ -22,12 +22,15 @@ namespace SimpleInventory.ViewModels
         private int _selectedTabIndex;
 
         private List<InventoryItem> _inventoryStockReport;
+        private bool _isViewingDailyReportInfo;
+        private int _lastDailyReportInfoInventoryID;
 
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             SelectedDailyReportDate = DateTime.Now;
             SelectedWeeklyReportDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedInventoryStockDate = DateTime.Now;
+            _isViewingDailyReportInfo = false;
         }
 
         public DateTime SelectedDailyReportDate
@@ -148,8 +151,10 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewPurchaseDetailsScreen(ReportItemSold reportForItem)
         {
+            _isViewingDailyReportInfo = true;
+            _lastDailyReportInfoInventoryID = reportForItem.InventoryItemID;
             PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, 
-                reportForItem) { CurrentUser = CurrentUser });
+                reportForItem) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener = this });
         }
 
         public ICommand ViewPurchaseDetailsForWeek
@@ -159,8 +164,34 @@ namespace SimpleInventory.ViewModels
 
         private void LoadViewPurchaseDetailsScreenForWeek(ReportItemSold reportForItem)
         {
+            _isViewingDailyReportInfo = false;
+            _lastDailyReportInfoInventoryID = reportForItem.InventoryItemID;
             PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, 
-                SelectedWeeklyReportDate.AddDays(6), reportForItem) { CurrentUser = CurrentUser });
+                SelectedWeeklyReportDate.AddDays(6), reportForItem) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener= this });
+        }
+
+        /// <summary>
+        /// returns null if no updated report (e.g. you deleted the last item of that type that was sold)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ReportItemSold ItemSoldInfoWasDeleted(ItemSoldInfo model)
+        {
+            // need to rerun all reports!!
+            RunDayReport();
+            RunWeeklyReport();
+            RunStockReport();
+            ReportItemSold report = null;
+            var reportList = _isViewingDailyReportInfo ? CurrentDaySalesReport.ItemsSold : CurrentWeeklySalesReport.AllItemsSold;
+            foreach (ReportItemSold itemReport in reportList)
+            {
+                if (itemReport.InventoryItemID == _lastDailyReportInfoInventoryID)
+                {
+                    report = itemReport;
+                    break;
+                }
+            }
+            return report;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace SimpleInventory.ViewModels
     {
         private int _inventoryItemID;
         private InventoryItem _item;
-        private List<ItemSoldInfo> _itemSoldInfo;
+        private ObservableCollection<ItemSoldInfo> _itemSoldInfo;
         private DateTime _startDate;
         private DateTime _endDate;
 
@@ -25,8 +26,8 @@ namespace SimpleInventory.ViewModels
             _reportForItem = reportForItem;
             _inventoryItemID = reportForItem.InventoryItemID;
             _item = InventoryItem.LoadItemByID(_inventoryItemID);
-            _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(date, _inventoryItemID);
             _startDate = date;
+            LoadData();
         }
 
         public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, ReportItemSold reportForItem) : base(viewModelChanger)
@@ -34,19 +35,27 @@ namespace SimpleInventory.ViewModels
             _reportForItem = reportForItem;
             _inventoryItemID = reportForItem.InventoryItemID;
             _item = InventoryItem.LoadItemByID(_inventoryItemID);
-            if (endDate != null && endDate > startDate && startDate.Date != endDate.Date)
+            _startDate = startDate;
+            _endDate = endDate;
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            if (_endDate != null && _endDate > _startDate && _startDate.Date != _endDate.Date)
             {
-                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItemUntilDate(startDate, endDate, _inventoryItemID);
+                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, _endDate, _inventoryItemID));
             }
             else
             {
-                _itemSoldInfo = ItemSoldInfo.LoadInfoForDateAndItem(startDate, _inventoryItemID);
+                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItem(_startDate, _inventoryItemID));
             }
-            _startDate = startDate;
-            _endDate = endDate;
         }
 
-        public List<ItemSoldInfo> ItemSoldInfoData
+        public IConfirmDelete<ItemSoldInfo> DeleteItemSoldInfoConfirmer { get; set; }
+        public IDeletedItemSoldInfo DeletedItemSoldInfoListener { get; set; }
+
+        public ObservableCollection<ItemSoldInfo> ItemSoldInfoData
         {
             get { return _itemSoldInfo; }
             set { _itemSoldInfo = value; NotifyPropertyChanged(); }
@@ -94,6 +103,27 @@ namespace SimpleInventory.ViewModels
         private void PopToReports()
         {
             PopViewModel();
+        }
+        
+        public ICommand ConfirmDeleteItemSoldInfo
+        {
+            get { return new RelayCommand<ItemSoldInfo>(item => CheckBeforeDeletingItemSoldInfo(item)); }
+        }
+
+        private void CheckBeforeDeletingItemSoldInfo(ItemSoldInfo item)
+        {
+            DeleteItemSoldInfoConfirmer?.ConfirmDelete(item);
+        }
+
+        public void DeleteItemSoldInfo(ItemSoldInfo info)
+        {
+            info.Delete();
+            ItemSoldInfoData.Remove(info);
+            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info); // returns null if no updated report (e.g. you deleted the last item of that type that was sold)
+            if (ReportForItem == null)
+            {
+                PopViewModel();
+            }
         }
     }
 }

@@ -343,7 +343,7 @@ namespace SimpleInventory.Helpers
                             // add CanDeleteItemsSold column to UserPermissions
                             string addCanDeleteItemsSold = "" +
                                 "ALTER TABLE UserPermissions " +
-                                "ADD COLUMN CanDeleteItemsSold INTEGER DEFAULT 0;";
+                                "ADD COLUMN CanDeleteItemsSold INTEGER DEFAULT 1;";
                             command.CommandText = addCanDeleteItemsSold;
                             command.ExecuteNonQuery();
                             // bump user_version

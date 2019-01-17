@@ -87,6 +87,8 @@
                               Content="Manage Item Categories" FontSize="14" IsChecked="{Binding User.Permissions.CanManageItemCategories}"/>
                     <CheckBox Grid.Row="5" Grid.Column="0" 
                               Content="Manage Users" FontSize="14" IsChecked="{Binding User.Permissions.CanManageUsers}"/>
+                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5,0,0,0"
+                              Content="Delete Info on Items Sold" FontSize="14" IsChecked="{Binding User.Permissions.CanDeleteItemsSold}"/>
                 </Grid>
             </StackPanel>
             <Label FontSize="12" Content="{Binding ErrorMessage}" HorizontalAlignment="Center" Foreground="IndianRed" FontWeight="Bold"/>
