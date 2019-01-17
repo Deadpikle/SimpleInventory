@@ -52,7 +52,7 @@ namespace SimpleInventory.ViewModels
             ItemPurchaseStatusMessage = "";
             SelectedPaidCurrencyIndex = -1;
             ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
-            _failureSoundPlayer = new SoundPlayer("Sounds/failure.wav");
+            _failureSoundPlayer = new SoundPlayer("Sounds/failure-tbone.wav");
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
         }
 

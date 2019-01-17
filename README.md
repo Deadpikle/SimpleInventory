@@ -40,7 +40,8 @@ Glad you asked! There are always things that can be done on an open-source proje
 
 * The icon for this software was created by [Icons8](https://icons8.com) and is their Point of Sale Terminal icon. Thank you! :)
 * Success sound by grunz: https://freesound.org/people/grunz/sounds/109662/
-* Failure sound by GabrielAraujo: https://freesound.org/people/GabrielAraujo/sounds/242503/
+* Failure sound by Joe Lamb : http://soundbible.com/1830-Sad-Trombone.html
+
 ## License
 
 MIT License. Thanks for using the software!

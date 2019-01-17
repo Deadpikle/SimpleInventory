@@ -313,7 +313,7 @@
     <Resource Include="Graphics\icons8_pos_terminal_96_ahu_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sounds\failure.wav">
+    <Content Include="Sounds\failure-tbone.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Sounds\success.wav">
