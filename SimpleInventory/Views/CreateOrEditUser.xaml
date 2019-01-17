@@ -67,27 +67,27 @@
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Add/Edit Items" FontSize="14" IsChecked="{Binding User.Permissions.CanAddEditItems}"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" 
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,5" 
                               Content="Change Item Quantity" FontSize="14" IsChecked="{Binding User.Permissions.CanAdjustItemQuantity}"/>
                     <CheckBox Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" 
                               Content="View Details on Item Quantity Changes" FontSize="14" IsChecked="{Binding User.Permissions.CanViewDetailedItemQuantityAdjustments}"/>
-                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" 
+                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,5" 
                               Content="Delete Items from Inventory" FontSize="14" IsChecked="{Binding User.Permissions.CanDeleteItemsFromInventory}"/>
                     <CheckBox Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Scan Items" FontSize="14" IsChecked="{Binding User.Permissions.CanScanItems}"/>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0"
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,5"
                               Content="Generate Barcodes" FontSize="14" IsChecked="{Binding User.Permissions.CanGenerateBarcodes}"/>
                     <CheckBox Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" 
                               Content="View Reports" FontSize="14" IsChecked="{Binding User.Permissions.CanViewReports}"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
+                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5,0,0,5"
                               Content="View Details on Item Sales Info (Reports)" FontSize="14" IsChecked="{Binding User.Permissions.CanViewDetailedItemSoldInfo}"/>
                     <CheckBox Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Save Reports to PDF" FontSize="14" IsChecked="{Binding User.Permissions.CanSaveReportsToPDF}"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5,0,0,0"
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5,0,0,5"
                               Content="Manage Item Categories" FontSize="14" IsChecked="{Binding User.Permissions.CanManageItemCategories}"/>
-                    <CheckBox Grid.Row="5" Grid.Column="0" 
+                    <CheckBox Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" 
                               Content="Manage Users" FontSize="14" IsChecked="{Binding User.Permissions.CanManageUsers}"/>
-                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5,0,0,0"
+                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5,0,0,5"
                               Content="Delete Info on Items Sold" FontSize="14" IsChecked="{Binding User.Permissions.CanDeleteItemsSold}"/>
                 </Grid>
             </StackPanel>
