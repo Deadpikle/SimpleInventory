@@ -3,6 +3,7 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
+using System.Media;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -32,6 +33,9 @@ namespace SimpleInventory.ViewModels
 
         private int _amountInventoryChanged;
 
+        private SoundPlayer _successSoundPlayer;
+        private SoundPlayer _failureSoundPlayer;
+
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             _currencies = Currency.LoadCurrencies();
@@ -48,6 +52,8 @@ namespace SimpleInventory.ViewModels
             ItemPurchaseStatusMessage = "";
             SelectedPaidCurrencyIndex = -1;
             ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
+            _failureSoundPlayer = new SoundPlayer("Sounds/failure.wav");
+            _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
         }
 
         #region Properties
@@ -245,6 +251,8 @@ namespace SimpleInventory.ViewModels
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                         ItemPurchaseStatusMessage = "There are no remaining items to purchase for this barcode!";
                         PurchaseInfoIsVisible = false;
+                        // play failure sound
+                        _failureSoundPlayer.Play();
                     }
                     else
                     {
@@ -279,6 +287,8 @@ namespace SimpleInventory.ViewModels
                         SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
                         Quantity = 1;
                         PurchaseInfoIsVisible = true;
+                        // play success sound
+                        _successSoundPlayer.Play();
                     }
                 }
                 else
@@ -286,6 +296,8 @@ namespace SimpleInventory.ViewModels
                     ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                     ItemPurchaseStatusMessage = "Item not found!";
                     PurchaseInfoIsVisible = false;
+                    // play failure sound
+                    _failureSoundPlayer.Play();
                 }
             }
             BarcodeNumber = ""; // empty the field so that something can be scanned again

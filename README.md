@@ -38,8 +38,9 @@ Glad you asked! There are always things that can be done on an open-source proje
 
 ## Special Thanks
 
-The icon for this software was created by [Icons8](https://icons8.com) and is their Point of Sale Terminal icon. Thank you! :)
-
+* The icon for this software was created by [Icons8](https://icons8.com) and is their Point of Sale Terminal icon. Thank you! :)
+* Success sound by grunz: https://freesound.org/people/grunz/sounds/109662/
+* Failure sound by GabrielAraujo: https://freesound.org/people/GabrielAraujo/sounds/242503/
 ## License
 
 MIT License. Thanks for using the software!
