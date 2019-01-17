@@ -144,7 +144,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 1;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            goto case 2; // weeee
                         case 2:
                             // add IsDrink column
                             string addIsDrinkColumn = "" +
@@ -156,7 +156,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 2;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            goto case 3;
                         case 3:
                             // add ItemTypes table
                             command.CommandText = "PRAGMA foreign_keys = 0";
@@ -232,7 +232,7 @@ namespace SimpleInventory.Helpers
                             // cleanup
                             command.CommandText = "VACUUM;";
                             command.ExecuteNonQuery();
-                            break;
+                            goto case 4;
                         case 4:
                             // add IsDefault column to ItemTypes
                             string addIsDefaultColumn = "" +
@@ -247,7 +247,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 4;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            goto case 5;
                         case 5:
                             command.CommandText = "PRAGMA foreign_keys = 0";
                             command.ExecuteNonQuery();
@@ -282,7 +282,7 @@ namespace SimpleInventory.Helpers
                             command.Parameters.Clear();
                             command.CommandText = "PRAGMA foreign_keys = 1";
                             command.ExecuteNonQuery();
-                            break;
+                            goto case 6;
                         case 6:
                             // add user permissions table
                             string addUserPermissionsTable = "" +
@@ -314,7 +314,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 6;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            goto case 7;
                         case 7:
                             // add CanManageUsers column to UserPermissions
                             string addCanManageUsersColumn = "" +
@@ -326,7 +326,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 7;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            break;
+                            goto case 8;
                         case 8:
                             // add WasDeleted column to Users
                             string addWasDeletedUsersColumn = "" +
@@ -338,6 +338,7 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 8;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
+                            //goto case 9;
                             break;
                     }
                 }
