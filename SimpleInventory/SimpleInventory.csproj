@@ -164,6 +164,9 @@
     <Compile Include="ViewModels\ViewItemTypesViewModel.cs" />
     <Compile Include="ViewModels\ViewQuantityAdjustmentsViewModel.cs" />
     <Compile Include="ViewModels\ViewReportsViewModel.cs" />
+    <Compile Include="Views\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AdjustQuantity.xaml.cs">
       <DependentUpon>AdjustQuantity.xaml</DependentUpon>
     </Compile>
@@ -221,6 +224,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AdjustQuantity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

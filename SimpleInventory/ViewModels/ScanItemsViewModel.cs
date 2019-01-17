@@ -133,8 +133,6 @@ namespace SimpleInventory.ViewModels
             }
         }
 
-        // TODO: until paid amount adjusted manually, update it when the quantity changes
-
         public int Quantity
         {
             get { return _quantity; }

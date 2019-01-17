@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,20 +17,18 @@ using System.Windows.Shapes;
 namespace SimpleInventory.Views
 {
     /// <summary>
-    /// Interaction logic for HomeScreen.xaml
+    /// Interaction logic for AboutWindow.xaml
     /// </summary>
-    public partial class HomeScreen : UserControl
+    public partial class AboutWindow : MetroWindow
     {
-        public HomeScreen()
+        public AboutWindow()
         {
             InitializeComponent();
         }
 
-        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            var window = new AboutWindow();
-            window.Owner = Application.Current.MainWindow;
-            window.Show();
+            System.Diagnostics.Process.Start(e.Uri.ToString());
         }
     }
 }
