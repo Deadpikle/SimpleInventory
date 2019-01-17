@@ -45,6 +45,6 @@
             <Button Content="Logout" Margin="0 0 0 5" Width="200" Command="{Binding Logout}" FontSize="16"/>
         </StackPanel>
         <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-               Content="The icon for this software was created by Icons8 (https://icons8.com) and is their POS Terminal icon. Thank you! :)"/>
+               Content="The icon for this software was created by Icons8 (https://icons8.com) and is their Point of Sale Terminal icon. Thank you! :)"/>
     </Grid>
 </UserControl>
