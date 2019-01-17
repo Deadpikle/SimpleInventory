@@ -45,7 +45,8 @@ namespace SimpleInventory.Models
                     string query = "" +
                         "SELECT u.ID AS UserID, u.Name, u.Username, up.ID AS PermissionID, CanAddEditItems, CanAdjustItemQuantity, " +
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
-                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers " +
+                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers," +
+                                "CanDeleteItemsSold " +
                         "FROM Users u JOIN UserPermissions up ON u.ID = up.UserID " +
                             (string.IsNullOrEmpty(whereClause) ? " WHERE WasDeleted = 0 " : whereClause) + " " +
                         "ORDER BY u.Username, u.Name";
@@ -81,6 +82,7 @@ namespace SimpleInventory.Models
                             user.Permissions.CanDeleteItemsFromInventory = dbHelper.ReadBool(reader, "CanDeleteItemsFromInventory");
                             user.Permissions.CanManageItemCategories = dbHelper.ReadBool(reader, "CanManageItemCategories");
                             user.Permissions.CanManageUsers = dbHelper.ReadBool(reader, "CanManageUsers");
+                            user.Permissions.CanDeleteItemsSold = dbHelper.ReadBool(reader, "CanDeleteItemsSold");
                             users.Add(user);
                         }
                         reader.Close();
@@ -109,9 +111,11 @@ namespace SimpleInventory.Models
                     // now insert into user permissions!
                     insert = "INSERT INTO UserPermissions (CanAddEditItems, CanAdjustItemQuantity, " +
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
-                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers, UserID) " +
+                                "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, " +
+                                "CanManageUsers, CanDeleteItemsSold, UserID) " +
                         "VALUES (@canEditItems, @canAdjustQuantity, @canViewDetailedItemQuantityAdjustments, @canScan, @canGenerate, @canViewReports," +
-                                "@canViewDetailedItemSoldInfo, @canSaveReports, @canDeleteItems, @canManageCategories, @canManageUsers, @userID)";
+                                "@canViewDetailedItemSoldInfo, @canSaveReports, @canDeleteItems, @canManageCategories, @canManageUsers, " +
+                                "@canDeleteItemsSold, @userID)";
                     command.CommandText = insert;
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@canEditItems", Permissions.CanAddEditItems);
@@ -125,6 +129,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@canDeleteItems", Permissions.CanDeleteItemsFromInventory);
                     command.Parameters.AddWithValue("@canManageCategories", Permissions.CanManageItemCategories);
                     command.Parameters.AddWithValue("@canManageUsers", Permissions.CanManageUsers);
+                    command.Parameters.AddWithValue("@canDeleteItemsSold", Permissions.CanDeleteItemsSold);
                     command.Parameters.AddWithValue("@userID", ID);
                     command.ExecuteNonQuery();
                     Permissions.ID = (int)conn.LastInsertRowId;
@@ -158,7 +163,8 @@ namespace SimpleInventory.Models
                                 "CanScanItems = @canScan, CanGenerateBarcodes = @canGenerate, CanViewReports = @canViewReports," +
                                 "CanViewDetailedItemSoldInfo = @canViewDetailedItemSoldInfo, " +
                                 "CanSaveReportsToPDF = @canSaveReports, CanDeleteItemsFromInventory = @canDeleteItems, " +
-                                "CanManageItemCategories = @canManageCategories, CanManageUsers = @canManageUsers " +
+                                "CanManageItemCategories = @canManageCategories, CanManageUsers = @canManageUsers," +
+                                "CanDeleteItemsSold = @canDeleteItemsSold " +
                                 "WHERE ID = @permissionID";
                     command.CommandText = update;
                     command.Parameters.Clear();
@@ -173,6 +179,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@canDeleteItems", Permissions.CanDeleteItemsFromInventory);
                     command.Parameters.AddWithValue("@canManageCategories", Permissions.CanManageItemCategories);
                     command.Parameters.AddWithValue("@canManageUsers", Permissions.CanManageUsers);
+                    command.Parameters.AddWithValue("@canDeleteItemsSold", Permissions.CanDeleteItemsSold);
                     command.Parameters.AddWithValue("@permissionID", Permissions.ID);
                     command.ExecuteNonQuery();
                 }
