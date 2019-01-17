@@ -37,7 +37,7 @@ Glad you asked! There are always things that can be done on an open-source proje
 
 ## Special Thanks
 
-The icon for this software was created by [Icons8](https://icons8.com) and is their POS Terminal icon. Thank you! :)
+The icon for this software was created by [Icons8](https://icons8.com) and is their Point of Sale Terminal icon. Thank you! :)
 
 ## License
 
