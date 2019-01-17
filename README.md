@@ -2,6 +2,8 @@
 
 SimpleInventory is a small Windows 7+ WPF software application to manage small inventories/stores where items are purchased on a regular basis. It runs on the .NET 4.7.1 framework and uses a SQLite database for data storage. SimpleInventory was built for a small school in Mondulkiri, Cambodia for use in the school store. Because of the school's location, Riel is the default currency, and A4 is the default paper size.
 
+SimpleInventory can be edited in Visual Studio 2017+.
+
 Feature set:
 
 * Multiple users, each of which can be set with different permissions for the different software features available
