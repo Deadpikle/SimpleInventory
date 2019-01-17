@@ -239,6 +239,7 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     var dateForQuery = date.AddDays(1).Date;
+                    var dateForQueryString = dateForQuery.ToString(Utilities.DateTimeToStringFormat());
                     // current quantity will be the sum of QuantityAdjustments and ItemsSoldInfo for the given
                     // inventory item ID by the end of the given date
                     command.CommandText = "" +
@@ -257,7 +258,7 @@ namespace SimpleInventory.Models
                         {
                             command.Parameters.Clear();
                             command.Parameters.AddWithValue("@itemID", item.ID);
-                            command.Parameters.AddWithValue("@date", dateForQuery.ToString(Utilities.DateTimeToStringFormat()));
+                            command.Parameters.AddWithValue("@date", dateForQueryString);
 
                             int quantity = 0;
                             using (var reader = command.ExecuteReader())
@@ -271,7 +272,7 @@ namespace SimpleInventory.Models
 
                             secondSumCommand.Parameters.Clear();
                             secondSumCommand.Parameters.AddWithValue("@itemID", item.ID);
-                            secondSumCommand.Parameters.AddWithValue("@date", dateForQuery.ToString(Utilities.DateTimeToStringFormat()));
+                            secondSumCommand.Parameters.AddWithValue("@date", dateForQueryString);
                             using (var reader = secondSumCommand.ExecuteReader())
                             {
                                 if (reader.HasRows && reader.Read())
