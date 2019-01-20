@@ -21,6 +21,20 @@ Feature set:
 
 The default username is `admin`, and the default password is `changeme`. Please change the password before you use this in real life!
 
+## Screenshots
+
+<div align="center">
+
+<img alt="Daily report" src="./screenshots/menu.png">
+
+<img alt="Daily report" src="./screenshots/items-list.png">
+
+<img alt="Daily report" src="./screenshots/purchase-made.png">
+
+<img alt="Daily report" src="./screenshots/daily-report.png">
+
+</div>
+
 ## What sorts of things would be nice to add?
 
 * UI for adding and editing currencies
