@@ -230,7 +230,7 @@ namespace SimpleInventory.Models
 
         public static List<InventoryItem> GetStockByEndOfDate(DateTime date)
         {
-            var items = LoadItems();
+            var items = LoadItemsNotDeleted();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
@@ -272,7 +272,7 @@ namespace SimpleInventory.Models
                     conn.Close();
                 }
             }
-            items.RemoveAll((item) => item.WasDeleted && item.Quantity == 0);
+            items.RemoveAll((item) => item.Quantity == 0);
             items.Sort((left, right) => left.Name.CompareTo(right.Name));
             return items;
         }
