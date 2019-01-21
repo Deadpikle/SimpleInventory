@@ -44,6 +44,23 @@ namespace SimpleInventory.Models
             }
         }
 
+        public void UpdateExplanation()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "UPDATE QuantityAdjustments SET Explanation = @explanation WHERE ID = @id";
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.Parameters.AddWithValue("@explanation", Explanation);
+                    command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
         public static List<QuantityAdjustment> LoadQuantityAdjustments(InventoryItem item)
         {
             var adjustments = new List<QuantityAdjustment>();

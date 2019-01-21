@@ -8,7 +8,8 @@
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="ViewQuantityChangesControl">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,7 +41,16 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Adjusted By" Binding="{Binding UserName}"/>
-                <DataGridTextColumn Header="Explanation" Binding="{Binding Explanation}" Width="*"/>
+                <DataGridTextColumn Header="Explanation" Binding="{Binding Explanation}"/>
+                <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Update Explanation" Width="150" HorizontalAlignment="Left" Margin="5,0,0,0"
+                                                Command="{Binding ElementName=ViewQuantityChangesControl, Path=DataContext.AdjustExplanation}"
+                                                CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

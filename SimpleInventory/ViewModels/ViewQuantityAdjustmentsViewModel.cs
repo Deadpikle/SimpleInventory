@@ -35,5 +35,15 @@ namespace SimpleInventory.ViewModels
         {
             PopViewModel();
         }
+
+        public ICommand AdjustExplanation
+        {
+            get { return new RelayCommand<QuantityAdjustment>(o => LoadEditQuantityScreen(o)); }
+        }
+
+        private void LoadEditQuantityScreen(QuantityAdjustment adjustment)
+        {
+            PushViewModel(new AdjustQuantityViewModel(ViewModelChanger, adjustment) { CurrentUser = CurrentUser });
+        }
     }
 }

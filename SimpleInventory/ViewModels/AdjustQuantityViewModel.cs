@@ -15,11 +15,28 @@ namespace SimpleInventory.ViewModels
         private InventoryItem _item;
         private int _quantity;
         private string _explanation;
+        private bool _isCreating;
+
+        private QuantityAdjustment _adjustment;
 
         public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
             _item = item;
             Quantity = item?.Quantity ?? 0;
+            _isCreating = true;
+        }
+
+        /// <summary>
+        /// To be used when updating quantity adjustment explanation
+        /// </summary>
+        /// <param name="viewModelChanger"></param>
+        /// <param name="adjustment"></param>
+        public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, QuantityAdjustment adjustment) : base(viewModelChanger)
+        {
+            Quantity = adjustment.AmountChanged;
+            _isCreating = false;
+            _adjustment = adjustment;
+            Explanation = adjustment.Explanation;
         }
 
         public string ItemName
@@ -39,6 +56,16 @@ namespace SimpleInventory.ViewModels
             set { _explanation = value; NotifyPropertyChanged(); }
         }
 
+        public bool IsCreating
+        {
+            get { return _isCreating; }
+        }
+
+        public bool IsEditing
+        {
+            get { return !_isCreating; }
+        }
+
         public ICommand GoToManageItems
         {
             get { return new RelayCommand(ReturnToPreviousScreen); }
@@ -56,12 +83,21 @@ namespace SimpleInventory.ViewModels
 
         private void AdjustQuantity()
         {
-            var difference = Quantity - _item.Quantity;
-            var userID = CurrentUser != null ? CurrentUser.ID : 1;
-            QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation);
-            _item.AdjustQuantityByAmount(difference);
-            _item.Quantity = Quantity;
-            ReturnToPreviousScreen();
+            if (IsCreating)
+            {
+                var difference = Quantity - _item.Quantity;
+                var userID = CurrentUser != null ? CurrentUser.ID : 1;
+                QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation);
+                _item.AdjustQuantityByAmount(difference);
+                _item.Quantity = Quantity;
+                ReturnToPreviousScreen();
+            }
+            else
+            {
+                _adjustment.Explanation = Explanation;
+                _adjustment.UpdateExplanation();
+                ReturnToPreviousScreen();
+            }
         }
     }
 }
