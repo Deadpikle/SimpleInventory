@@ -247,7 +247,7 @@ namespace SimpleInventory.ViewModels
                     if (item.Quantity <= 0)
                     {
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
-                        ItemPurchaseStatusMessage = "There are no remaining items to purchase for this barcode!";
+                        ItemPurchaseStatusMessage = "There are no items left to purchase for this item! Barcode: " + BarcodeNumber;
                         PurchaseInfoIsVisible = false;
                         // play failure sound
                         _failureSoundPlayer.Play();
@@ -256,7 +256,7 @@ namespace SimpleInventory.ViewModels
                     {
                         _hasPaidAmountChangedForCurrentItem = false;
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
-                        ItemPurchaseStatusMessage = "Item successfully found and purchased!";
+                        ItemPurchaseStatusMessage = "Item successfully found and purchased! Barcode: " + BarcodeNumber;
                         PurchasedItem = item;
                         // create purchase data object and save to the db
                         var purchaseData = new ItemSoldInfo();
@@ -292,7 +292,7 @@ namespace SimpleInventory.ViewModels
                 else
                 {
                     ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
-                    ItemPurchaseStatusMessage = "Item not found!";
+                    ItemPurchaseStatusMessage = "Item not found! Barcode: " + BarcodeNumber;
                     PurchaseInfoIsVisible = false;
                     // play failure sound
                     _failureSoundPlayer.Play();
