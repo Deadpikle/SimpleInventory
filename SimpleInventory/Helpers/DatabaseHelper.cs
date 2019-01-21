@@ -350,7 +350,19 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 9;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            //goto case 10;
+                            goto case 10;
+                        case 10:
+                            // add CanDeleteItemsSold column to UserPermissions
+                            string addExplanationColumn = "" +
+                                "ALTER TABLE QuantityAdjustments " +
+                                "ADD COLUMN Explanation TEXT DEFAULT '';";
+                            command.CommandText = addExplanationColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 10;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            //goto case 11;
                             break;
                     }
                 }

@@ -16,26 +16,28 @@ namespace SimpleInventory.Models
         public int InventoryItemID { get; set; }
         public int UserID { get; set; }
         public string UserName { get; set; }
+        public string Explanation { get; set; }
 
         public string FriendlyDateTime
         {
             get { return DateTimeChanged.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()); }
         }
 
-        public static void UpdateQuantity(int quantity, int itemID, int userID)
+        public static void UpdateQuantity(int quantity, int itemID, int userID, string explanation)
         {
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID)" +
-                        " VALUES (@amount, @dateTime, @itemID, @userID);";
+                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID, Explanation)" +
+                        " VALUES (@amount, @dateTime, @itemID, @userID, @explanation);";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@amount", quantity);
                     command.Parameters.AddWithValue("@dateTime", DateTime.Now.ToString(Utilities.DateTimeToStringFormat()));
                     command.Parameters.AddWithValue("@itemID", itemID);
                     command.Parameters.AddWithValue("@userID", userID);
+                    command.Parameters.AddWithValue("@explanation", explanation);
                     command.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -50,7 +52,7 @@ namespace SimpleInventory.Models
                 return adjustments;
             }
             string query = "" +
-                "SELECT qa.ID, AmountChanged, DateTimeChanged, AdjustedByUserID, u.Name AS UserName " +
+                "SELECT qa.ID, AmountChanged, DateTimeChanged, AdjustedByUserID, u.Name AS UserName, Explanation " +
                 "FROM QuantityAdjustments qa JOIN Users u ON qa.AdjustedByUserID = u.ID " +
                 "WHERE InventoryItemID = @id " +
                 "ORDER BY DateTimeChanged";
@@ -73,6 +75,7 @@ namespace SimpleInventory.Models
                             adjustment.UserID = dbHelper.ReadInt(reader, "AdjustedByUserID");
                             adjustment.InventoryItemID = item.ID;
                             adjustment.UserName = dbHelper.ReadString(reader, "UserName");
+                            adjustment.Explanation = dbHelper.ReadString(reader, "Explanation");
                             adjustments.Add(adjustment);
                         }
                         reader.Close();

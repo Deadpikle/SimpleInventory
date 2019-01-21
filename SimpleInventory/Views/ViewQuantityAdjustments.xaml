@@ -40,6 +40,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Adjusted By" Binding="{Binding UserName}"/>
+                <DataGridTextColumn Header="Explanation" Binding="{Binding Explanation}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

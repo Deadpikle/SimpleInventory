@@ -283,7 +283,7 @@ namespace SimpleInventory.ViewModels
                 if (_isCreating)
                 {
                     item.CreateNewItem(userID);
-                    QuantityAdjustment.UpdateQuantity(Quantity, item.ID, userID);
+                    QuantityAdjustment.UpdateQuantity(Quantity, item.ID, userID, "Initial quantity upon creating item");
                     _createdItemListener?.CreatedInventoryItem(item);
                 }
                 else

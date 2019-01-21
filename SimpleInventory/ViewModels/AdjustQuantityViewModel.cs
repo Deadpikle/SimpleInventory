@@ -14,6 +14,7 @@ namespace SimpleInventory.ViewModels
     {
         private InventoryItem _item;
         private int _quantity;
+        private string _explanation;
 
         public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
@@ -30,6 +31,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _quantity; }
             set { _quantity = value; NotifyPropertyChanged(); }
+        }
+
+        public string Explanation
+        {
+            get { return _explanation; }
+            set { _explanation = value; NotifyPropertyChanged(); }
         }
 
         public ICommand GoToManageItems
@@ -51,7 +58,7 @@ namespace SimpleInventory.ViewModels
         {
             var difference = Quantity - _item.Quantity;
             var userID = CurrentUser != null ? CurrentUser.ID : 1;
-            QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID);
+            QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation);
             _item.AdjustQuantityByAmount(difference);
             _item.Quantity = Quantity;
             ReturnToPreviousScreen();
