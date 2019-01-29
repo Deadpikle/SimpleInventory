@@ -17,7 +17,7 @@ namespace SimpleInventory.ViewModels
         private InventoryItem _item;
         private ObservableCollection<ItemSoldInfo> _itemSoldInfo;
         private DateTime _startDate;
-        private DateTime _endDate;
+        private DateTime? _endDate;
 
         private ReportItemSold _reportForItem;
 
@@ -27,6 +27,7 @@ namespace SimpleInventory.ViewModels
             _inventoryItemID = reportForItem.InventoryItemID;
             _item = InventoryItem.LoadItemByID(_inventoryItemID);
             _startDate = date;
+            _endDate = null;
             LoadData();
         }
 
@@ -42,9 +43,9 @@ namespace SimpleInventory.ViewModels
 
         private void LoadData()
         {
-            if (_endDate != null && _endDate > _startDate && _startDate.Date != _endDate.Date)
+            if (_endDate != null && _endDate > _startDate && _startDate.Date != _endDate?.Date)
             {
-                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, _endDate, _inventoryItemID));
+                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, (DateTime)_endDate, _inventoryItemID));
             }
             else
             {
@@ -84,7 +85,7 @@ namespace SimpleInventory.ViewModels
                 else
                 {
                     return _startDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat()) + " - " +
-                        _endDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+                        _endDate?.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
                 }
             }
         }
