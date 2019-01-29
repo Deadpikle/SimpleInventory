@@ -184,8 +184,9 @@ namespace SimpleInventory.ViewModels
         {
             _isViewingDailyReportInfo = true;
             _lastDailyReportInfoInventoryID = reportForItem.InventoryItemID;
+            var userToFilterBy = DailyReportUserChoiceIndex == 0 ? null : _users[DailyReportUserChoiceIndex - 1];
             PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedDailyReportDate, 
-                reportForItem) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener = this });
+                reportForItem, userToFilterBy) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener = this });
         }
 
         public ICommand ViewPurchaseDetailsForWeek
@@ -197,8 +198,9 @@ namespace SimpleInventory.ViewModels
         {
             _isViewingDailyReportInfo = false;
             _lastDailyReportInfoInventoryID = reportForItem.InventoryItemID;
+            var userToFilterBy = WeeklyReportUserChoiceIndex == 0 ? null : _users[WeeklyReportUserChoiceIndex - 1];
             PushViewModel(new ViewItemSoldInfoViewModel(ViewModelChanger, SelectedWeeklyReportDate, 
-                SelectedWeeklyReportDate.AddDays(6), reportForItem) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener= this });
+                SelectedWeeklyReportDate.AddDays(6), reportForItem, userToFilterBy) { CurrentUser = CurrentUser, DeletedItemSoldInfoListener= this });
         }
 
         /// <summary>

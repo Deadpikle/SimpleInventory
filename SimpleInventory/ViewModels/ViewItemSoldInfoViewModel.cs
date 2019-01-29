@@ -20,36 +20,43 @@ namespace SimpleInventory.ViewModels
         private DateTime? _endDate;
 
         private ReportItemSold _reportForItem;
+        private User _userToFilterBy;
 
-        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, ReportItemSold reportForItem) : base(viewModelChanger)
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime date, ReportItemSold reportForItem, 
+            User userToFilterBy = null) : base(viewModelChanger)
         {
             _reportForItem = reportForItem;
             _inventoryItemID = reportForItem.InventoryItemID;
             _item = InventoryItem.LoadItemByID(_inventoryItemID);
             _startDate = date;
             _endDate = null;
+            _userToFilterBy = userToFilterBy;
             LoadData();
         }
 
-        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, ReportItemSold reportForItem) : base(viewModelChanger)
+        public ViewItemSoldInfoViewModel(IChangeViewModel viewModelChanger, DateTime startDate, DateTime endDate, 
+            ReportItemSold reportForItem, User userToFilterBy = null) : base(viewModelChanger)
         {
             _reportForItem = reportForItem;
             _inventoryItemID = reportForItem.InventoryItemID;
             _item = InventoryItem.LoadItemByID(_inventoryItemID);
             _startDate = startDate;
             _endDate = endDate;
+            _userToFilterBy = userToFilterBy;
             LoadData();
         }
 
         private void LoadData()
         {
+            int userID = _userToFilterBy == null ? -1 : _userToFilterBy.ID;
             if (_endDate != null && _endDate > _startDate && _startDate.Date != _endDate?.Date)
             {
-                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, (DateTime)_endDate, _inventoryItemID));
+                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, _endDate.Value, 
+                    _inventoryItemID, userID));
             }
             else
             {
-                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItem(_startDate, _inventoryItemID));
+                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItem(_startDate, _inventoryItemID, userID));
             }
         }
 
@@ -66,11 +73,12 @@ namespace SimpleInventory.ViewModels
         {
             get
             {
+                string userSoldByName = _userToFilterBy == null ? "" : " (Sold by " + _userToFilterBy.Name + ")";
                 if (string.IsNullOrWhiteSpace(_item.Description))
                 {
-                    return _item.Name;
+                    return _item.Name + userSoldByName;
                 }
-                return _item.Name + " - " + _item.Description;
+                return _item.Name + " - " + _item.Description + userSoldByName;
             }
         }
 

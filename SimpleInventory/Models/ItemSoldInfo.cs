@@ -171,31 +171,37 @@ namespace SimpleInventory.Models
 
         public static List<ItemSoldInfo> LoadInfoForDate(DateTime date, int userID = -1)
         {
-            if (userID == -1)
+            string whereClause = "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ";
+            if (userID != -1)
             {
-                return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
+                whereClause += " AND isi.SoldByUserID = " + userID + " ";
             }
-            else
-            {
-                return LoadInfo("WHERE isi.SoldByUserID = " + userID + " AND DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
-            }
+            return LoadInfo(whereClause);
         }
 
-        public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID)
+        public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID, int userID = -1)
         {
-            return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' AND InventoryItemID = @itemID",
-                new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
+            string whereClause = "WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' AND InventoryItemID = @itemID";
+            if (userID != -1)
+            {
+                whereClause += " AND isi.SoldByUserID = " + userID + " ";
+            }
+            return LoadInfo(whereClause, new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
         }
 
-        public static List<ItemSoldInfo> LoadInfoForDateAndItemUntilDate(DateTime startDate, DateTime endDate, int inventoryItemID)
+        public static List<ItemSoldInfo> LoadInfoForDateAndItemUntilDate(DateTime startDate, DateTime endDate, int inventoryItemID, int userID = -1)
         {
             if (endDate != null && startDate.Date != endDate.Date && endDate > startDate)
             {
-                return LoadInfo("WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
-                    endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND InventoryItemID = @itemID",
-                    new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
+                string whereClause = "WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
+                        endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND InventoryItemID = @itemID";
+                if (userID != -1)
+                {
+                    whereClause += " AND isi.SoldByUserID = " + userID + " ";
+                }
+                return LoadInfo(whereClause, new List<Tuple<string, string>>() { new Tuple<string, string>("@itemID", inventoryItemID.ToString()) });
             }
-            return LoadInfoForDateAndItem(startDate, inventoryItemID);
+            return LoadInfoForDateAndItem(startDate, inventoryItemID, userID);
         }
 
         public void CreateNewSoldInfo()
