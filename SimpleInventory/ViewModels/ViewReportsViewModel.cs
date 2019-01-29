@@ -25,12 +25,24 @@ namespace SimpleInventory.ViewModels
         private bool _isViewingDailyReportInfo;
         private int _lastDailyReportInfoInventoryID;
 
+        private List<User> _users;
+        private List<string> _userChoiceList;
+        private int _dailyReportUserChoiceIndex;
+        private int _weeklyReportUserChoiceIndex;
+
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             SelectedDailyReportDate = DateTime.Now;
             SelectedWeeklyReportDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedInventoryStockDate = DateTime.Now;
             _isViewingDailyReportInfo = false;
+            _users = User.LoadUsers();
+            _users.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
+            _userChoiceList = new List<string>();
+            _userChoiceList.Add("All Users");
+            _userChoiceList.AddRange(_users.Select(x => x.Name));
+            _dailyReportUserChoiceIndex = 0;
+            _weeklyReportUserChoiceIndex = 0;
         }
 
         public DateTime SelectedDailyReportDate
@@ -69,6 +81,23 @@ namespace SimpleInventory.ViewModels
             set { _inventoryStockReport = value; NotifyPropertyChanged(); }
         }
 
+        public List<string> UserChoiceList
+        {
+            get { return _userChoiceList; }
+        }
+
+        public int DailyReportUserChoiceIndex
+        {
+            get { return _dailyReportUserChoiceIndex; }
+            set { _dailyReportUserChoiceIndex = value; NotifyPropertyChanged(); RunDayReport(); }
+        }
+
+        public int WeeklyReportUserChoiceIndex
+        {
+            get { return _weeklyReportUserChoiceIndex; }
+            set { _weeklyReportUserChoiceIndex = value; NotifyPropertyChanged(); RunWeeklyReport(); }
+        }
+
         // for some reason, binding this property fixes an issue where if you leave the screen
         // and come back, the tab changes to the first tab on you...huh. *shrug*
         public int SelectedTabIndex
@@ -89,7 +118,8 @@ namespace SimpleInventory.ViewModels
 
         private void RunDayReport()
         {
-            CurrentDaySalesReport = DaySales.GenerateDataForSingleDay(SelectedDailyReportDate);
+            int userID = DailyReportUserChoiceIndex == 0 ? -1 : _users[DailyReportUserChoiceIndex - 1].ID;
+            CurrentDaySalesReport = DaySales.GenerateDataForSingleDay(SelectedDailyReportDate, userID);
         }
 
         public ICommand SaveDayReportToPDF
@@ -115,7 +145,8 @@ namespace SimpleInventory.ViewModels
 
         private void RunWeeklyReport()
         {
-            CurrentWeeklySalesReport = WeekSales.GenerateDataForWeek(SelectedWeeklyReportDate);
+            int userID = WeeklyReportUserChoiceIndex == 0 ? -1 : _users[WeeklyReportUserChoiceIndex - 1].ID;
+            CurrentWeeklySalesReport = WeekSales.GenerateDataForWeek(SelectedWeeklyReportDate, userID);
         }
 
         public ICommand SaveWeeklyReportToPDF

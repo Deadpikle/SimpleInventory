@@ -54,7 +54,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        public static WeekSales GenerateDataForWeek(DateTime date)
+        public static WeekSales GenerateDataForWeek(DateTime date, int userID = -1)
         {
             WeekSales weekSales = new WeekSales();
             weekSales.Date = date;
@@ -72,7 +72,7 @@ namespace SimpleInventory.Models
 
             for (int i = 0; i < 7; i++) // get all sales for the week
             {
-                DaySales sales = DaySales.GenerateDataForSingleDay(date.AddDays(i));
+                DaySales sales = DaySales.GenerateDataForSingleDay(date.AddDays(i), userID);
                 weekSales.AllDaySales.Add(sales);
                 if (weekSales.Currency.ID == sales.Currency.ID)
                 {

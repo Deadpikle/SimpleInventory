@@ -169,9 +169,16 @@ namespace SimpleInventory.Models
             return items;
         }
 
-        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date)
+        public static List<ItemSoldInfo> LoadInfoForDate(DateTime date, int userID = -1)
         {
-            return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
+            if (userID == -1)
+            {
+                return LoadInfo("WHERE DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
+            }
+            else
+            {
+                return LoadInfo("WHERE isi.SoldByUserID = " + userID + " AND DateTimeSold LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ");
+            }
         }
 
         public static List<ItemSoldInfo> LoadInfoForDateAndItem(DateTime date, int inventoryItemID)

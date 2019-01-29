@@ -50,7 +50,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        public static DaySales GenerateDataForSingleDay(DateTime date)
+        public static DaySales GenerateDataForSingleDay(DateTime date, int userID = -1)
         {
             var totalDaySaleInfo = new DaySales();
             totalDaySaleInfo.Date = date;
@@ -67,7 +67,7 @@ namespace SimpleInventory.Models
                     break;
                 }
             }
-            var data = ItemSoldInfo.LoadInfoForDate(date);
+            var data = ItemSoldInfo.LoadInfoForDate(date, userID);
 
             var itemIDToReportSold = new Dictionary<int, ReportItemSold>();
             foreach (ItemSoldInfo singleItemInfo in data)
