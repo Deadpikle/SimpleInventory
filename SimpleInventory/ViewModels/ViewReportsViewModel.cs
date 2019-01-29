@@ -30,6 +30,9 @@ namespace SimpleInventory.ViewModels
         private int _dailyReportUserChoiceIndex;
         private int _weeklyReportUserChoiceIndex;
 
+        private bool _canGenerateDailyPDFReports;
+        private bool _canGenerateWeeklyPDFReports;
+
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             SelectedDailyReportDate = DateTime.Now;
@@ -43,6 +46,8 @@ namespace SimpleInventory.ViewModels
             _userChoiceList.AddRange(_users.Select(x => x.Name));
             _dailyReportUserChoiceIndex = 0;
             _weeklyReportUserChoiceIndex = 0;
+            _canGenerateDailyPDFReports = true;
+            _canGenerateWeeklyPDFReports = true;
         }
 
         public DateTime SelectedDailyReportDate
@@ -89,13 +94,37 @@ namespace SimpleInventory.ViewModels
         public int DailyReportUserChoiceIndex
         {
             get { return _dailyReportUserChoiceIndex; }
-            set { _dailyReportUserChoiceIndex = value; NotifyPropertyChanged(); RunDayReport(); }
+            set
+            {
+                _dailyReportUserChoiceIndex = value;
+                CanGenerateDailyPDFReports = value == 0;
+                NotifyPropertyChanged();
+                RunDayReport();
+            }
         }
 
         public int WeeklyReportUserChoiceIndex
         {
             get { return _weeklyReportUserChoiceIndex; }
-            set { _weeklyReportUserChoiceIndex = value; NotifyPropertyChanged(); RunWeeklyReport(); }
+            set
+            {
+                _weeklyReportUserChoiceIndex = value;
+                CanGenerateWeeklyPDFReports = value == 0;
+                NotifyPropertyChanged();
+                RunWeeklyReport();
+            }
+        }
+
+        public bool CanGenerateDailyPDFReports
+        {
+            get { return _canGenerateDailyPDFReports; }
+            set { _canGenerateDailyPDFReports = value; NotifyPropertyChanged(); }
+        }
+
+        public bool CanGenerateWeeklyPDFReports
+        {
+            get { return _canGenerateWeeklyPDFReports; }
+            set { _canGenerateWeeklyPDFReports = value; NotifyPropertyChanged(); }
         }
 
         // for some reason, binding this property fixes an issue where if you leave the screen
