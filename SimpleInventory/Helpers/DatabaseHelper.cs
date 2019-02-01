@@ -362,7 +362,18 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 10;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
-                            //goto case 11;
+                            goto case 11;
+                        case 11:
+                            // add CanManageUsers column to UserPermissions
+                            string addCanViewManageInventoryQuantityColumn = "" +
+                                "ALTER TABLE UserPermissions " +
+                                "ADD COLUMN CanViewManageInventoryQuantity INTEGER DEFAULT 1;";
+                            command.CommandText = addCanViewManageInventoryQuantityColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 11;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
                             break;
                     }
                 }

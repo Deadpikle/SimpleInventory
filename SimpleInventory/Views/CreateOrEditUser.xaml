@@ -28,11 +28,9 @@
                 <Label Content="Name" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="300" Text="{Binding User.Name}" VerticalContentAlignment="Center" FontSize="14"
                          TabIndex="0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Username" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <Label Content="Username" Margin="5,0,5,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="300" Text="{Binding User.Username}" VerticalContentAlignment="Center" FontSize="14"
-                         TabIndex="1"/>
+                        TabIndex="1"/>
             </StackPanel>
             <CheckBox Grid.Row="0" Grid.Column="0" Margin="6,4,0,0" 
                       Content="Change Password?" FontSize="14" IsChecked="{Binding ShouldShowPasswordFields}"
@@ -54,6 +52,7 @@
                 <Label Content="Permissions" Margin="0,0,10,0" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                 <Grid Margin="8,0,0,0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -89,6 +88,9 @@
                               Content="Manage Users" FontSize="14" IsChecked="{Binding User.Permissions.CanManageUsers}"/>
                     <CheckBox Grid.Row="5" Grid.Column="1" Margin="5,0,0,5"
                               Content="Delete Info on Items Sold" FontSize="14" IsChecked="{Binding User.Permissions.CanDeleteItemsSold}"/>
+                    <CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5" 
+                              Content="Can View Current Item Quantity on Manage Items Screen" FontSize="14" 
+                              IsChecked="{Binding User.Permissions.CanViewManageInventoryQuantity}"/>
                 </Grid>
             </StackPanel>
             <Label FontSize="12" Content="{Binding ErrorMessage}" HorizontalAlignment="Center" Foreground="IndianRed" FontWeight="Bold"/>
