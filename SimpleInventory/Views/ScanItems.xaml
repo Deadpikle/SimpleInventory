@@ -63,6 +63,9 @@
                     <mahapps:NumericUpDown Width="150" Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
                                        TextAlignment="Left"
                                        VerticalContentAlignment="Center" FontSize="14"/>
+                    <Label FontStyle="Italic" Content="{Binding QuantityErrorMessage}"
+                           HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,7"
+                            Foreground="Red"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>

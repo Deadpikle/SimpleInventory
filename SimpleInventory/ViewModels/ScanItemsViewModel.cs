@@ -36,6 +36,8 @@ namespace SimpleInventory.ViewModels
         private SoundPlayer _successSoundPlayer;
         private SoundPlayer _failureSoundPlayer;
 
+        private string _quantityErrorMessage;
+
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             _currencies = Currency.LoadCurrencies();
@@ -218,6 +220,12 @@ namespace SimpleInventory.ViewModels
             set { _dateTimePurchased = value; NotifyPropertyChanged(); }
         }
 
+        public string QuantityErrorMessage
+        {
+            get { return _quantityErrorMessage; }
+            set { _quantityErrorMessage = value; NotifyPropertyChanged(); }
+        }
+
         #endregion
 
         #region ICommands
@@ -299,6 +307,7 @@ namespace SimpleInventory.ViewModels
                 }
             }
             BarcodeNumber = ""; // empty the field so that something can be scanned again
+            QuantityErrorMessage = "";
         }
 
         public ICommand CancelPurchase
@@ -343,26 +352,36 @@ namespace SimpleInventory.ViewModels
             if (PurchaseInfoIsVisible && PurchaseInfo != null)
             {
                 UpdatePurchaseInfoCurrencies();
-                PurchaseInfo.QuantitySold = Quantity;
-                var paidAsDecimal = 0m;
-                if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+                if (Quantity > PurchasedItem.Quantity)
                 {
-                    paidAsDecimal = 0;
+                    // too much!! can't buy this many. :(
+                    _failureSoundPlayer.Play();
+                    QuantityErrorMessage = "Quantity to purchase is higher than the number of available items";
                 }
-                PurchaseInfo.Paid = paidAsDecimal;
-                if (_amountInventoryChanged != Quantity)
+                else
                 {
-                    if (_amountInventoryChanged < Quantity) // e.g. 1 -> 3 (= diff of 2; needs to be adjusted by -2)
+                    QuantityErrorMessage = "";
+                    PurchaseInfo.QuantitySold = Quantity;
+                    var paidAsDecimal = 0m;
+                    if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
                     {
-                        PurchasedItem.AdjustQuantityByAmount(_amountInventoryChanged - Quantity);
+                        paidAsDecimal = 0;
                     }
-                    else // e.g. 3 -> 1 (= diff of 2; needs to be adjusted by 2)
+                    PurchaseInfo.Paid = paidAsDecimal;
+                    if (_amountInventoryChanged != Quantity)
                     {
-                        PurchasedItem.AdjustQuantityByAmount(Quantity - _amountInventoryChanged);
+                        if (_amountInventoryChanged < Quantity) // e.g. 1 -> 3 (= diff of 2; needs to be adjusted by -2)
+                        {
+                            PurchasedItem.AdjustQuantityByAmount(_amountInventoryChanged - Quantity);
+                        }
+                        else // e.g. 3 -> 1 (= diff of 2; needs to be adjusted by 2)
+                        {
+                            PurchasedItem.AdjustQuantityByAmount(Quantity - _amountInventoryChanged);
+                        }
+                        _amountInventoryChanged = Quantity;
                     }
-                    _amountInventoryChanged = Quantity;
+                    PurchaseInfo.SaveUpdates();
                 }
-                PurchaseInfo.SaveUpdates();
             }
         }
 
