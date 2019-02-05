@@ -25,11 +25,11 @@ The default username is `admin`, and the default password is `changeme`. Please 
 
 <div align="center">
 
-<img alt="Daily report" src="./screenshots/menu.png">
+<img alt="Menu" src="./screenshots/menu.png">
 
-<img alt="Daily report" src="./screenshots/items-list.png">
+<img alt="Items list" src="./screenshots/items-list.png">
 
-<img alt="Daily report" src="./screenshots/purchase-made.png">
+<img alt="Purchase made" src="./screenshots/purchase-made.png">
 
 <img alt="Daily report" src="./screenshots/daily-report.png">
 
