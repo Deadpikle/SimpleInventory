@@ -16,30 +16,38 @@
         ShowMinButton="False"
         TitleCaps="False" GlowBrush="SkyBlue" Icon="pack://application:,,,/Graphics/icons8_pos_terminal_96_ahu_icon.ico">
     <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-            <Label Content="About Simple Inventory" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBlock TextWrapping="Wrap" Margin="5,0,5,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+                <Label Content="About Simple Inventory" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Margin="0,5,0,5"/>
+                <TextBlock TextWrapping="Wrap" Margin="5,0,5,0">
                 Simple Inventory was originally created for a small school in Mondulkiri, Cambodia, for use in their school store.
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
                 	• The icon for this software comes from 
                     <Hyperlink NavigateUri="https://icons8.com" RequestNavigate="Hyperlink_RequestNavigate">Icons8</Hyperlink>
                 and is their 
                     <Hyperlink NavigateUri="https://icons8.com/icon/13129/pos-terminal" 
                                RequestNavigate="Hyperlink_RequestNavigate">Terminal icon in Flat Style</Hyperlink>.
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
                 	• The success sound on the scanning screen was created by 
                     <Hyperlink NavigateUri="https://freesound.org/people/grunz/sounds/109662/" 
                                RequestNavigate="Hyperlink_RequestNavigate">Grunz at FreeSound</Hyperlink>.
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" Margin="5,5,5,5">
                 	• The failure sound on the scanning screen was created by 
                     <Hyperlink NavigateUri="http://soundbible.com/1830-Sad-Trombone.html" 
                                RequestNavigate="Hyperlink_RequestNavigate">Joe Lamb</Hyperlink>.
-            </TextBlock>
-        </StackPanel>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="14" Margin="5,5,5,5">
+                </TextBlock>
+                <Label Content="Open Source Licenses" FontWeight="Bold" FontSize="14" Margin="0,2,0,2"/>
+                <TextBlock Name="LicensesText" TextWrapping="Wrap" xmlns:space="preserve" Margin="5"/>
+            </StackPanel>
+        </ScrollViewer>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="14" Margin="5,5,5,5">
                 	<Run FontWeight="Bold">© 2019</Run> | <Hyperlink NavigateUri="https://github.com/Deadpikle/SimpleInventory" 
                                RequestNavigate="Hyperlink_RequestNavigate">Simple Inventory is Open Source Software on GitHub</Hyperlink>
         </TextBlock>

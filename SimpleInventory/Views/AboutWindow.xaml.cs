@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ namespace SimpleInventory.Views
         public AboutWindow()
         {
             InitializeComponent();
+            TextReader tr = new StreamReader(@"Licenses.txt");
+            string myText = tr.ReadToEnd();
+            LicensesText.Text = myText;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
