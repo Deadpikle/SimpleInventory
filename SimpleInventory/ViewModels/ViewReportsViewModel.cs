@@ -164,11 +164,19 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedDailyReportDate.ToString("yyyy-MM-dd");
             if (saveFileDialog.ShowDialog() == true)
             {
-                var generator = new ReportPDFGenerator();
-                //generator.PageSize = GetPaperSize();
-                //generator.BarcodeType = GetBarcodeType();
-                //generator.NumberOfPages = NumberOfPages;
-                generator.GeneratePDF(CurrentDaySalesReport, saveFileDialog.FileName);
+                try
+                {
+                    var generator = new ReportPDFGenerator();
+                    //generator.PageSize = GetPaperSize();
+                    //generator.BarcodeType = GetBarcodeType();
+                    //generator.NumberOfPages = NumberOfPages;
+                    generator.GeneratePDF(CurrentDaySalesReport, saveFileDialog.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error generating PDF! Please make sure to close the PDF with the same name" +
+                        " if it is open in Adobe or other software before generating a PDF report.", "Error!", MessageBoxButton.OK);
+                }
             }
         }
 
@@ -191,11 +199,19 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.FileName = "Weekly-Inventory-Report-" + SelectedWeeklyReportDate.ToString("yyyy-MM-dd");
             if (saveFileDialog.ShowDialog() == true)
             {
-                var generator = new ReportPDFGenerator();
-                //generator.PageSize = GetPaperSize();
-                //generator.BarcodeType = GetBarcodeType();
-                //generator.NumberOfPages = NumberOfPages;
-                generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
+                try
+                {
+                    var generator = new ReportPDFGenerator();
+                    //generator.PageSize = GetPaperSize();
+                    //generator.BarcodeType = GetBarcodeType();
+                    //generator.NumberOfPages = NumberOfPages;
+                    generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error generating PDF! Please make sure to close the PDF with the same name" +
+                        " if it is open in Adobe or other software before generating a PDF report.", "Error!", MessageBoxButton.OK);
+                }
             }
         }
 

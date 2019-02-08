@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
@@ -136,7 +137,15 @@ namespace SimpleInventory.ViewModels
                 generator.PageSize = GetPaperSize();
                 generator.BarcodeType = GetBarcodeType();
                 generator.NumberOfPages = NumberOfPages;
-                generator.GenerateBarcodes(saveFileDialog.FileName);
+                try
+                {
+                    generator.GenerateBarcodes(saveFileDialog.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error generating PDF! Please make sure to close the PDF with the same name" +
+                        " if it is open in Adobe or other software before generating a PDF report.", "Error!", MessageBoxButton.OK);
+                }
             }
         }
     }

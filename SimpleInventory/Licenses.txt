@@ -258,3 +258,4 @@ Public domain
 System.Data.SQLite.Linq/System.Data.SQLite.EF6:
 
 MS-PL -- https://system.data.sqlite.org/index.html/doc/trunk/www/copyright.wiki
+
