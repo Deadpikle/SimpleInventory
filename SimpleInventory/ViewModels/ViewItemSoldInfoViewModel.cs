@@ -126,9 +126,11 @@ namespace SimpleInventory.ViewModels
 
         public void DeleteItemSoldInfo(ItemSoldInfo info)
         {
+            var item = InventoryItem.LoadItemByID(info.InventoryItemID);
+            item.AdjustQuantityByAmount(info.QuantitySold);
             info.Delete();
             ItemSoldInfoData.Remove(info);
-            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info); 
+            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info);
             if (ReportForItem == null)
             {
                 PopViewModel();
