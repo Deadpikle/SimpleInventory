@@ -18,12 +18,14 @@ namespace SimpleInventory.ViewModels
         private string _explanation;
         private bool _isCreating;
         private bool _wasAdjustedForStockPurchase;
+        private bool _canMarkAdjustedForStockPurchase;
 
         private QuantityAdjustment _adjustment;
 
         public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, InventoryItem item) : base(viewModelChanger)
         {
             _item = item;
+            CanMarkAdjustedForStockPurchase = true;
             Quantity = item?.Quantity ?? 0;
             _isCreating = true;
             WasAdjustedForStockPurchase = false;
@@ -37,11 +39,11 @@ namespace SimpleInventory.ViewModels
         /// <param name="adjustment"></param>
         public AdjustQuantityViewModel(IChangeViewModel viewModelChanger, QuantityAdjustment adjustment) : base(viewModelChanger)
         {
+            WasAdjustedForStockPurchase = adjustment.WasAdjustedForStockPurchase;
             Quantity = adjustment.AmountChanged;
             _isCreating = false;
             _adjustment = adjustment;
             Explanation = adjustment.Explanation;
-            WasAdjustedForStockPurchase = adjustment.WasAdjustedForStockPurchase;
             Title = "Adjust Explanation";
         }
 
@@ -59,7 +61,7 @@ namespace SimpleInventory.ViewModels
         public int Quantity
         {
             get { return _quantity; }
-            set { _quantity = value; NotifyPropertyChanged(); }
+            set { _quantity = value; NotifyPropertyChanged(); CanMarkAdjustedForStockPurchase = _quantity >= 0; }
         }
 
         public string Explanation
@@ -72,6 +74,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _wasAdjustedForStockPurchase; }
             set { _wasAdjustedForStockPurchase = value; NotifyPropertyChanged(); }
+        }
+
+        public bool CanMarkAdjustedForStockPurchase
+        {
+            get { return _canMarkAdjustedForStockPurchase; }
+            set { _canMarkAdjustedForStockPurchase = value; NotifyPropertyChanged(); }
         }
 
         public bool IsCreating
@@ -105,7 +113,8 @@ namespace SimpleInventory.ViewModels
             {
                 var difference = Quantity - _item.Quantity;
                 var userID = CurrentUser != null ? CurrentUser.ID : 1;
-                QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation, WasAdjustedForStockPurchase);
+                var wasAdjusted = CanMarkAdjustedForStockPurchase ? WasAdjustedForStockPurchase : false;
+                QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation, wasAdjusted);
                 _item.AdjustQuantityByAmount(difference);
                 _item.Quantity = Quantity;
                 ReturnToPreviousScreen();

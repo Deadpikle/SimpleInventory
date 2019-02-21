@@ -41,6 +41,7 @@
         </StackPanel>
         <CheckBox Grid.Row="5" Grid.Column="0" Margin="5,5,0,5" 
                               Content="Adjusting Quantity for Stock Purchase" FontSize="16" IsChecked="{Binding WasAdjustedForStockPurchase}"
+                  IsEnabled="{Binding CanMarkAdjustedForStockPurchase}"
                   Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                 Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" 
