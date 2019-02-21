@@ -47,17 +47,19 @@ namespace SimpleInventory.Models
             }
         }
 
-        public void UpdateExplanation()
+        public void SaveUpdates()
         {
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "UPDATE QuantityAdjustments SET Explanation = @explanation WHERE ID = @id";
+                    string query = "UPDATE QuantityAdjustments SET Explanation = @explanation, WasAdjustedForStockPurchase = @wasAdjustedForStockPurchase " +
+                        " WHERE ID = @id";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@id", ID);
                     command.Parameters.AddWithValue("@explanation", Explanation);
+                    command.Parameters.AddWithValue("@wasAdjustedForStockPurchase", WasAdjustedForStockPurchase);
                     command.ExecuteNonQuery();
                     conn.Close();
                 }

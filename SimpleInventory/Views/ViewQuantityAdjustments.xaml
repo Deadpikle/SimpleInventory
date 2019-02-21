@@ -46,7 +46,7 @@
                 <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Update Explanation" Width="150" HorizontalAlignment="Left" Margin="5,0,0,0"
+                            <Button Content="Edit" Width="150" HorizontalAlignment="Left" Margin="5,0,0,0"
                                                 Command="{Binding ElementName=ViewQuantityChangesControl, Path=DataContext.AdjustExplanation}"
                                                 CommandParameter="{Binding}"/>
                         </DataTemplate>

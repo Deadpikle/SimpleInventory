@@ -44,7 +44,7 @@ namespace SimpleInventory.ViewModels
             _isCreating = false;
             _adjustment = adjustment;
             Explanation = adjustment.Explanation;
-            Title = "Adjust Explanation";
+            Title = "Edit";
         }
 
         public string Title
@@ -122,7 +122,8 @@ namespace SimpleInventory.ViewModels
             else
             {
                 _adjustment.Explanation = Explanation;
-                _adjustment.UpdateExplanation();
+                _adjustment.WasAdjustedForStockPurchase = WasAdjustedForStockPurchase;
+                _adjustment.SaveUpdates();
                 ReturnToPreviousScreen();
             }
         }
