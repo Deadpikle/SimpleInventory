@@ -21,10 +21,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
                     Content="Cancel" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding GoToManageItems}"/>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Change Quantity" FontWeight="Bold" FontSize="16" 
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding Title}" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Grid.Row="1" HorizontalAlignment="Center" Content="{Binding ItemName}" FontWeight="Bold" FontSize="16"/>
         <Label Grid.Row="2" HorizontalAlignment="Center" Content="Set the current final quantity for the current item. This action cannot be reversed!" FontStyle="Italic"
@@ -38,7 +39,10 @@
             <Label Content="Explanation" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
             <TextBox Width="300" Text="{Binding Explanation, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" FontSize="14" TabIndex="1"/>
         </StackPanel>
-        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
+        <CheckBox Grid.Row="5" Grid.Column="0" Margin="5,5,0,5" 
+                              Content="Adjusting Quantity for Stock Purchase" FontSize="16" IsChecked="{Binding WasAdjustedForStockPurchase}"
+                  Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                 Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" 
                 Command="{Binding SaveQuantityUpdates}"/>
     </Grid>

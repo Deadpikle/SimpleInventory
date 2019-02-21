@@ -17,27 +17,30 @@ namespace SimpleInventory.Models
         public int UserID { get; set; }
         public string UserName { get; set; }
         public string Explanation { get; set; }
+        public bool WasAdjustedForStockPurchase { get; set; }
 
         public string FriendlyDateTime
         {
             get { return DateTimeChanged.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()); }
         }
 
-        public static void UpdateQuantity(int quantity, int itemID, int userID, string explanation)
+        public static void UpdateQuantity(int quantity, int itemID, int userID, string explanation, bool wasAdjustedForStockPurchase)
         {
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID, Explanation)" +
-                        " VALUES (@amount, @dateTime, @itemID, @userID, @explanation);";
+                    string query = "INSERT INTO QuantityAdjustments (AmountChanged, DateTimeChanged, InventoryItemID, AdjustedByUserID, " +
+                        "Explanation, WasAdjustedForStockPurchase)" +
+                        " VALUES (@amount, @dateTime, @itemID, @userID, @explanation, @wasAdjustedForStockPurchase);";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@amount", quantity);
                     command.Parameters.AddWithValue("@dateTime", DateTime.Now.ToString(Utilities.DateTimeToStringFormat()));
                     command.Parameters.AddWithValue("@itemID", itemID);
                     command.Parameters.AddWithValue("@userID", userID);
                     command.Parameters.AddWithValue("@explanation", explanation);
+                    command.Parameters.AddWithValue("@wasAdjustedForStockPurchase", wasAdjustedForStockPurchase);
                     command.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -69,7 +72,7 @@ namespace SimpleInventory.Models
                 return adjustments;
             }
             string query = "" +
-                "SELECT qa.ID, AmountChanged, DateTimeChanged, AdjustedByUserID, u.Name AS UserName, Explanation " +
+                "SELECT qa.ID, AmountChanged, DateTimeChanged, AdjustedByUserID, u.Name AS UserName, Explanation, WasAdjustedForStockPurchase " +
                 "FROM QuantityAdjustments qa JOIN Users u ON qa.AdjustedByUserID = u.ID " +
                 "WHERE InventoryItemID = @id " +
                 "ORDER BY DateTimeChanged";
@@ -93,6 +96,7 @@ namespace SimpleInventory.Models
                             adjustment.InventoryItemID = item.ID;
                             adjustment.UserName = dbHelper.ReadString(reader, "UserName");
                             adjustment.Explanation = dbHelper.ReadString(reader, "Explanation");
+                            adjustment.WasAdjustedForStockPurchase = dbHelper.ReadBool(reader, "WasAdjustedForStockPurchase");
                             adjustments.Add(adjustment);
                         }
                         reader.Close();

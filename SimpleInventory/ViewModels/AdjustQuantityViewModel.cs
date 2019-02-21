@@ -12,10 +12,12 @@ namespace SimpleInventory.ViewModels
 {
     class AdjustQuantityViewModel : BaseViewModel
     {
+        private string _title;
         private InventoryItem _item;
         private int _quantity;
         private string _explanation;
         private bool _isCreating;
+        private bool _wasAdjustedForStockPurchase;
 
         private QuantityAdjustment _adjustment;
 
@@ -24,6 +26,8 @@ namespace SimpleInventory.ViewModels
             _item = item;
             Quantity = item?.Quantity ?? 0;
             _isCreating = true;
+            WasAdjustedForStockPurchase = false;
+            Title = "Change Quantity";
         }
 
         /// <summary>
@@ -37,6 +41,14 @@ namespace SimpleInventory.ViewModels
             _isCreating = false;
             _adjustment = adjustment;
             Explanation = adjustment.Explanation;
+            WasAdjustedForStockPurchase = adjustment.WasAdjustedForStockPurchase;
+            Title = "Adjust Explanation";
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set { _title = value; NotifyPropertyChanged(); }
         }
 
         public string ItemName
@@ -54,6 +66,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _explanation; }
             set { _explanation = value; NotifyPropertyChanged(); }
+        }
+
+        public bool WasAdjustedForStockPurchase
+        {
+            get { return _wasAdjustedForStockPurchase; }
+            set { _wasAdjustedForStockPurchase = value; NotifyPropertyChanged(); }
         }
 
         public bool IsCreating
@@ -87,7 +105,7 @@ namespace SimpleInventory.ViewModels
             {
                 var difference = Quantity - _item.Quantity;
                 var userID = CurrentUser != null ? CurrentUser.ID : 1;
-                QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation);
+                QuantityAdjustment.UpdateQuantity(difference, _item.ID, userID, Explanation, WasAdjustedForStockPurchase);
                 _item.AdjustQuantityByAmount(difference);
                 _item.Quantity = Quantity;
                 ReturnToPreviousScreen();

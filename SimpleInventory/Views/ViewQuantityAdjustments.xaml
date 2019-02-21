@@ -41,6 +41,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Adjusted By" Binding="{Binding UserName}"/>
+                <DataGridCheckBoxColumn Header="Stock Purchase?" Binding="{Binding WasAdjustedForStockPurchase}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Explanation" Binding="{Binding Explanation}"/>
                 <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
