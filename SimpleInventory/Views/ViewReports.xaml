@@ -23,7 +23,21 @@
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Reports" FontWeight="Bold" FontSize="16" 
                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TabControl Grid.Row="1" mahapps:TabControlHelper.IsUnderlined="True" mahapps:TabControlHelper.Underlined="SelectedTabItem"
-                    SelectedIndex="{Binding SelectedTabIndex}">
+                    SelectedIndex="{Binding SelectedTabIndex}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <TabControl.Template>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <TabPanel x:Name="HeaderPanel" IsItemsHost="True" Margin="0,4,0,0"/>
+                        </ScrollViewer>
+                        <ContentPresenter x:Name="PART_SelectedContentHost" Margin="4" ContentSource="SelectedContent" Grid.Row="1"/>
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
             <TabItem Header="Daily Report">
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
@@ -235,6 +249,51 @@
                     <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding InventoryStockReport}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
                       RowHeaderWidth="0" x:Name="WeeklyReportDataGrida"
+                      d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
+                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
+                      ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                        <DataGrid.Style>
+                            <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                            </Style>
+                        </DataGrid.Style>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Detailed Stock Report">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="View Inventory Stock at the End of a Given Date" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    <DatePicker Grid.Row="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
+                        SelectedDate="{Binding SelectedInventoryStockDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
+                        Name="InventoryStartDatePicker">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <TextBox x:Name="PART_TextBox"
+                                             Style="{StaticResource MetroTextBox}"
+                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                             RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding InventoryStockReport}" IsReadOnly="True" CanUserAddRows="False" 
+                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
+                      RowHeaderWidth="0" x:Name="DetailedStockReportDataGrid"
                       d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
                       Background="LightGray" BorderBrush="Gray" BorderThickness="1"
                       ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
