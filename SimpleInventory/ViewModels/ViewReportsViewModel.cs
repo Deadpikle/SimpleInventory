@@ -47,7 +47,7 @@ namespace SimpleInventory.ViewModels
             SelectedInventoryStockDate = DateTime.Now;
             SelectedStockReportFirstDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedStockReportSecondDate = DateTime.Now;
-            AddStockPurchasesBetweenDatesToInitialStock = false;
+            AddStockPurchasesBetweenDatesToInitialStock = true;
             _isViewingDailyReportInfo = false;
             _users = User.LoadUsers();
             _users.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
