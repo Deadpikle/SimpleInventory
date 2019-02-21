@@ -376,10 +376,10 @@ namespace SimpleInventory.Helpers
                             command.Parameters.Clear();
                             goto case 12;
                         case 12:
-                            // add Explanation column to QuantityAdjustments
+                            // add WasAdjustedForStockPurchase column to QuantityAdjustments
                             string addWasAdjustedForStockPurchase = "" +
                                 "ALTER TABLE QuantityAdjustments " +
-                                "ADD COLUMN WasAdjustedForStockPurchase TEXT DEFAULT '';";
+                                "ADD COLUMN WasAdjustedForStockPurchase INTEGER DEFAULT 0;";
                             command.CommandText = addWasAdjustedForStockPurchase;
                             command.ExecuteNonQuery();
                             // bump user_version
