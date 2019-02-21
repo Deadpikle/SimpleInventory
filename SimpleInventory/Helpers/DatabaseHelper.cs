@@ -352,7 +352,7 @@ namespace SimpleInventory.Helpers
                             command.Parameters.Clear();
                             goto case 10;
                         case 10:
-                            // add CanDeleteItemsSold column to UserPermissions
+                            // add Explanation column to QuantityAdjustments
                             string addExplanationColumn = "" +
                                 "ALTER TABLE QuantityAdjustments " +
                                 "ADD COLUMN Explanation TEXT DEFAULT '';";
@@ -372,6 +372,18 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             // bump user_version
                             command.CommandText = "PRAGMA user_version = 11;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            goto case 12;
+                        case 12:
+                            // add Explanation column to QuantityAdjustments
+                            string addWasAdjustedForStockPurchase = "" +
+                                "ALTER TABLE QuantityAdjustments " +
+                                "ADD COLUMN WasAdjustedForStockPurchase TEXT DEFAULT '';";
+                            command.CommandText = addWasAdjustedForStockPurchase;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 12;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
