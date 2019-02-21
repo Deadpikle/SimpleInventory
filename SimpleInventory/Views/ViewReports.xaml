@@ -283,7 +283,7 @@
                                 SelectedDate="{Binding SelectedStockReportSecondDate, UpdateSourceTrigger=PropertyChanged}"
                                 Name="DetailedStockEndDatePicker" Culture="en-GB" />
                     </StackPanel>
-                    <CheckBox Grid.Row="2" Content="Add stock purchases between dates to initial quantity" 
+                    <CheckBox Grid.Row="2" Content="Add stock purchases between dates to start quantity" 
                               IsChecked="{Binding AddStockPurchasesBetweenDatesToInitialStock}" HorizontalAlignment="Center" Margin="0,5,0,5"/>
                     <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding DetailedStockReport}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
