@@ -228,7 +228,7 @@ namespace SimpleInventory.Models
             }
         }
 
-        public static List<InventoryItem> GetStockByEndOfDate(DateTime date)
+        public static List<InventoryItem> GetStockByDateTime(DateTime date, bool ignoreTime = true, bool removeItemsWithNoQuantity = true)
         {
             var items = LoadItemsNotDeleted();
             var dbHelper = new DatabaseHelper();
@@ -236,7 +236,8 @@ namespace SimpleInventory.Models
             {
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
-                    var dateForQuery = date.AddDays(1).Date;
+                    var dateForQuery = ignoreTime ? date.AddDays(1).Date : date; 
+                    // date.AddDays(1).Date makes the "end date" basically 12:00 AM the next day so you get everything from the prior day
                     var dateForQueryString = dateForQuery.ToString(Utilities.DateTimeToStringFormat());
                     // current quantity will be the sum of QuantityAdjustments and ItemsSoldInfo for the given
                     // inventory item ID by the end of the given date
@@ -272,9 +273,53 @@ namespace SimpleInventory.Models
                     conn.Close();
                 }
             }
-            items.RemoveAll((item) => item.Quantity == 0);
+            if (removeItemsWithNoQuantity)
+            {
+                items.RemoveAll((item) => item.Quantity == 0);
+            }
             items.Sort((left, right) => left.Name.CompareTo(right.Name));
             return items;
+        }
+
+
+        public static List<DetailedStockReportInfo> GetStockOnDates(DateTime firstDate, DateTime secondDate, bool addStockPurchasesBetweenDatesToInitialStock)
+        {
+            if (secondDate < firstDate)
+            {
+                return new List<DetailedStockReportInfo>(); // dates are invalid
+            }
+            var firstStock = GetStockByDateTime(firstDate, false, false);
+            var lastStock = GetStockByDateTime(secondDate, false, false);
+            var output = new List<DetailedStockReportInfo>();
+            // this isn't very optimized for matching up the items, but it will do for now~
+            for (int i = 0; i < firstStock.Count; i++)
+            {
+                var firstStockItem = firstStock[i];
+                var reportInfo = new DetailedStockReportInfo();
+                reportInfo.Item = firstStockItem;
+                reportInfo.StartStock = firstStockItem.Quantity;
+                if (addStockPurchasesBetweenDatesToInitialStock)
+                {
+                    var adjustments = QuantityAdjustment.LoadQuantityAdjustmentsBetweenDates(firstStockItem, firstDate, secondDate);
+                    int adjustmentCount = 0;
+                    foreach (QuantityAdjustment adjustment in adjustments)
+                    {
+                        if (adjustment.WasAdjustedForStockPurchase)
+                        {
+                            adjustmentCount += adjustment.AmountChanged;
+                        }
+                    }
+                    reportInfo.StartStock += adjustmentCount;
+                }
+                var secondStockItem = lastStock.Where(x => x.ID == firstStockItem.ID).FirstOrDefault();
+                if (secondStockItem != null)
+                {
+                    reportInfo.EndStock = secondStockItem.Quantity;
+                }
+                output.Add(reportInfo);
+            }
+            output.Sort((left, right) => left.Item.Name.CompareTo(right.Item.Name));
+            return output;
         }
     }
 }

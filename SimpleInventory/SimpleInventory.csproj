@@ -136,6 +136,7 @@
     <Compile Include="Interfaces\IItemsSoldReportData.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\DaySales.cs" />
+    <Compile Include="Models\DetailedStockReportInfo.cs" />
     <Compile Include="Models\GeneratedBarcode.cs" />
     <Compile Include="Models\ItemTypeMoneyInfo.cs" />
     <Compile Include="Models\InventoryItem.cs" />

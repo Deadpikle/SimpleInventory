@@ -17,8 +17,15 @@ namespace SimpleInventory.ViewModels
         private DateTime _selectedDailyReportDate;
         private DateTime _selectedWeeklyReportDate;
         private DateTime _selectedInventoryStockDate;
+
+        private DateTime _selectedStockReportFirstDate;
+        private DateTime _selectedStockReportSecondDate;
+        private bool _addStockPurchasesBetweenDatesToInitialStock;
+        private List<DetailedStockReportInfo> _detailedStockReport;
+
         private DaySales _currentDaySalesReport;
         private WeekSales _currentWeeklySalesReport;
+        
         private int _selectedTabIndex;
 
         private List<InventoryItem> _inventoryStockReport;
@@ -38,6 +45,9 @@ namespace SimpleInventory.ViewModels
             SelectedDailyReportDate = DateTime.Now;
             SelectedWeeklyReportDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedInventoryStockDate = DateTime.Now;
+            SelectedStockReportFirstDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
+            SelectedStockReportSecondDate = DateTime.Now;
+            AddStockPurchasesBetweenDatesToInitialStock = false;
             _isViewingDailyReportInfo = false;
             _users = User.LoadUsers();
             _users.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
@@ -66,6 +76,30 @@ namespace SimpleInventory.ViewModels
         {
             get { return _selectedInventoryStockDate; }
             set { _selectedInventoryStockDate = value; NotifyPropertyChanged(); RunStockReport(); }
+        }
+
+        public DateTime SelectedStockReportFirstDate
+        {
+            get { return _selectedStockReportFirstDate; }
+            set { _selectedStockReportFirstDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
+        }
+
+        public DateTime SelectedStockReportSecondDate
+        {
+            get { return _selectedStockReportSecondDate; }
+            set { _selectedStockReportSecondDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
+        }
+
+        public bool AddStockPurchasesBetweenDatesToInitialStock
+        {
+            get { return _addStockPurchasesBetweenDatesToInitialStock; }
+            set { _addStockPurchasesBetweenDatesToInitialStock = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
+        }
+
+        public List<DetailedStockReportInfo> DetailedStockReport
+        {
+            get { return _detailedStockReport; }
+            set { _detailedStockReport = value; NotifyPropertyChanged(); }
         }
 
         public DaySales CurrentDaySalesReport
@@ -217,7 +251,7 @@ namespace SimpleInventory.ViewModels
 
         private void RunStockReport()
         {
-            InventoryStockReport = InventoryItem.GetStockByEndOfDate(SelectedInventoryStockDate);
+            InventoryStockReport = InventoryItem.GetStockByDateTime(SelectedInventoryStockDate);
         }
 
         public ICommand ViewPurchaseDetails
@@ -270,6 +304,12 @@ namespace SimpleInventory.ViewModels
                 }
             }
             return report;
+        }
+
+        private void RunDetailedStockReport()
+        {
+            DetailedStockReport = InventoryItem.GetStockOnDates(SelectedStockReportFirstDate, SelectedStockReportSecondDate, 
+                AddStockPurchasesBetweenDatesToInitialStock);
         }
     }
 }
