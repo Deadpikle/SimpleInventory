@@ -301,6 +301,7 @@
                             <DataGridTextColumn Header="Description" Binding="{Binding Item.Description}"/>
                             <DataGridTextColumn Header="Start Quantity" Binding="{Binding StartStock}"/>
                             <DataGridTextColumn Header="End Quantity" Binding="{Binding EndStock}"/>
+                            <DataGridTextColumn Header="Difference" Binding="{Binding DifferenceInStock, Mode=OneWay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

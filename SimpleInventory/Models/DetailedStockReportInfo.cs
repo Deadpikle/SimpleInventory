@@ -11,5 +11,10 @@ namespace SimpleInventory.Models
         public InventoryItem Item { get; set; }
         public int StartStock { get; set; }
         public int EndStock { get; set; }
+
+        public int DifferenceInStock
+        {
+            get { return EndStock - StartStock; }
+        }
     }
 }
