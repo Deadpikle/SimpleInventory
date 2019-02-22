@@ -282,7 +282,7 @@ namespace SimpleInventory.Models
         }
 
 
-        public static List<DetailedStockReportInfo> GetStockOnDates(DateTime firstDate, DateTime secondDate, bool addStockPurchasesBetweenDatesToInitialStock)
+        public static List<DetailedStockReportInfo> GetStockOnDates(DateTime firstDate, DateTime secondDate)
         {
             if (secondDate < firstDate)
             {
@@ -298,19 +298,20 @@ namespace SimpleInventory.Models
                 var reportInfo = new DetailedStockReportInfo();
                 reportInfo.Item = firstStockItem;
                 reportInfo.StartStock = firstStockItem.Quantity;
-                if (addStockPurchasesBetweenDatesToInitialStock)
+
+                var adjustments = QuantityAdjustment.LoadQuantityAdjustmentsBetweenDates(firstStockItem, firstDate, secondDate);
+                foreach (QuantityAdjustment adjustment in adjustments)
                 {
-                    var adjustments = QuantityAdjustment.LoadQuantityAdjustmentsBetweenDates(firstStockItem, firstDate, secondDate);
-                    int adjustmentCount = 0;
-                    foreach (QuantityAdjustment adjustment in adjustments)
+                    if (adjustment.WasAdjustedForStockPurchase)
                     {
-                        if (adjustment.WasAdjustedForStockPurchase)
-                        {
-                            adjustmentCount += adjustment.AmountChanged;
-                        }
+                        reportInfo.AmountChangedFromPurchaseStockIncrease += adjustment.AmountChanged;
                     }
-                    reportInfo.StartStock += adjustmentCount;
+                    else
+                    {
+                        reportInfo.AmountFromOtherQuantityAdjustments += adjustment.AmountChanged;
+                    }
                 }
+
                 var secondStockItem = lastStock.Where(x => x.ID == firstStockItem.ID).FirstOrDefault();
                 if (secondStockItem != null)
                 {

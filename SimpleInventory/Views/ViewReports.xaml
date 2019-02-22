@@ -274,7 +274,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Content="View Inventory Stock on Two Dates" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
                         <mahapps:DateTimePicker Grid.Row="2" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
                             SelectedDate="{Binding SelectedStockReportFirstDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"
                             Name="DetailedStockStartDatePicker" Culture="en-GB" />
@@ -283,13 +283,13 @@
                                 SelectedDate="{Binding SelectedStockReportSecondDate, UpdateSourceTrigger=PropertyChanged}"
                                 Name="DetailedStockEndDatePicker" Culture="en-GB" />
                     </StackPanel>
-                    <CheckBox Grid.Row="2" Content="Add stock purchases between dates to start quantity" 
-                              IsChecked="{Binding AddStockPurchasesBetweenDatesToInitialStock}" HorizontalAlignment="Center" Margin="0,5,0,5"/>
+                    <Label Content="Stock quantity is shown both with and without quantity adjustments made due to stock purchase increases" Grid.Row="2" HorizontalAlignment="Center"/>
                     <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding DetailedStockReport}" IsReadOnly="True" CanUserAddRows="False" 
                       AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
                       RowHeaderWidth="0" x:Name="DetailedStockReportDataGrid"
                       d:DataContext="{d:DesignInstance Type={x:Type models:DetailedStockReportInfo}}"
-                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
+                        GridLinesVisibility="Vertical"
+                      Background="LightGray" BorderBrush="Gray" BorderThickness="1" VerticalGridLinesBrush="LightGray"
                       ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
                         <DataGrid.Style>
                             <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
@@ -301,7 +301,10 @@
                             <DataGridTextColumn Header="Description" Binding="{Binding Item.Description}"/>
                             <DataGridTextColumn Header="Start Quantity" Binding="{Binding StartStock}"/>
                             <DataGridTextColumn Header="End Quantity" Binding="{Binding EndStock}"/>
-                            <DataGridTextColumn Header="Difference" Binding="{Binding DifferenceInStock, Mode=OneWay}"/>
+                            <DataGridTextColumn Header="Difference" Binding="{Binding DifferenceInStockWithoutPurchaseStockIncrease, Mode=OneWay}"/>
+                            <DataGridTextColumn Header="Start Quantity (With Stock Purchases)" Binding="{Binding StartStockWithPurchaseStockIncrease}"/>
+                            <DataGridTextColumn Header="End Quantity (With Stock Purchases)" Binding="{Binding EndStock}"/>
+                            <DataGridTextColumn Header="Difference (With Stock Purchases)" Binding="{Binding DifferenceInStockWithPurchaseStockIncrease, Mode=OneWay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

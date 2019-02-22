@@ -11,10 +11,22 @@ namespace SimpleInventory.Models
         public InventoryItem Item { get; set; }
         public int StartStock { get; set; }
         public int EndStock { get; set; }
+        public int AmountChangedFromPurchaseStockIncrease { get; set; }
+        public int AmountFromOtherQuantityAdjustments { get; set; }
 
-        public int DifferenceInStock
+        public int DifferenceInStockWithoutPurchaseStockIncrease
         {
             get { return EndStock - StartStock; }
+        }
+
+        public int StartStockWithPurchaseStockIncrease
+        {
+            get { return StartStock + AmountChangedFromPurchaseStockIncrease; }
+        }
+
+        public int DifferenceInStockWithPurchaseStockIncrease
+        {
+            get { return EndStock - StartStockWithPurchaseStockIncrease; }
         }
     }
 }

@@ -20,7 +20,6 @@ namespace SimpleInventory.ViewModels
 
         private DateTime _selectedStockReportFirstDate;
         private DateTime _selectedStockReportSecondDate;
-        private bool _addStockPurchasesBetweenDatesToInitialStock;
         private List<DetailedStockReportInfo> _detailedStockReport;
 
         private DaySales _currentDaySalesReport;
@@ -47,7 +46,6 @@ namespace SimpleInventory.ViewModels
             SelectedInventoryStockDate = DateTime.Now;
             SelectedStockReportFirstDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedStockReportSecondDate = DateTime.Now;
-            AddStockPurchasesBetweenDatesToInitialStock = true;
             _isViewingDailyReportInfo = false;
             _users = User.LoadUsers();
             _users.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
@@ -88,12 +86,6 @@ namespace SimpleInventory.ViewModels
         {
             get { return _selectedStockReportSecondDate; }
             set { _selectedStockReportSecondDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
-        }
-
-        public bool AddStockPurchasesBetweenDatesToInitialStock
-        {
-            get { return _addStockPurchasesBetweenDatesToInitialStock; }
-            set { _addStockPurchasesBetweenDatesToInitialStock = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
         }
 
         public List<DetailedStockReportInfo> DetailedStockReport
@@ -308,8 +300,7 @@ namespace SimpleInventory.ViewModels
 
         private void RunDetailedStockReport()
         {
-            DetailedStockReport = InventoryItem.GetStockOnDates(SelectedStockReportFirstDate, SelectedStockReportSecondDate, 
-                AddStockPurchasesBetweenDatesToInitialStock);
+            DetailedStockReport = InventoryItem.GetStockOnDates(SelectedStockReportFirstDate, SelectedStockReportSecondDate);
         }
     }
 }
