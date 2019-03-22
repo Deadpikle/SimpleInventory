@@ -204,6 +204,27 @@ namespace SimpleInventory.Models
             return LoadInfoForDateAndItem(startDate, inventoryItemID, userID);
         }
 
+        public static List<int> LoadItemIDsSoldBetweenDateAndItemUntilDate(DateTime startDate, DateTime endDate)
+        {
+            List<ItemSoldInfo> infoList = null;
+            if (endDate != null && startDate.Date != endDate.Date && endDate > startDate)
+            {
+                string whereClause = "WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
+                        endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00'";
+                infoList = LoadInfo(whereClause, new List<Tuple<string, string>>() { });
+            }
+            else
+            {
+                infoList = LoadInfoForDate(startDate);
+            }
+            var output = new List<int>();
+            foreach (ItemSoldInfo info in infoList)
+            {
+                output.Add(info.InventoryItemID);
+            }
+            return output;
+        }
+
         public void CreateNewSoldInfo()
         {
             var dbHelper = new DatabaseHelper();
