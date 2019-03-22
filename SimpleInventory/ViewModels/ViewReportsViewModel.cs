@@ -302,5 +302,37 @@ namespace SimpleInventory.ViewModels
         {
             DetailedStockReport = InventoryItem.GetStockOnDates(SelectedStockReportFirstDate, SelectedStockReportSecondDate);
         }
+
+        public ICommand ExportSoldItemStockInfoToExcel
+        {
+            get { return new RelayCommand(ExportSoldItemInfoToExcel); }
+        }
+
+        private void ExportSoldItemInfoToExcel()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Excel File (*.xlsx)|*.xlsx";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            saveFileDialog.FileName = "Stock-Info-Sold-Items-Report-" + SelectedStockReportFirstDate.ToString("yyyy-MM-dd") 
+                    + "-" + SelectedStockReportSecondDate.ToString("yyyy-MM-dd");
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var soldItemIDs = ItemSoldInfo.LoadItemIDsSoldBetweenDateAndItemUntilDate(SelectedStockReportFirstDate, SelectedStockReportSecondDate);
+                    // https://stackoverflow.com/a/3944821/3938401 for quick "remove items from one list that are in another" code :)
+                    var excludedIDs = new HashSet<int>(soldItemIDs);
+                    var itemsToExport = DetailedStockReport.Where(x => !excludedIDs.Contains(x.Item.ID));
+                    // export data to excel
+                    var excelGenerator = new StockInfoExcelGenerator();
+                    excelGenerator.ExportStockInfo(itemsToExport.ToList(), SelectedStockReportFirstDate, SelectedStockReportSecondDate, saveFileDialog.FileName);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error generating file! Please make sure to close the file with the same name" +
+                        " if it is open in Excel or other software before generating a file report.", "Error!", MessageBoxButton.OK);
+                }
+            }
+        }
     }
 }

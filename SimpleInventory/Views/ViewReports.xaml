@@ -272,6 +272,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Content="View Inventory Stock on Two Dates" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
@@ -307,6 +308,7 @@
                             <DataGridTextColumn Header="Difference (With Stock Purchases)" Binding="{Binding DifferenceInStockWithPurchaseStockIncrease, Mode=OneWay}"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Grid.Row="4" Margin="5" Content="Export Stock Info for Sold Items to Excel" Width="300" Command="{Binding ExportSoldItemStockInfoToExcel}"/>
                 </Grid>
             </TabItem>
         </TabControl>
