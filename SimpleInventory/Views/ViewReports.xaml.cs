@@ -1,6 +1,7 @@
 ﻿using SimpleInventory.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,14 @@ namespace SimpleInventory.Views
             InitializeComponent();
 
             WeeklyReportDatePicker.Loaded += WeeklyReportDatePicker_Loaded;
+            var culture = new CultureInfo("en-US");
+            culture.DateTimeFormat = new DateTimeFormatInfo() { ShortDatePattern = "dd/MM/yyyy", ShortTimePattern = "HH:mm:ss"};
+            DetailedStockStartDatePicker.SelectedDateFormat = DatePickerFormat.Short;
+            DetailedStockStartDatePicker.SelectedTimeFormat = MahApps.Metro.Controls.TimePickerFormat.Short;
+            DetailedStockEndDatePicker.SelectedDateFormat = DatePickerFormat.Short;
+            DetailedStockEndDatePicker.SelectedTimeFormat = MahApps.Metro.Controls.TimePickerFormat.Short;
+            DetailedStockStartDatePicker.Culture = culture;
+            DetailedStockEndDatePicker.Culture = culture;
         }
 
         private void WeeklyReportDatePicker_Loaded(object sender, RoutedEventArgs e)

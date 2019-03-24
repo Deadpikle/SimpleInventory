@@ -278,11 +278,11 @@
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
                         <mahapps:DateTimePicker Grid.Row="2" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
                             SelectedDate="{Binding SelectedStockReportFirstDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"
-                            Name="DetailedStockStartDatePicker" Culture="en-GB" />
+                            Name="DetailedStockStartDatePicker" />
                         <Label Content="-" FontWeight="ExtraBold" FontSize="16" VerticalAlignment="Center" Padding="0" Margin="10,0,10,0"/>
                         <mahapps:DateTimePicker Grid.Row="2" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
                                 SelectedDate="{Binding SelectedStockReportSecondDate, UpdateSourceTrigger=PropertyChanged}"
-                                Name="DetailedStockEndDatePicker" Culture="en-GB" />
+                                Name="DetailedStockEndDatePicker"  />
                     </StackPanel>
                     <Label Content="Stock quantity is shown both with and without quantity adjustments made due to stock purchase increases" Grid.Row="2" HorizontalAlignment="Center"/>
                     <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding DetailedStockReport}" IsReadOnly="True" CanUserAddRows="False" 
