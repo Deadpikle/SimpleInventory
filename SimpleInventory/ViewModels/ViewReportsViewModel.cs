@@ -320,9 +320,9 @@ namespace SimpleInventory.ViewModels
                 try
                 {
                     var soldItemIDs = ItemSoldInfo.LoadItemIDsSoldBetweenDateAndItemUntilDate(SelectedStockReportFirstDate, SelectedStockReportSecondDate);
-                    // https://stackoverflow.com/a/3944821/3938401 for quick "remove items from one list that are in another" code :)
-                    var excludedIDs = new HashSet<int>(soldItemIDs);
-                    var itemsToExport = DetailedStockReport.Where(x => !excludedIDs.Contains(x.Item.ID));
+                    // we only want items in the excel sheet that have been sold in between the two dates
+                    var soldItemIDHashSet = new HashSet<int>(soldItemIDs);
+                    var itemsToExport = DetailedStockReport.Where(x => soldItemIDHashSet.Contains(x.Item.ID));
                     // export data to excel
                     var excelGenerator = new StockInfoExcelGenerator();
                     excelGenerator.ExportStockInfo(itemsToExport.ToList(), SelectedStockReportFirstDate, SelectedStockReportSecondDate, saveFileDialog.FileName);
