@@ -26,7 +26,7 @@ namespace SimpleInventory.Models
                 "SELECT ID, Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency " +
                 "FROM Currencies " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY Name, Abbreviation, ConversionRateToUSD";
+                "ORDER BY lower(Name), Abbreviation, ConversionRateToUSD";
 
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())

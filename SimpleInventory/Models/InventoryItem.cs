@@ -64,7 +64,7 @@ namespace SimpleInventory.Models
                 "   LEFT JOIN Users u ON ii.CreatedByUserID = u.ID " +
                 "   LEFT JOIN ItemTypes it ON ii.ItemTypeID = it.ID " +
                 (string.IsNullOrEmpty(whereClause) ? " " : whereClause) + " " +
-                "ORDER BY ii.Name, Cost, ii.Description";
+                "ORDER BY lower(ii.Name), lower(ii.Description), Cost";
             var currencies = Currency.GetKeyValueCurrencyList();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())

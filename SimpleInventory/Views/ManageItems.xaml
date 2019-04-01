@@ -43,7 +43,7 @@
                 </Style>
             </DataGrid.Style>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="{x:Null}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Category" Binding="{Binding Type.Name}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"

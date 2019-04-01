@@ -113,7 +113,7 @@ namespace SimpleInventory.Models
                         "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
                         "   JOIN Users u ON isi.SoldByUserID = u.ID " +
                         (string.IsNullOrWhiteSpace(whereClause) ? "" : whereClause + " ") +
-                        "ORDER BY i.Name, isi.DateTimeSold";
+                        "ORDER BY lower(i.Name), isi.DateTimeSold";
 
                     command.CommandText = query;
                     if (!string.IsNullOrEmpty(whereClause) && whereParams != null)

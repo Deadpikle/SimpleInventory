@@ -49,7 +49,7 @@ namespace SimpleInventory.Models
                                 "CanDeleteItemsSold, CanViewManageInventoryQuantity " +
                         "FROM Users u JOIN UserPermissions up ON u.ID = up.UserID " +
                             (string.IsNullOrEmpty(whereClause) ? " WHERE WasDeleted = 0 " : whereClause) + " " +
-                        "ORDER BY u.Username, u.Name";
+                        "ORDER BY lower(u.Username), lower(u.Name)";
                     command.CommandText = query;
                     if (!string.IsNullOrEmpty(whereClause) && whereParams != null)
                     {

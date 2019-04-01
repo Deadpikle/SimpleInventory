@@ -38,7 +38,7 @@ namespace SimpleInventory.Models
                 "SELECT ID, Name, Description, IsDefault " +
                 "FROM ItemTypes " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY Name, Description";
+                "ORDER BY lower(Name), lower(Description)";
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {

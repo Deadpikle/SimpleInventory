@@ -327,7 +327,7 @@ namespace SimpleInventory.ViewModels
                     var excelGenerator = new StockInfoExcelGenerator();
                     excelGenerator.ExportStockInfo(itemsToExport.ToList(), SelectedStockReportFirstDate, SelectedStockReportSecondDate, saveFileDialog.FileName);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     MessageBox.Show("Error generating file! Please make sure to close the file with the same name" +
                         " if it is open in Excel or other software before generating a file report.", "Error!", MessageBoxButton.OK);
