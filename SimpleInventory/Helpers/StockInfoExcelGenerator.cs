@@ -86,7 +86,8 @@ namespace SimpleInventory.Helpers
                 var firstCellForPrinting = worksheet.Cell("A1");
                 var lastCellForPrinting = items.Count > 0 ? currentCell.CellAbove(1).CellRight(9) : worksheet.Cell("J4");
                 worksheet.PageSetup.PrintAreas.Add(firstCellForPrinting.Address.ToStringRelative() + ":" + lastCellForPrinting.Address.ToStringRelative());
-
+                worksheet.PageSetup.SetRowsToRepeatAtTop("4:4");
+                worksheet.PageSetup.PagesWide = 1;
                 workbook.SaveAs(path);
                 Process.Start(path);
             }
