@@ -35,19 +35,19 @@ namespace SimpleInventory.Helpers
 
                 // start exporting data
                 var currentCell = worksheet.Cell("A5");
-                bool isOddRow = false;
+                var lastRow = currentCell.WorksheetRow();
                 foreach (DetailedStockReportInfo item in items)
                 {
+                    lastRow = currentCell.WorksheetRow();
                     currentCell.Value = item.Item.Name;
                     currentCell.CellRight(1).Value = item.Item.Description;
                     currentCell.CellRight(2).Value = item.StartStockWithPurchaseStockIncrease;
                     currentCell.CellRight(3).Value = item.EndStock; // computer
                     currentCell.CellRight(4).Value = ""; // manual entry
                     currentCell.CellRight(4).AddConditionalFormat()
-                        .WhenEquals("")
+                        .WhenEquals("\"\"")
                         .Fill.SetBackgroundColor(XLColor.Yellow); // if data not entered, highlight that work needs to happen!!
-
-
+                        
                     currentCell.CellRight(5).FormulaA1 = "=SUM(-" + currentCell.CellRight(2).Address.ToStringFixed() + "," 
                         + currentCell.CellRight(3).Address.ToStringFixed() + ")"; // computer diff
                     currentCell.CellRight(6).FormulaA1 = "=IF(" + currentCell.CellRight(3).Address.ToStringFixed() + "=\"\", \"-\", "
@@ -74,11 +74,18 @@ namespace SimpleInventory.Helpers
                         currentCell.WorksheetRow().Style.Fill.BackgroundColor = XLColor.LightGray;
                     }
 
+                    // if you add more data columns make sure to adjust print area!!!
+
                     // go to next row
                     currentCell = currentCell.CellBelow();
                 }
                 //// auto fit width
                 worksheet.Columns().AdjustToContents(4, 4, 10, 25);
+                // set print area
+                worksheet.PageSetup.PrintAreas.Clear();
+                var firstCellForPrinting = worksheet.Cell("A1");
+                var lastCellForPrinting = items.Count > 0 ? currentCell.CellAbove(1).CellRight(9) : worksheet.Cell("J4");
+                worksheet.PageSetup.PrintAreas.Add(firstCellForPrinting.Address.ToStringRelative() + ":" + lastCellForPrinting.Address.ToStringRelative());
 
                 workbook.SaveAs(path);
                 Process.Start(path);
