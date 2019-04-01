@@ -30,9 +30,12 @@ namespace SimpleInventory.Helpers
                 worksheet.Cell("F4").SetValue("Computer Difference").Style.Font.SetBold(true);
                 worksheet.Cell("G4").SetValue("Manual Difference").Style.Font.SetBold(true);
                 worksheet.Cell("H4").SetValue("Stock Difference").Style.Font.SetBold(true);
+                worksheet.Cell("I4").SetValue("Item Cost").Style.Font.SetBold(true);
+                worksheet.Cell("J4").SetValue("Cost Difference").Style.Font.SetBold(true);
 
                 // start exporting data
                 var currentCell = worksheet.Cell("A5");
+                bool isOddRow = false;
                 foreach (DetailedStockReportInfo item in items)
                 {
                     currentCell.Value = item.Item.Name;
@@ -40,12 +43,17 @@ namespace SimpleInventory.Helpers
                     currentCell.CellRight(2).Value = item.StartStockWithPurchaseStockIncrease;
                     currentCell.CellRight(3).Value = item.EndStock; // computer
                     currentCell.CellRight(4).Value = ""; // manual entry
+                    currentCell.CellRight(4).AddConditionalFormat()
+                        .WhenEquals("")
+                        .Fill.SetBackgroundColor(XLColor.Yellow); // if data not entered, highlight that work needs to happen!!
+
+
                     currentCell.CellRight(5).FormulaA1 = "=SUM(-" + currentCell.CellRight(2).Address.ToStringFixed() + "," 
                         + currentCell.CellRight(3).Address.ToStringFixed() + ")"; // computer diff
                     currentCell.CellRight(6).FormulaA1 = "=IF(" + currentCell.CellRight(3).Address.ToStringFixed() + "=\"\", \"-\", "
                             + "SUM(-" + currentCell.CellRight(2).Address.ToStringFixed() + ","
                                 + currentCell.CellRight(4).Address.ToStringFixed() + "))"; // manual diff
-                    // conditional formatting
+
                     currentCell.CellRight(5).AddConditionalFormat()
                         .WhenNotEquals("=" + currentCell.CellRight(6).Address.ToStringFixed())
                         .Fill.SetBackgroundColor(XLColor.LightPink);
@@ -55,7 +63,16 @@ namespace SimpleInventory.Helpers
                     currentCell.CellRight(7).SetFormulaA1("=ABS(SUM(" + currentCell.CellRight(5).Address.ToStringFixed() + ", -" 
                         + currentCell.CellRight(6).Address.ToStringFixed() + "))").AddConditionalFormat()
                         .WhenNotEquals("0")
-                        .Fill.SetBackgroundColor(XLColor.LightPink);
+                        .Fill.SetBackgroundColor(XLColor.LightPink); // stock difference
+                    currentCell.CellRight(8).Value = item.Item.Cost; // item cost
+                    currentCell.CellRight(9).SetFormulaA1("=" + 
+                        currentCell.CellRight(7).Address.ToStringFixed() + "*" + 
+                        currentCell.CellRight(8).Address.ToStringFixed()); // cost difference
+
+                    if (currentCell.WorksheetRow().RowNumber() % 2 == 0)
+                    {
+                        currentCell.WorksheetRow().Style.Fill.BackgroundColor = XLColor.LightGray;
+                    }
 
                     // go to next row
                     currentCell = currentCell.CellBelow();
