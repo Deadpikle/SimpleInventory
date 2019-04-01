@@ -23,12 +23,13 @@ namespace SimpleInventory.Helpers
 
                 // table headers
                 worksheet.Cell("A4").SetValue("Name").Style.Font.SetBold(true);
-                worksheet.Cell("B4").SetValue("Name").Style.Font.SetBold(true);
+                worksheet.Cell("B4").SetValue("Description").Style.Font.SetBold(true);
                 worksheet.Cell("C4").SetValue("Beginning Stock (Computer)").Style.Font.SetBold(true);
                 worksheet.Cell("D4").SetValue("Ending Stock (Computer)").Style.Font.SetBold(true);
                 worksheet.Cell("E4").SetValue("Ending Stock (Manual Entry)").Style.Font.SetBold(true);
                 worksheet.Cell("F4").SetValue("Computer Difference").Style.Font.SetBold(true);
                 worksheet.Cell("G4").SetValue("Manual Difference").Style.Font.SetBold(true);
+                worksheet.Cell("H4").SetValue("Stock Difference").Style.Font.SetBold(true);
 
                 // start exporting data
                 var currentCell = worksheet.Cell("A5");
@@ -50,6 +51,10 @@ namespace SimpleInventory.Helpers
                         .Fill.SetBackgroundColor(XLColor.LightPink);
                     currentCell.CellRight(6).AddConditionalFormat()
                         .WhenNotEquals("=" + currentCell.CellRight(5).Address.ToStringFixed())
+                        .Fill.SetBackgroundColor(XLColor.LightPink);
+                    currentCell.CellRight(7).SetFormulaA1("=ABS(SUM(" + currentCell.CellRight(5).Address.ToStringFixed() + ", -" 
+                        + currentCell.CellRight(6).Address.ToStringFixed() + "))").AddConditionalFormat()
+                        .WhenNotEquals("0")
                         .Fill.SetBackgroundColor(XLColor.LightPink);
 
                     // go to next row
