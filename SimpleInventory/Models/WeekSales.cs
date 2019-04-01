@@ -159,8 +159,8 @@ namespace SimpleInventory.Models
                 }
             }
             // sort final arrays for nice display
-            weekSales.AllItemsSold.Sort((left, right) => left.Name.CompareTo(right.Name));
-            weekSales.ItemTypeMoneyBreakdown.Sort((left, right) => left.Type.Name.CompareTo(right.Type.Name));
+            weekSales.AllItemsSold.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
+            weekSales.ItemTypeMoneyBreakdown.Sort((left, right) => left.Type.Name.ToLower().CompareTo(right.Type.Name.ToLower()));
             return weekSales;
         }
 

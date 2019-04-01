@@ -277,7 +277,7 @@ namespace SimpleInventory.Models
             {
                 items.RemoveAll((item) => item.Quantity == 0);
             }
-            items.Sort((left, right) => left.Name.CompareTo(right.Name));
+            items.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
             return items;
         }
 
@@ -319,7 +319,7 @@ namespace SimpleInventory.Models
                 }
                 output.Add(reportInfo);
             }
-            output.Sort((left, right) => left.Item.Name.CompareTo(right.Item.Name));
+            output.Sort((left, right) => left.Item.Name.ToLower().CompareTo(right.Item.Name.ToLower()));
             return output;
         }
     }
