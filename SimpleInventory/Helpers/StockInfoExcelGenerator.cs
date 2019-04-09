@@ -88,6 +88,7 @@ namespace SimpleInventory.Helpers
                 worksheet.PageSetup.PrintAreas.Add(firstCellForPrinting.Address.ToStringRelative() + ":" + lastCellForPrinting.Address.ToStringRelative());
                 worksheet.PageSetup.SetRowsToRepeatAtTop("4:4");
                 worksheet.PageSetup.PagesWide = 1;
+                worksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
                 workbook.SaveAs(path);
                 Process.Start(path);
             }
