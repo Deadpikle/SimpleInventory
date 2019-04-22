@@ -204,14 +204,23 @@ namespace SimpleInventory.Models
             return LoadInfoForDateAndItem(startDate, inventoryItemID, userID);
         }
 
-        public static List<int> LoadItemIDsSoldBetweenDateAndItemUntilDate(DateTime startDate, DateTime endDate)
+        public static List<int> LoadItemIDsSoldBetweenDateAndItemUntilDate(DateTime startDate, DateTime endDate, bool ignoreTime = false)
         {
             List<ItemSoldInfo> infoList = null;
             if (endDate != null && startDate.Date != endDate.Date && endDate > startDate)
             {
-                string whereClause = "WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
-                        endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00'";
-                infoList = LoadInfo(whereClause, new List<Tuple<string, string>>() { });
+                if (!ignoreTime)
+                {
+                    string whereClause = "WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToStringFormat()) + "' AND '" +
+                            endDate.ToString(Utilities.DateTimeToStringFormat()) + "'";
+                    infoList = LoadInfo(whereClause, new List<Tuple<string, string>>() { });
+                }
+                else
+                {
+                    string whereClause = "WHERE DateTimeSold BETWEEN '" + startDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00' AND '" +
+                            endDate.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + " 00:00:00'";
+                    infoList = LoadInfo(whereClause, new List<Tuple<string, string>>() { });
+                }
             }
             else
             {
