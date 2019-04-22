@@ -36,9 +36,14 @@ namespace SimpleInventory.Helpers
                 // start exporting data
                 var currentCell = worksheet.Cell("A5");
                 var lastRow = currentCell.WorksheetRow();
+                IXLCell firstCellWithData = null;
                 foreach (DetailedStockReportInfo item in items)
                 {
                     lastRow = currentCell.WorksheetRow();
+                    if (firstCellWithData == null)
+                    {
+                        firstCellWithData = currentCell;
+                    }
                     currentCell.Value = item.Item.Name;
                     currentCell.CellRight(1).Value = item.Item.Description;
                     currentCell.CellRight(2).Value = item.StartStockWithPurchaseStockIncrease;
@@ -79,12 +84,19 @@ namespace SimpleInventory.Helpers
                     // go to next row
                     currentCell = currentCell.CellBelow();
                 }
+                // add cost discrepency
+                if (items.Count > 0)
+                {
+                    currentCell.CellRight(8).SetValue("Cost Discrepency").Style.Font.SetBold(true);
+                    currentCell.CellRight(9).SetFormulaA1("=SUM(" + firstCellWithData.CellRight(9).Address.ToStringFixed()
+                        + ":" + currentCell.CellAbove(1).CellRight(9).Address.ToStringFixed() + ")").Style.Font.SetBold(true);
+                }
                 //// auto fit width
                 worksheet.Columns().AdjustToContents(4, 4, 10, 25);
                 // set print area
                 worksheet.PageSetup.PrintAreas.Clear();
                 var firstCellForPrinting = worksheet.Cell("A1");
-                var lastCellForPrinting = items.Count > 0 ? currentCell.CellAbove(1).CellRight(9) : worksheet.Cell("J4");
+                var lastCellForPrinting = items.Count > 0 ? currentCell.CellRight(9) : worksheet.Cell("J4");
                 worksheet.PageSetup.PrintAreas.Add(firstCellForPrinting.Address.ToStringRelative() + ":" + lastCellForPrinting.Address.ToStringRelative());
                 worksheet.PageSetup.SetRowsToRepeatAtTop("4:4");
                 worksheet.PageSetup.PagesWide = 1;
