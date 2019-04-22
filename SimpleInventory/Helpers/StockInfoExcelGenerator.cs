@@ -37,6 +37,7 @@ namespace SimpleInventory.Helpers
                 var currentCell = worksheet.Cell("A5");
                 var lastRow = currentCell.WorksheetRow();
                 IXLCell firstCellWithData = null;
+                // TODO: adjust formulas with string.Format() rather than string concat
                 foreach (DetailedStockReportInfo item in items)
                 {
                     lastRow = currentCell.WorksheetRow();
