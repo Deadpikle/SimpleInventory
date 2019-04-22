@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SimpleInventory"
         xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
         mc:Ignorable="d"
-        Title="Simple Inventory" Height="450" Width="800" MinHeight="480" MinWidth="680"
+        Title="Simple Inventory" Height="600" Width="800" MinHeight="600" MinWidth="680"
         TitleCaps="False" GlowBrush="SkyBlue" Icon="Graphics/icons8_pos_terminal_96_ahu_icon.ico">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>

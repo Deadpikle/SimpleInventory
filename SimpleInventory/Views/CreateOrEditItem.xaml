@@ -9,7 +9,7 @@
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CreateOrEditItemViewModel}}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="680">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
@@ -22,6 +22,7 @@
         <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" IsTabStop="False"
                 Content="Cancel" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding PopBack}"/>
         <StackPanel Margin="15,0,0,0" Grid.Row="1" Orientation="Vertical">
+            <Label Content="Item Information" Margin="0,0,10,0" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Name" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="300" Text="{Binding Name}" VerticalContentAlignment="Center" FontSize="14"
@@ -48,7 +49,25 @@
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <Label Content="Price Paid When Purchasing Pack for Use in Local Store" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <TextBox Width="150" Text="{Binding CostToPurchase}" VerticalContentAlignment="Center" FontSize="14" TabIndex="4"/>
+                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
+                          SelectedIndex="{Binding SelectedCostToPurchaseCurrencyIndex}" FontSize="14" IsTabStop="False">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding NameWithSymbol}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Number of Items in Pack (e.g. 12 water bottles in 1 pack)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                <mahapps:NumericUpDown Width="150" Value="{Binding NumberOfItemsInPack}" VerticalContentAlignment="Center" FontSize="14" TabIndex="1"/>
+            </StackPanel>
+            <Rectangle Fill="LightGray" Height="2" Margin="10"/>
+            <Label Content="Local Store Information" Margin="0,0,10,-5" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Store Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="150" Text="{Binding Cost}" VerticalContentAlignment="Center" FontSize="14" TabIndex="3"/>
                 <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
                           SelectedIndex="{Binding SelectedCostCurrencyIndex}" IsTabStop="False">
@@ -71,6 +90,8 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
+            <Label Content="Profit = Store sale price - (price paid per pack / number of items in pack)" 
+                       Margin="50,0,10,0" FontSize="14" VerticalAlignment="Center" FontStyle="Italic"/>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox Width="250" Text="{Binding BarcodeNumber}" VerticalContentAlignment="Center" FontSize="14" TabIndex="5"/>

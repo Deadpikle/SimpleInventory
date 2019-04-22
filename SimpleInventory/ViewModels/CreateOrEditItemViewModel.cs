@@ -21,10 +21,13 @@ namespace SimpleInventory.ViewModels
         private string _description;
         private string _cost;
         private string _profitPerItem;
+        private string _costToPurchase;
+        private int _numberOfItemsInPack;
 
         private int _indexOfDefaultCurrency;
         private int _selectedCostCurrencyIndex;
         private int _selectedProfitCurrencyIndex;
+        private int _selectedCostToPurchaseCurrencyIndex;
         private int _selectedItemTypeIndex;
 
         private int _quantity;
@@ -69,6 +72,8 @@ namespace SimpleInventory.ViewModels
             ProfitPerItem = item.ProfitPerItem.ToString();
             Quantity = item.Quantity;
             BarcodeNumber = item.BarcodeNumber;
+            NumberOfItemsInPack = item.ItemsPerPurchase;
+            CostToPurchase = item.ItemPurchaseCost.ToString();
             ScreenTitle = "Edit Item";
         }
 
@@ -150,6 +155,24 @@ namespace SimpleInventory.ViewModels
             set { _isCreating = value; NotifyPropertyChanged(); }
         }
 
+        public string CostToPurchase
+        {
+            get { return _costToPurchase; }
+            set { _costToPurchase = value; NotifyPropertyChanged(); }
+        }
+
+        public int NumberOfItemsInPack
+        {
+            get { return _numberOfItemsInPack; }
+            set { _numberOfItemsInPack = value; NotifyPropertyChanged(); }
+        }
+
+        public int SelectedCostToPurchaseCurrencyIndex
+        {
+            get { return _selectedCostToPurchaseCurrencyIndex; }
+            set { _selectedCostToPurchaseCurrencyIndex = value; NotifyPropertyChanged(); }
+        }
+
         #endregion
 
         #region ICommands
@@ -175,6 +198,7 @@ namespace SimpleInventory.ViewModels
         {
             var didSetCostCurrencyIndex = false;
             var didSetProfitCurrencyIndex = false;
+            var didSetCostToPurchaseCurrencyIndex = false;
             for (int i = 0; i < _currencies.Count; i++)
             {
                 var currency = _currencies[i];
@@ -185,6 +209,7 @@ namespace SimpleInventory.ViewModels
                     {
                         _selectedCostCurrencyIndex = i;
                         _selectedProfitCurrencyIndex = i;
+                        _selectedCostToPurchaseCurrencyIndex = i;
                         didSetCostCurrencyIndex = didSetProfitCurrencyIndex = true;
                     }
                 }
@@ -200,6 +225,11 @@ namespace SimpleInventory.ViewModels
                         _selectedProfitCurrencyIndex = i;
                         didSetProfitCurrencyIndex = true;
                     }
+                    if (item.ItemPurchaseCostCurrency != null && item.ItemPurchaseCostCurrency.ID == currency.ID)
+                    {
+                        _selectedCostToPurchaseCurrencyIndex = i;
+                        didSetCostToPurchaseCurrencyIndex = true;
+                    }
                 }
             }
             if (!didSetCostCurrencyIndex)
@@ -209,6 +239,10 @@ namespace SimpleInventory.ViewModels
             if (!didSetProfitCurrencyIndex)
             {
                 _selectedProfitCurrencyIndex = _indexOfDefaultCurrency;
+            }
+            if (!didSetCostToPurchaseCurrencyIndex)
+            {
+                _selectedCostToPurchaseCurrencyIndex = _indexOfDefaultCurrency;
             }
         }
 
@@ -273,6 +307,12 @@ namespace SimpleInventory.ViewModels
                 item.ProfitPerItem = didParse ? profit : 0m;
                 item.ProfitPerItemCurrency = _currencies[_selectedProfitCurrencyIndex];
 
+                decimal costToPurchase = 0m;
+                didParse = Decimal.TryParse(CostToPurchase, out costToPurchase);
+                item.ItemPurchaseCost = didParse ? costToPurchase : 0m;
+                item.ItemPurchaseCostCurrency = _currencies[_selectedCostToPurchaseCurrencyIndex];
+                item.ItemsPerPurchase = NumberOfItemsInPack;
+
                 item.BarcodeNumber = BarcodeNumber;
                 item.PicturePath = "";
                 if (_isCreating) // any further adjustments have to be made via the adjust quantity screen
@@ -280,6 +320,7 @@ namespace SimpleInventory.ViewModels
                     item.Quantity = Quantity;
                 }
                 var userID = CurrentUser != null ? CurrentUser.ID : 1;
+                item.CreatedByUserName = CurrentUser != null ? CurrentUser.Name : "";
                 if (_isCreating)
                 {
                     item.CreateNewItem(userID);

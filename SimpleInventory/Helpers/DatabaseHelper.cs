@@ -386,6 +386,22 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 12;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
+                            goto case 13;
+                        case 13:
+                            // add WasAdjustedForStockPurchase column to QuantityAdjustments
+                            string addPurchaseCostAndItemsPerPurchase = "" +
+                                "ALTER TABLE InventoryItems " +
+                                "ADD COLUMN ItemPurchaseCost TEXT DEFAULT ''; " +
+                                "ALTER TABLE InventoryItems " +
+                                "ADD COLUMN ItemPurchaseCostCurrencyID INTEGER DEFAULT 0;" +
+                                "ALTER TABLE InventoryItems " +
+                                "ADD COLUMN ItemsPerPurchase INTEGER DEFAULT 0";
+                            command.CommandText = addPurchaseCostAndItemsPerPurchase;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 13;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
                             break;
                     }
                 }
