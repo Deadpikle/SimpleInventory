@@ -391,7 +391,7 @@ namespace SimpleInventory.Helpers
                             // add WasAdjustedForStockPurchase column to QuantityAdjustments
                             string addPurchaseCostAndItemsPerPurchase = "" +
                                 "ALTER TABLE InventoryItems " +
-                                "ADD COLUMN ItemPurchaseCost TEXT DEFAULT ''; " +
+                                "ADD COLUMN ItemPurchaseCost TEXT DEFAULT '0'; " +
                                 "ALTER TABLE InventoryItems " +
                                 "ADD COLUMN ItemPurchaseCostCurrencyID INTEGER DEFAULT 0;" +
                                 "ALTER TABLE InventoryItems " +
