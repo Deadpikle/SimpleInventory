@@ -4,6 +4,7 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,6 +189,12 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileDialog.FileName = "Daily-Inventory-Report-" + SelectedDailyReportDate.ToString("yyyy-MM-dd");
+            var lastDayReportLocation = Properties.Settings.Default.LastDayReportSaveFolder;
+            if (!string.IsNullOrWhiteSpace(lastDayReportLocation) && Directory.Exists(Path.GetDirectoryName(lastDayReportLocation)))
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = lastDayReportLocation;
+            }
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
@@ -197,6 +204,7 @@ namespace SimpleInventory.ViewModels
                     //generator.BarcodeType = GetBarcodeType();
                     //generator.NumberOfPages = NumberOfPages;
                     generator.GeneratePDF(CurrentDaySalesReport, saveFileDialog.FileName);
+                    Properties.Settings.Default.LastDayReportSaveFolder = Path.GetDirectoryName(saveFileDialog.FileName);
                 }
                 catch (Exception)
                 {
@@ -223,6 +231,12 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileDialog.FileName = "Weekly-Inventory-Report-" + SelectedWeeklyReportDate.ToString("yyyy-MM-dd");
+            var lastWeekReportLocation = Properties.Settings.Default.LastWeekReportSaveFolder;
+            if (!string.IsNullOrWhiteSpace(lastWeekReportLocation) && Directory.Exists(Path.GetDirectoryName(lastWeekReportLocation)))
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = lastWeekReportLocation;
+            }
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
@@ -232,6 +246,7 @@ namespace SimpleInventory.ViewModels
                     //generator.BarcodeType = GetBarcodeType();
                     //generator.NumberOfPages = NumberOfPages;
                     generator.GeneratePDF(CurrentWeeklySalesReport, saveFileDialog.FileName);
+                    Properties.Settings.Default.LastWeekReportSaveFolder = Path.GetDirectoryName(saveFileDialog.FileName);
                 }
                 catch (Exception)
                 {
@@ -315,6 +330,12 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileDialog.FileName = "Stock-Info-Sold-Items-Report-" + SelectedStockReportFirstDate.ToString("yyyy-MM-dd") 
                     + "-" + SelectedStockReportSecondDate.ToString("yyyy-MM-dd");
+            var lastExcelLocation = Properties.Settings.Default.LastExcelReportSaveLocation;
+            if (!string.IsNullOrWhiteSpace(lastExcelLocation) && Directory.Exists(Path.GetDirectoryName(lastExcelLocation)))
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = lastExcelLocation;
+            }
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
@@ -326,6 +347,7 @@ namespace SimpleInventory.ViewModels
                     // export data to excel
                     var excelGenerator = new StockInfoExcelGenerator();
                     excelGenerator.ExportStockInfo(itemsToExport.ToList(), SelectedStockReportFirstDate, SelectedStockReportSecondDate, saveFileDialog.FileName);
+                    Properties.Settings.Default.LastExcelReportSaveLocation = Path.GetDirectoryName(saveFileDialog.FileName);
                 }
                 catch (Exception)
                 {

@@ -80,10 +80,18 @@ namespace SimpleInventory.ViewModels
             saveFileDialog.Filter = "SIDB file (*.sidb)|*.sidb";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             saveFileDialog.FileName = "inventory-backup-" + DateTime.Now.ToString("yyyy-MM-dd-H-mm-ss");
+
+            var lastBackupLocation = Properties.Settings.Default.LastBackupFolder;
+            if (!string.IsNullOrWhiteSpace(lastBackupLocation) && Directory.Exists(Path.GetDirectoryName(lastBackupLocation)))
+            {
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = lastBackupLocation;
+            }
             if (saveFileDialog.ShowDialog() == true)
             {
                 var dbHelper = new DatabaseHelper();
                 File.Copy(dbHelper.GetDatabaseFilePath(), saveFileDialog.FileName);
+                Properties.Settings.Default.LastBackupFolder = Path.GetDirectoryName(saveFileDialog.FileName);
             }
         }
 
