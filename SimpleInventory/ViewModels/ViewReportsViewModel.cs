@@ -328,8 +328,8 @@ namespace SimpleInventory.ViewModels
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Excel File (*.xlsx)|*.xlsx";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            saveFileDialog.FileName = "Stock-Info-Sold-Items-Report-" + SelectedStockReportFirstDate.ToString("yyyy-MM-dd") 
-                    + "-" + SelectedStockReportSecondDate.ToString("yyyy-MM-dd");
+            saveFileDialog.FileName = "Stock-Info-Sold-Items-Report-" + SelectedStockReportFirstDate.ToString("yyyy-MM-dd-h-mm-ss-tt") 
+                    + "-" + SelectedStockReportSecondDate.ToString("yyyy-MM-dd-h-mm-ss-tt");
             var lastExcelLocation = Properties.Settings.Default.LastExcelReportSaveLocation;
             if (!string.IsNullOrWhiteSpace(lastExcelLocation) && Directory.Exists(Path.GetDirectoryName(lastExcelLocation)))
             {

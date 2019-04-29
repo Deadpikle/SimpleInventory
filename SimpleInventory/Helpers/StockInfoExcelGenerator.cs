@@ -12,8 +12,8 @@ namespace SimpleInventory.Helpers
         public void ExportStockInfo(List<DetailedStockReportInfo> items, DateTime startDate, DateTime endDate, string path)
         {
             items.Sort((a, b) => (a.Item.Name + a.Item.Description).ToLower().CompareTo((b.Item.Name + b.Item.Description).ToLower()));
-            var startDateString = startDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
-            var endDateString = endDate.ToString(Utilities.DateTimeToFriendlyJustDateStringFormat());
+            var startDateString = startDate.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat());
+            var endDateString = endDate.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat());
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Stock Info");
