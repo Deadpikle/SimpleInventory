@@ -117,8 +117,9 @@ namespace SimpleInventory.Helpers
                     // Generate a barcode
                     var barcodeCreator = new BarcodeLib.Barcode();
                     barcodeCreator.ImageFormat = ImageFormat.Jpeg;
-                    barcodeCreator.IncludeLabel = true;
-                    barcodeCreator.LabelPosition = BarcodeLib.LabelPositions.BOTTOMCENTER;
+                    barcodeCreator.IncludeLabel = false;
+                    //barcodeCreator.IncludeLabel = true;
+                    //barcodeCreator.LabelPosition = BarcodeLib.LabelPositions.BOTTOMCENTER;
                     barcodeCreator.Alignment = BarcodeLib.AlignmentPositions.CENTER;
 
                     bool isPageFull = false;
@@ -136,7 +137,7 @@ namespace SimpleInventory.Helpers
                                 // TODO: There has got to be a better way to make things fairly consistent across computers 
                                 // with different DPI. This is ridiculous. I love WPF most of the time with its DPI
                                 // help, but in this case.......ugh. Images come out a little blurry this way
-                                // on computers with a non-192 DPI.
+                                // on computers with a non-192 DPI, but scanners will probably be OK.
                                 double ratioTo192 = (192 / image.VerticalResolution);
                                 int resizeHeight = (int)(image.Height / ratioTo192);
                                 int resizeWidth = (int)(image.Width / ratioTo192);
@@ -144,9 +145,15 @@ namespace SimpleInventory.Helpers
                                 // ok, now we can draw.
                                 XImage pdfImage = XImage.FromBitmapSource(ConvertImageToBitmapImage(image));
                                 gfx.DrawImage(pdfImage, xCoord, yCoord);
+                                // now draw label
+                                XFont barcodeFont = new XFont("Verdana", 16, XFontStyle.Bold);
+                                // + 2 on the y coordinate there just to give it a teensy bit of space
+                                gfx.DrawString(barcodeToUse.ToString(), barcodeFont, XBrushes.Black,
+                                    new XRect(xCoord, yCoord + pdfImage.PointHeight + 2, pdfImage.PointWidth, 150), XStringFormats.TopCenter);
+                                //
                                 xCoord += XUnit.FromPoint(pdfImage.PointWidth);
                                 imageHeight = XUnit.FromPoint(pdfImage.PointHeight);
-                                var blah = XUnit.FromPoint(image.Width);
+                                //var blah = XUnit.FromPoint(image.Width);
                                 XUnit spaceBetweenBarcodes = XUnit.FromInch(0.75);
                                 if (xCoord + XUnit.FromPoint(pdfImage.PointWidth) + spaceBetweenBarcodes > page.Width - XUnit.FromInch(1))
                                 {
