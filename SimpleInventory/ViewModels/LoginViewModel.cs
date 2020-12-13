@@ -57,17 +57,24 @@ namespace SimpleInventory.ViewModels
             }
             else
             {
-                var user = User.LoadUser(Username, Utilities.SecureStringToString(Password));
-                if (user != null)
+                try
                 {
-                    Username = "";
-                    Password.Clear();
-                    Error = "";
-                    PushViewModel(new HomeScreenViewModel(ViewModelChanger) { CurrentUser = user });
+                    var user = User.LoadUser(Username, Utilities.SecureStringToString(Password));
+                    if (user != null)
+                    {
+                        Username = "";
+                        Password.Clear();
+                        Error = "";
+                        PushViewModel(new HomeScreenViewModel(ViewModelChanger) { CurrentUser = user });
+                    }
+                    else
+                    {
+                        Error = "Invalid username or password";
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Error = "Invalid username or password";
+                    Error = "Error: " + e.Message;
                 }
             }
         }
