@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="SimpleInventory.Views.ManageAppSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:SimpleInventory.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding ReturnToMainMenu}"/>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Manage App Settings" FontWeight="Bold" FontSize="16" 
+               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <StackPanel Margin="15,0,0,0"
+                    Grid.Row="1"
+                    Orientation="Vertical">
+            <Grid Margin="8,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Auto logout time in minutes (>1)"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <mah:NumericUpDown Minimum="0"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Width="150"
+                                   Maximum="999999"
+                                   Value="{Binding AutoLogoutLengthMinutes}"
+                                   Interval="10"/>
+                <Label Content="(Requires restart of software to take effect)"
+                       Grid.Row="1"
+                       FontSize="12"
+                       Margin="10,0,0,0"
+                       FontStyle="Italic" />
+            </Grid>
+            <Label FontSize="12" Content="{Binding ErrorMessage}" HorizontalAlignment="Center" Foreground="IndianRed" FontWeight="Bold"/>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" IsTabStop="False"
+                Content="Save" Margin="5" Padding="5" Height="35" Width="150" Command="{Binding SaveAppSettings}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

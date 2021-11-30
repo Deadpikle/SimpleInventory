@@ -24,6 +24,7 @@ namespace SimpleInventory.Models
         public bool CanManageUsers { get; set; }
         public bool CanDeleteItemsSold { get; set; }
         public bool CanViewManageInventoryQuantity { get; set; }
+        public bool CanEditAppSettings { get; set; }
 
         public UserPermissions()
         {
@@ -43,6 +44,7 @@ namespace SimpleInventory.Models
             CanManageUsers = false;
             CanDeleteItemsSold = false;
             CanViewManageInventoryQuantity = false;
+            CanEditAppSettings = false;
         }
     }
 }

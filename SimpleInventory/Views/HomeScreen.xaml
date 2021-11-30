@@ -43,7 +43,13 @@
             <Button Content="Backup Data" Margin="0 0 0 10" Width="200" Command="{Binding BackupData}" FontSize="16"/>
             <Rectangle Fill="Gray" Width="300" Height="5" Margin="0 0 0 5"/>
             <Button Content="Manage Users" Margin="0 0 0 5" Width="200" Command="{Binding MoveToManageUsersScreen}" FontSize="16"
-                    Visibility="{Binding CurrentUser.Permissions.CanManageUsers, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    Visibility="{Binding CurrentUser.Permissions.CanManageUsers, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button Content="Manage App Settings"
+                    Margin="0 0 0 5"
+                    Width="200"
+                    Command="{Binding MoveToManageAppSettingsScreen}"
+                    FontSize="16"
+                    Visibility="{Binding CurrentUser.Permissions.CanEditAppSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Button Content="Logout" Margin="0 0 0 5" Width="200" Command="{Binding Logout}" FontSize="16"/>
         </StackPanel>
     </Grid>

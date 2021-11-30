@@ -124,5 +124,15 @@ namespace SimpleInventory.ViewModels
         {
             PushViewModel(new ChangePasswordViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
+
+        public ICommand MoveToManageAppSettingsScreen
+        {
+            get { return new RelayCommand(LoadManageAppSettingsScreen); }
+        }
+
+        private void LoadManageAppSettingsScreen()
+        {
+            PushViewModel(new ManageAppSettingsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
+        }
     }
 }

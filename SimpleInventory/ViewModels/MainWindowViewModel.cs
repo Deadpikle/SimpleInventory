@@ -34,7 +34,12 @@ namespace SimpleInventory.ViewModels
             CurrentViewModel = initialViewModel;
             // setup inactivity timer
             InputManager.Current.PreProcessInput += InputPreProcessInput;
-            _activityTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(10), IsEnabled = true };
+            var autoLogoutTime = Properties.Settings.Default.AutoLogoutLength;
+            if (autoLogoutTime < 1)
+            {
+                autoLogoutTime = 10;
+            }
+            _activityTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(autoLogoutTime), IsEnabled = true };
             _activityTimer.Tick += ActivityTimerTick;
         }
 
