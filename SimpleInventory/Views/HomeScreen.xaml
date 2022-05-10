@@ -100,6 +100,12 @@
                     Command="{Binding MoveToManageItemCategoriesScreen}"
                     FontSize="16"
                     Visibility="{Binding CurrentUser.Permissions.CanManageItemCategories, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button Content="Manage Currencies"
+                    Margin="0 0 0 5"
+                    Width="200"
+                    Command="{Binding MoveToManageCurrenciesScreen}"
+                    FontSize="16"
+                    Visibility="{Binding CurrentUser.Permissions.CanManageCurrencies, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Button Content="Backup Data"
                     Margin="0 0 0 10"
                     Width="200"

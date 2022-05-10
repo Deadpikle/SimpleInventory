@@ -414,6 +414,18 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 14;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
+                            goto case 15;
+                        case 15:
+                            // add CanEditAppSettings column to UserPermissions
+                            string addCanEditCurrencies = "" +
+                                "ALTER TABLE UserPermissions " +
+                                "ADD COLUMN CanManageCurrencies INTEGER DEFAULT 0;";
+                            command.CommandText = addCanEditCurrencies;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 15;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
                             break;
                     }
                 }

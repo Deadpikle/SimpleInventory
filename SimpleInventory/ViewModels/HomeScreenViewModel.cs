@@ -29,6 +29,16 @@ namespace SimpleInventory.ViewModels
             PushViewModel(new ManageItemsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
+        public ICommand MoveToManageCurrenciesScreen
+        {
+            get { return new RelayCommand(LoadManageCurrenciesScreen); }
+        }
+
+        private void LoadManageCurrenciesScreen()
+        {
+            PushViewModel(new ViewCurrenciesViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
+        }
+
         public ICommand MoveToScanItemsScreen
         {
             get { return new RelayCommand(LoadScanItemsScreen); }

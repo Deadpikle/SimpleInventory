@@ -38,6 +38,12 @@
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemTypeViewModel}">
                 <views:CreateOrEditItemType />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ViewCurrenciesViewModel}">
+                <views:ViewCurrencies />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:CreateOrEditCurrencyViewModel}">
+                <views:CreateOrEditCurrency />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ViewQuantityAdjustmentsViewModel}">
                 <views:ViewQuantityAdjustments />
             </DataTemplate>

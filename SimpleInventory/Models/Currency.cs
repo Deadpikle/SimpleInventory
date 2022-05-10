@@ -77,5 +77,101 @@ namespace SimpleInventory.Models
             }
             return dictionary;
         }
+
+        public static Currency LoadDefaultCurrency()
+        {
+            var data = LoadCurrencies(" WHERE IsDefaultCurrency = @isDefault",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@isDefault", "1") });
+            return data.Count > 0 ? data[0] : null;
+        }
+
+        public void Create()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    if (IsDefaultCurrency)
+                    {
+                        // need to remove the current default
+                        string removeDefault = "UPDATE Currencies SET IsDefaultCurrency = 0";
+                        command.CommandText = removeDefault;
+                        command.ExecuteNonQuery();
+                    }
+                    string insert = "INSERT INTO Currencies (Name, Abbreviation, Symbol, ConversionRateToUSD, IsDefaultCurrency) " +
+                        "VALUES (@name, @abbreviation, @symbol, @conversionRate, @isDefault)";
+                    command.CommandText = insert;
+                    command.Parameters.AddWithValue("@name", Name);
+                    command.Parameters.AddWithValue("@abbreviation", Abbreviation);
+                    command.Parameters.AddWithValue("@symbol", Symbol);
+                    command.Parameters.AddWithValue("@conversionRate", ConversionRateToUSD);
+                    command.Parameters.AddWithValue("@isDefault", IsDefaultCurrency);
+                    command.ExecuteNonQuery();
+                    ID = (int)conn.LastInsertRowId;
+                }
+                conn.Close();
+            }
+        }
+
+        public void Save()
+        {
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    if (IsDefaultCurrency)
+                    {
+                        // need to remove the current default
+                        string removeDefault = "UPDATE Currencies SET IsDefaultCurrency = 0";
+                        command.CommandText = removeDefault;
+                        command.ExecuteNonQuery();
+                    }
+                    string insert = "" +
+                        "UPDATE Currencies SET Name = @name, Abbreviation = @abbr, Symbol = @symbol, " +
+                        "ConversionRateToUSD = @conversion, IsDefaultCurrency = @isDefault " +
+                        "WHERE ID = @currencyID";
+                    command.CommandText = insert;
+                    command.Parameters.AddWithValue("@name", Name);
+                    command.Parameters.AddWithValue("@abbr", Abbreviation);
+                    command.Parameters.AddWithValue("@symbol", Symbol);
+                    command.Parameters.AddWithValue("@conversion", ConversionRateToUSD);
+                    command.Parameters.AddWithValue("@isDefault", IsDefaultCurrency);
+                    command.Parameters.AddWithValue("@currencyID", ID);
+                    command.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// You cannot delete the default Currency.
+        /// </summary>
+        public void Delete()
+        {
+            if (!IsDefaultCurrency)
+            {
+                var dbHelper = new DatabaseHelper();
+                using (var conn = dbHelper.GetDatabaseConnection())
+                {
+                    using (var command = dbHelper.GetSQLiteCommand(conn))
+                    {
+                        // move items from this category to the default category
+                        string updateCommand = "UPDATE InventoryItems SET ItemPurchaseCostCurrencyID = NULL " +
+                            "WHERE ID = @removingID";
+                        command.CommandText = updateCommand;
+                        command.Parameters.AddWithValue("@removingID", ID);
+                        command.ExecuteNonQuery();
+                        // ok, now delete this category
+                        string deleteCommand = "DELETE FROM Currencies WHERE ID = @currencyID";
+                        command.CommandText = deleteCommand;
+                        command.Parameters.AddWithValue("@currencyID", ID);
+                        command.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+            }
+        }
     }
 }

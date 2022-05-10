@@ -30,10 +30,21 @@ namespace SimpleInventory.ViewModels
         public User SelectedUser
         {
             get { return _selectedUser; }
-            set { _selectedUser = value; NotifyPropertyChanged(); NotifyPropertyChanged(nameof(CanEditDeleteCurrentUser)); }
+            set 
+            {
+                _selectedUser = value; 
+                NotifyPropertyChanged(); 
+                NotifyPropertyChanged(nameof(CanEditCurrentUser));
+                NotifyPropertyChanged(nameof(CanDeleteCurrentUser));
+            }
         }
 
-        public bool CanEditDeleteCurrentUser
+        public bool CanEditCurrentUser
+        {
+            get { return _selectedUser != null; }
+        }
+
+        public bool CanDeleteCurrentUser
         {
             get { return _selectedUser != null && _selectedUser.ID != CurrentUser.ID; }
         }

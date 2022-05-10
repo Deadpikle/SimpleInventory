@@ -116,6 +116,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -207,6 +208,13 @@
                               Content="Can Edit Application Settings"
                               FontSize="14"
                               IsChecked="{Binding User.Permissions.CanEditAppSettings}" />
+                    <CheckBox Grid.Row="8"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="1"
+                              Margin="0,0,0,5"
+                              Content="Can Manage Currencies"
+                              FontSize="14"
+                              IsChecked="{Binding User.Permissions.CanManageCurrencies}" />
                 </Grid>
             </StackPanel>
             <Label FontSize="12"

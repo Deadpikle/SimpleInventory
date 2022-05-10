@@ -46,7 +46,7 @@ namespace SimpleInventory.Models
                         "SELECT u.ID AS UserID, u.Name, u.Username, up.ID AS PermissionID, CanAddEditItems, CanAdjustItemQuantity, " +
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
                                 "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, CanManageUsers," +
-                                "CanDeleteItemsSold, CanViewManageInventoryQuantity, CanEditAppSettings " +
+                                "CanDeleteItemsSold, CanViewManageInventoryQuantity, CanEditAppSettings, CanManageCurrencies " +
                         "FROM Users u JOIN UserPermissions up ON u.ID = up.UserID " +
                             (string.IsNullOrEmpty(whereClause) ? " WHERE WasDeleted = 0 " : whereClause) + " " +
                         "ORDER BY lower(u.Username), lower(u.Name)";
@@ -85,6 +85,7 @@ namespace SimpleInventory.Models
                             user.Permissions.CanDeleteItemsSold = dbHelper.ReadBool(reader, "CanDeleteItemsSold");
                             user.Permissions.CanViewManageInventoryQuantity = dbHelper.ReadBool(reader, "CanViewManageInventoryQuantity");
                             user.Permissions.CanEditAppSettings = dbHelper.ReadBool(reader, "CanEditAppSettings");
+                            user.Permissions.CanManageCurrencies = dbHelper.ReadBool(reader, "CanManageCurrencies");
                             users.Add(user);
                         }
                         reader.Close();
@@ -114,10 +115,12 @@ namespace SimpleInventory.Models
                     insert = "INSERT INTO UserPermissions (CanAddEditItems, CanAdjustItemQuantity, " +
                                 "CanViewDetailedItemQuantityAdjustments, CanScanItems, CanGenerateBarcodes, CanViewReports," +
                                 "CanViewDetailedItemSoldInfo, CanSaveReportsToPDF, CanDeleteItemsFromInventory, CanManageItemCategories, " +
-                                "CanManageUsers, CanDeleteItemsSold, CanViewManageInventoryQuantity, UserID, CanEditAppSettings) " +
+                                "CanManageUsers, CanDeleteItemsSold, CanViewManageInventoryQuantity, UserID, CanEditAppSettings," +
+                                "CanManageCurrencies) " +
                         "VALUES (@canEditItems, @canAdjustQuantity, @canViewDetailedItemQuantityAdjustments, @canScan, @canGenerate, @canViewReports," +
                                 "@canViewDetailedItemSoldInfo, @canSaveReports, @canDeleteItems, @canManageCategories, @canManageUsers, " +
-                                "@canDeleteItemsSold, @canViewManageInventoryQuantity, @userID, @canEditAppSettings)";
+                                "@canDeleteItemsSold, @canViewManageInventoryQuantity, @userID, @canEditAppSettings," +
+                                "@canManageCurrencies)";
                     command.CommandText = insert;
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@canEditItems", Permissions.CanAddEditItems);
@@ -133,6 +136,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@canManageUsers", Permissions.CanManageUsers);
                     command.Parameters.AddWithValue("@canDeleteItemsSold", Permissions.CanDeleteItemsSold);
                     command.Parameters.AddWithValue("@canViewManageInventoryQuantity", Permissions.CanViewManageInventoryQuantity);
+                    command.Parameters.AddWithValue("@canManageCurrencies", Permissions.CanManageCurrencies);
                     command.Parameters.AddWithValue("@userID", ID);
                     command.Parameters.AddWithValue("@canEditAppSettings", Permissions.CanEditAppSettings);
                     command.ExecuteNonQuery();
@@ -169,7 +173,7 @@ namespace SimpleInventory.Models
                                 "CanSaveReportsToPDF = @canSaveReports, CanDeleteItemsFromInventory = @canDeleteItems, " +
                                 "CanManageItemCategories = @canManageCategories, CanManageUsers = @canManageUsers," +
                                 "CanDeleteItemsSold = @canDeleteItemsSold, CanViewManageInventoryQuantity = @canViewManageInventoryQuantity, " +
-                                "CanEditAppSettings = @canEditAppSettings " +
+                                "CanEditAppSettings = @canEditAppSettings, CanManageCurrencies = @canManageCurrencies " +
                                 "WHERE ID = @permissionID";
                     command.CommandText = update;
                     command.Parameters.Clear();
@@ -187,6 +191,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@canDeleteItemsSold", Permissions.CanDeleteItemsSold);
                     command.Parameters.AddWithValue("@canViewManageInventoryQuantity", Permissions.CanViewManageInventoryQuantity);
                     command.Parameters.AddWithValue("@canEditAppSettings", Permissions.CanEditAppSettings);
+                    command.Parameters.AddWithValue("@canManageCurrencies", Permissions.CanManageCurrencies);
                     command.Parameters.AddWithValue("@permissionID", Permissions.ID);
                     command.ExecuteNonQuery();
                 }

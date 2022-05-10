@@ -37,7 +37,6 @@ The default username is `admin`, and the default password is `changeme`. Please 
 
 ## What sorts of things would be nice to add?
 
-* UI for adding and editing currencies
 * More reporting capabilities?
 * Capability to make one purchase with multiple items and designate who purchased it (makes it more like a point of sale system) -- would need to be able to turn this feature on/off
 * Settings to change default paper size, date format, etc. throughout the app

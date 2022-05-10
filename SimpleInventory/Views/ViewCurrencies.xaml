@@ -1,11 +1,13 @@
-﻿<UserControl x:Class="SimpleInventory.Views.ManageUsers"
+﻿<UserControl x:Class="SimpleInventory.Views.ViewCurrencies"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:models="clr-namespace:SimpleInventory.Models"
+             xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModels:ViewCurrenciesViewModel}}"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid>
@@ -29,22 +31,23 @@
         <Label Grid.Row="0"
                Grid.Column="0"
                Grid.ColumnSpan="2"
-               Content="Manage Users"
+               Content="Manage Item Categories"
                FontWeight="Bold"
                FontSize="16"
                HorizontalAlignment="Center"
                VerticalAlignment="Center" />
         <DataGrid Grid.Row="1"
                   Grid.Column="0"
-                  Name="UsersGrid"
-                  ItemsSource="{Binding Users}"
-                  d:DataContext="{d:DesignInstance Type={x:Type models:User}}"
+                  Name="ItemsGrid"
+                  ItemsSource="{Binding Currencies}"
+                  d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   AutoGenerateColumns="False"
                   CanUserDeleteRows="False"
                   SelectionUnit="FullRow"
-                  SelectedItem="{Binding SelectedUser}"
+                  SelectedIndex="{Binding SelectedCurrencyIndex}"
+                  SelectedItem="{Binding SelectedItem}"
                   SelectionMode="Single"
                   GridLinesVisibility="All"
                   RowHeaderWidth="0"
@@ -60,36 +63,45 @@
                 </Style>
             </DataGrid.Style>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Username"
-                                    Binding="{Binding Username}"
-                                    SortDirection="Ascending" />
                 <DataGridTextColumn Header="Name"
                                     Binding="{Binding Name}"
-                                    Width="*" />
+                                    SortDirection="Ascending" />
+                <DataGridTextColumn Header="Abbreviation"
+                                    Binding="{Binding Abbreviation}"
+                                    Width="Auto" />
+                <DataGridTextColumn Header="Symbol"
+                                    Binding="{Binding Symbol}"
+                                    Width="Auto" />
+                <DataGridTextColumn Header="Conversion Rate to 1 USD"
+                                    Binding="{Binding ConversionRateToUSD}"
+                                    Width="Auto" />
+                <DataGridCheckBoxColumn Header="Default?"
+                                        Binding="{Binding IsDefaultCurrency}"
+                                        Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Vertical"
                     Grid.Row="1"
                     Grid.Column="1">
-            <Button Content="Add User"
+            <Button Content="Add Currency"
                     Margin="5,35,5,0"
                     Padding="10"
                     Height="40"
-                    Command="{Binding MoveToAddUserScreen}"
+                    Command="{Binding MoveToAddCurrencyScreen}"
                     FontSize="13" />
-            <Button Content="Edit User"
+            <Button Content="Edit Currency"
                     Margin="5,35,5,0"
                     Padding="10"
                     Height="40"
-                    Command="{Binding MoveToEditUserScreen}"
-                    IsEnabled="{Binding CanEditCurrentUser}"
+                    Command="{Binding MoveToEditCurrencyScreen}"
+                    IsEnabled="{Binding CanEdit}"
                     FontSize="13" />
-            <Button Content="Delete User"
+            <Button Content="Delete Currency"
                     Margin="5,35,5,0"
                     Padding="10"
                     Height="40"
-                    IsEnabled="{Binding CanDeleteCurrentUser}"
-                    Click="DeleteUser_Click"
+                    IsEnabled="{Binding CanDelete}"
+                    Click="DeleteCurrency_Click"
                     FontSize="13" />
         </StackPanel>
     </Grid>
