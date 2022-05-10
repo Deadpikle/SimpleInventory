@@ -159,17 +159,17 @@ namespace SimpleInventory.Models
                     {
                         /// set currency to null for items as applicable
                         string updateCommand = "UPDATE InventoryItems SET ItemPurchaseCostCurrencyID = NULL " +
-                            "WHERE ID = @removingID";
+                            "WHERE ItemPurchaseCostCurrencyID = @removingID";
                         command.CommandText = updateCommand;
                         command.Parameters.AddWithValue("@removingID", ID);
                         command.ExecuteNonQuery();
                         updateCommand = "UPDATE InventoryItems SET ProfitPerItemCurrencyID = NULL " +
-                            "WHERE ID = @removingID";
+                            "WHERE ProfitPerItemCurrencyID = @removingID";
                         command.CommandText = updateCommand;
                         command.Parameters.AddWithValue("@removingID", ID);
                         command.ExecuteNonQuery();
                         updateCommand = "UPDATE InventoryItems SET CostCurrencyID = NULL " +
-                            "WHERE ID = @removingID";
+                            "WHERE CostCurrencyID = @removingID";
                         command.CommandText = updateCommand;
                         command.Parameters.AddWithValue("@removingID", ID);
                         command.ExecuteNonQuery();

@@ -60,12 +60,13 @@ namespace SimpleInventory.ViewModels
 
         public bool CanEdit
         {
-            get { return _isItemSelected; }
+            get { return _isItemSelected && _selectedItem != null; }
         }
 
         public bool CanDelete
         {
-            get { return _isItemSelected && !_selectedItem.IsDefaultCurrency && _currencies.Count > 1 && _selectedItem.Abbreviation != "USD"; }
+            get { return _isItemSelected && _selectedItem != null 
+                    && !_selectedItem.IsDefaultCurrency && _currencies.Count > 1 && _selectedItem.Abbreviation != "USD"; }
         }
 
         public ICommand GoToMainMenu
