@@ -3,6 +3,7 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace SimpleInventory.ViewModels
@@ -10,14 +11,17 @@ namespace SimpleInventory.ViewModels
     class ManageItemsViewModel : BaseViewModel, ICreatedInventoryItem
     {
         private ObservableCollection<InventoryItem> _items;
+        private ObservableCollection<InventoryItem> _filteredItems;
         private int _selectedIndex = 0;
         private InventoryItem _selectedItem;
 
         private bool _isItemSelected;
 
+        private string _filterText;
+
         public ManageItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
-            Items = new ObservableCollection<InventoryItem>(InventoryItem.LoadItemsNotDeleted());
+            FilteredItems = Items = new ObservableCollection<InventoryItem>(InventoryItem.LoadItemsNotDeleted());
             IsItemSelected = false;
         }
 
@@ -25,6 +29,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _items; }
             set { _items = value; NotifyPropertyChanged(); }
+        }
+
+        public ObservableCollection<InventoryItem> FilteredItems
+        {
+            get { return _filteredItems; }
+            set { _filteredItems = value; NotifyPropertyChanged(); }
         }
 
         public bool IsItemSelected
@@ -37,6 +47,24 @@ namespace SimpleInventory.ViewModels
         {
             get { return _selectedIndex; }
             set { _selectedIndex = value; NotifyPropertyChanged(); IsItemSelected = value != -1; }
+        }
+
+        public string FilterText
+        {
+            get { return _filterText; }
+            set 
+            { 
+                _filterText = value;
+                if (string.IsNullOrWhiteSpace(_filterText))
+                {
+                    FilteredItems = Items;
+                }
+                else
+                {
+                    FilteredItems = new ObservableCollection<InventoryItem>(Items.Where(x => x.Name.ToLower().Contains(_filterText.ToLower())).ToList());
+                }
+                NotifyPropertyChanged();
+            }
         }
 
         public InventoryItem SelectedItem
