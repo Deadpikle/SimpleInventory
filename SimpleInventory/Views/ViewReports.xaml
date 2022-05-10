@@ -1,66 +1,105 @@
 ﻿<UserControl x:Class="SimpleInventory.Views.ViewReports"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              Name="ReportsUserControl">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding GoToMainMenu}"/>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Reports" FontWeight="Bold" FontSize="16" 
-               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TabControl Grid.Row="1" mahapps:TabControlHelper.IsUnderlined="True" mahapps:TabControlHelper.Underlined="SelectedTabItem"
-                    SelectedIndex="{Binding SelectedTabIndex}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <Button Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Content="Return to Main Menu"
+                Margin="15,5,5,5"
+                Padding="10"
+                Height="40"
+                Command="{Binding GoToMainMenu}" />
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Content="Reports"
+               FontWeight="Bold"
+               FontSize="16"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
+        <TabControl Grid.Row="1"
+                    mahapps:TabControlHelper.Underlined="SelectedTabItem"
+                    SelectedIndex="{Binding SelectedTabIndex}"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <TabControl.Template>
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                            <TabPanel x:Name="HeaderPanel" IsItemsHost="True" Margin="0,4,0,0"/>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled">
+                            <TabPanel x:Name="HeaderPanel"
+                                      IsItemsHost="True"
+                                      Margin="0,4,0,0" />
                         </ScrollViewer>
-                        <ContentPresenter x:Name="PART_SelectedContentHost" Margin="4" ContentSource="SelectedContent" Grid.Row="1"/>
+                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          Margin="4"
+                                          ContentSource="SelectedContent"
+                                          Grid.Row="1" />
                     </Grid>
                 </ControlTemplate>
             </TabControl.Template>
             <TabItem Header="Daily Report">
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="1" Content="Daily Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,5">
-                        <DatePicker FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center"  VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedDailyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
-                        Name="DailyReportDatePicker" Grid.Column="1">
+                    <Label Grid.Row="0"
+                           Grid.Column="1"
+                           Content="Daily Report"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,5">
+                        <DatePicker FirstDayOfWeek="Sunday"
+                                    IsTodayHighlighted="True"
+                                    Width="150"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    SelectedDate="{Binding SelectedDailyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}"
+                                    Margin="5"
+                                    Name="DailyReportDatePicker"
+                                    Grid.Column="1">
                             <DatePicker.Resources>
-                                <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                                <Style TargetType="DatePickerTextBox"
+                                       BasedOn="{StaticResource MahApps.Styles.TextBox}">
                                     <Setter Property="Control.Template">
                                         <Setter.Value>
                                             <ControlTemplate>
                                                 <TextBox x:Name="PART_TextBox"
-                                             Style="{StaticResource MetroTextBox}"
-                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                                         Style="{StaticResource MahApps.Styles.TextBox}"
+                                                         Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
                                              RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
                                             </ControlTemplate>
                                         </Setter.Value>
@@ -68,90 +107,154 @@
                                 </Style>
                             </DatePicker.Resources>
                         </DatePicker>
-                        <ComboBox Margin="5,0,0,0" ItemsSource="{Binding UserChoiceList}" IsEditable="False"
-                            SelectedIndex="{Binding DailyReportUserChoiceIndex}" FontSize="14" IsTabStop="False">
+                        <ComboBox Margin="5,0,0,0"
+                                  ItemsSource="{Binding UserChoiceList}"
+                                  IsEditable="False"
+                                  SelectedIndex="{Binding DailyReportUserChoiceIndex}"
+                                  FontSize="14"
+                                  IsTabStop="False">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding}"/>
+                                    <Label Content="{Binding}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    <DataGrid Grid.Row="2" Name="ItemsGrid" ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
-                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      RowHeaderWidth="0"
-                      d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
-                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                      ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}" Grid.ColumnSpan="2" Margin="0,0,0,0">
+                    <DataGrid Grid.Row="2"
+                              Name="ItemsGrid"
+                              ItemsSource="{Binding CurrentDaySalesReport.ItemsSold}"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False"
+                              CanUserDeleteRows="False"
+                              SelectionUnit="FullRow"
+                              RowHeaderWidth="0"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
+                              Background="LightGray"
+                              BorderBrush="Gray"
+                              BorderThickness="1"
+                              ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}"
+                              Grid.ColumnSpan="2"
+                              Margin="0,0,0,0">
                         <DataGrid.Style>
-                            <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
-                                <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                            <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+                                   TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground"
+                                        Value="{DynamicResource GrayBrush10}" />
                             </Style>
                         </DataGrid.Style>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-                            <DataGridTextColumn Header="Category" Binding="{Binding ItemType.Name}"/>
-                            <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
-                            <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
-                            <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
-                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="*" CanUserSort="False">
+                            <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Name}"
+                                                SortDirection="Ascending" />
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Description}" />
+                            <DataGridTextColumn Header="Category"
+                                                Binding="{Binding ItemType.Name}" />
+                            <DataGridTextColumn Header="# Purchased"
+                                                Binding="{Binding QuantityPurchased}" />
+                            <DataGridTextColumn Header="Total Income"
+                                                Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total Profit"
+                                                Binding="{Binding TotalProfitWithCurrency}" />
+                            <DataGridTemplateColumn Header=""
+                                                    CanUserResize="False"
+                                                    Width="*"
+                                                    CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="View Details" Width="125" HorizontalAlignment="Left" Margin="5,0,0,0"
+                                        <Button Content="View Details"
+                                                Width="125"
+                                                HorizontalAlignment="Left"
+                                                Margin="5,0,0,0"
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetails}"
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding ElementName=ReportsUserControl, 
                                                     Path=DataContext.CurrentUser.Permissions.CanViewDetailedItemSoldInfo, 
-                                                    Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}" Grid.ColumnSpan="2" Margin="0,0,0,0">
+                    <ItemsControl Grid.Row="3"
+                                  ItemsSource="{Binding CurrentDaySalesReport.ItemTypeMoneyBreakdown}"
+                                  Grid.ColumnSpan="2"
+                                  Margin="0,0,0,0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
-                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
+                                <TextBlock Grid.Row="3"
+                                           FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,5,0,5">
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}" /> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}" /> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                                 </TextBlock>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <TextBlock Grid.Row="4" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Grid.Column="1" Margin="0,5,0,5">
+                    <TextBlock Grid.Row="4"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,5,0,5">
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentDaySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" IsEnabled="{Binding CanGenerateDailyPDFReports}"
-                    Content="Save Daily Report to PDF" Padding="10" Height="40" Width="200" Margin="5" Command="{Binding SaveDayReportToPDF}"
-                    Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Grid.Row="5"
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            IsEnabled="{Binding CanGenerateDailyPDFReports}"
+                            Content="Save Daily Report to PDF"
+                            Padding="10"
+                            Height="40"
+                            Width="200"
+                            Margin="5"
+                            Command="{Binding SaveDayReportToPDF}"
+                            Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Weekly Report">
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="1" Content="Weekly Report" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    <Label Grid.Row="0"
+                           Grid.Column="1"
+                           Content="Weekly Report"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,5">
-                        <DatePicker FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center"  VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedWeeklyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
-                        Name="WeeklyReportDatePicker">
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,5">
+                        <DatePicker FirstDayOfWeek="Sunday"
+                                    IsTodayHighlighted="True"
+                                    Width="150"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    SelectedDate="{Binding SelectedWeeklyReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}"
+                                    Margin="5"
+                                    Name="WeeklyReportDatePicker">
                             <DatePicker.Resources>
-                                <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                                <Style TargetType="DatePickerTextBox"
+                                       BasedOn="{StaticResource MahApps.Styles.TextBox}">
                                     <Setter Property="Control.Template">
                                         <Setter.Value>
                                             <ControlTemplate>
                                                 <TextBox x:Name="PART_TextBox"
-                                             Style="{StaticResource MetroTextBox}"
-                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                                         Style="{StaticResource MahApps.Styles.TextBox}"
+                                                         Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
                                              RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
                                             </ControlTemplate>
                                         </Setter.Value>
@@ -159,86 +262,140 @@
                                 </Style>
                             </DatePicker.Resources>
                         </DatePicker>
-                        <ComboBox Margin="5,0,0,0" ItemsSource="{Binding UserChoiceList}" IsEditable="False"
-                            SelectedIndex="{Binding WeeklyReportUserChoiceIndex}" FontSize="14" IsTabStop="False">
+                        <ComboBox Margin="5,0,0,0"
+                                  ItemsSource="{Binding UserChoiceList}"
+                                  IsEditable="False"
+                                  SelectedIndex="{Binding WeeklyReportUserChoiceIndex}"
+                                  FontSize="14"
+                                  IsTabStop="False">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding}"/>
+                                    <Label Content="{Binding}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CurrentWeeklySalesReport.AllItemsSold}" IsReadOnly="True" CanUserAddRows="False" 
-                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      RowHeaderWidth="0" x:Name="WeeklyReportDataGrid"
-                      d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
-                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                  ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                    <DataGrid Grid.Row="2"
+                              Grid.Column="1"
+                              ItemsSource="{Binding CurrentWeeklySalesReport.AllItemsSold}"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False"
+                              CanUserDeleteRows="False"
+                              SelectionUnit="FullRow"
+                              RowHeaderWidth="0"
+                              x:Name="WeeklyReportDataGrid"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:ReportItemSold}}"
+                              Background="LightGray"
+                              BorderBrush="Gray"
+                              BorderThickness="1"
+                              ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
                         <DataGrid.Style>
-                            <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
-                                <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                            <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+                                   TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground"
+                                        Value="{DynamicResource GrayBrush10}" />
                             </Style>
                         </DataGrid.Style>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-                            <DataGridTextColumn Header="Category" Binding="{Binding ItemType.Name}"/>
-                            <DataGridTextColumn Header="# Purchased" Binding="{Binding QuantityPurchased}"/>
-                            <DataGridTextColumn Header="Total Income" Binding="{Binding TotalCostWithCurrency}"/>
-                            <DataGridTextColumn Header="Total Profit" Binding="{Binding TotalProfitWithCurrency}"/>
-                            <DataGridTemplateColumn Header="" CanUserResize="False" Width="125">
+                            <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Name}"
+                                                SortDirection="Ascending" />
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Description}" />
+                            <DataGridTextColumn Header="Category"
+                                                Binding="{Binding ItemType.Name}" />
+                            <DataGridTextColumn Header="# Purchased"
+                                                Binding="{Binding QuantityPurchased}" />
+                            <DataGridTextColumn Header="Total Income"
+                                                Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total Profit"
+                                                Binding="{Binding TotalProfitWithCurrency}" />
+                            <DataGridTemplateColumn Header=""
+                                                    CanUserResize="False"
+                                                    Width="125">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="View Details" 
+                                        <Button Content="View Details"
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding ElementName=ReportsUserControl, 
                                                     Path=DataContext.CurrentUser.Permissions.CanViewDetailedItemSoldInfo, 
-                                                    Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ItemsControl Grid.Row="3" ItemsSource="{Binding CurrentWeeklySalesReport.ItemTypeMoneyBreakdown}">
+                    <ItemsControl Grid.Row="3"
+                                  ItemsSource="{Binding CurrentWeeklySalesReport.ItemTypeMoneyBreakdown}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Grid.Row="3" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5">
-                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}"/> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
-                                    <Span>Total <Run Text="{Binding Type.Name}"/> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
+                                <TextBlock Grid.Row="3"
+                                           FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,5,0,5">
+                                    <Span xml:space="preserve">Total <Run Text="{Binding Type.Name}" /> income: <Run Text="{Binding TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span>
+                                    <Span>Total <Run Text="{Binding Type.Name}" /> profit: <Run Text="{Binding TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                                 </TextBlock>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <TextBlock Grid.Row="4" Grid.Column="1" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,5">
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="1"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,5,0,5">
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentWeeklySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" IsEnabled="{Binding CanGenerateWeeklyPDFReports}"
-                    Content="Save Weekly Report to PDF" Margin="5,5,5,5" Padding="10" Height="40" Width="215" Command="{Binding SaveWeeklyReportToPDF}"
-                    Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Grid.Row="5"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center"
+                            IsEnabled="{Binding CanGenerateWeeklyPDFReports}"
+                            Content="Save Weekly Report to PDF"
+                            Margin="5,5,5,5"
+                            Padding="10"
+                            Height="40"
+                            Width="215"
+                            Command="{Binding SaveWeeklyReportToPDF}"
+                            Visibility="{Binding CurrentUser.Permissions.CanSaveReportsToPDF, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Inventory Stock Report">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="View Inventory Stock at the End of a Given Date" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    <DatePicker Grid.Row="1" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
-                        SelectedDate="{Binding SelectedInventoryStockDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}" Margin="5"
-                        Name="InventoryStockDatePicker">
+                    <Label Grid.Row="0"
+                           Content="View Inventory Stock at the End of a Given Date"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
+                    <DatePicker Grid.Row="1"
+                                FirstDayOfWeek="Sunday"
+                                IsTodayHighlighted="True"
+                                Width="150"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                SelectedDate="{Binding SelectedInventoryStockDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}"
+                                Margin="5"
+                                Name="InventoryStockDatePicker">
                         <DatePicker.Resources>
-                            <Style TargetType="DatePickerTextBox" BasedOn="{StaticResource MetroTextBox}">
+                            <Style TargetType="DatePickerTextBox"
+                                   BasedOn="{StaticResource MahApps.Styles.TextBox}">
                                 <Setter Property="Control.Template">
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <TextBox x:Name="PART_TextBox"
-                                             Style="{StaticResource MetroTextBox}"
-                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                                     Style="{StaticResource MahApps.Styles.TextBox}"
+                                                     Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
                                              RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -246,21 +403,36 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
-                    <DataGrid Grid.Row="2" Grid.Column="1" ItemsSource="{Binding InventoryStockReport}" IsReadOnly="True" CanUserAddRows="False" 
-                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      RowHeaderWidth="0" x:Name="WeeklyReportDataGrida"
-                      d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
-                      Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                      ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                    <DataGrid Grid.Row="2"
+                              Grid.Column="1"
+                              ItemsSource="{Binding InventoryStockReport}"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False"
+                              CanUserDeleteRows="False"
+                              SelectionUnit="FullRow"
+                              RowHeaderWidth="0"
+                              x:Name="WeeklyReportDataGrida"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:InventoryItem}}"
+                              Background="LightGray"
+                              BorderBrush="Gray"
+                              BorderThickness="1"
+                              ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
                         <DataGrid.Style>
-                            <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
-                                <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                            <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+                                   TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground"
+                                        Value="{DynamicResource GrayBrush10}" />
                             </Style>
                         </DataGrid.Style>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" SortDirection="Ascending"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
+                            <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Name}"
+                                                SortDirection="Ascending" />
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Description}" />
+                            <DataGridTextColumn Header="Quantity"
+                                                Binding="{Binding Quantity}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -268,47 +440,98 @@
             <TabItem Header="Detailed Stock Report">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="View Inventory Stock on Two Dates" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
-                        <mahapps:DateTimePicker Grid.Row="2" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
-                            SelectedDate="{Binding SelectedStockReportFirstDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0"
-                            Name="DetailedStockStartDatePicker" />
-                        <Label Content="-" FontWeight="ExtraBold" FontSize="16" VerticalAlignment="Center" Padding="0" Margin="10,0,10,0"/>
-                        <mahapps:DateTimePicker Grid.Row="2" FirstDayOfWeek="Sunday" IsTodayHighlighted="True" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top"
-                                SelectedDate="{Binding SelectedStockReportSecondDate, UpdateSourceTrigger=PropertyChanged}"
-                                Name="DetailedStockEndDatePicker"  />
+                    <Label Grid.Row="0"
+                           Content="View Inventory Stock on Two Dates"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
+                    <StackPanel Grid.Row="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,5,0,5">
+                        <mahapps:DateTimePicker Grid.Row="2"
+                                                FirstDayOfWeek="Sunday"
+                                                IsTodayHighlighted="True"
+                                                Width="150"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                SelectedDateTime="{Binding SelectedStockReportFirstDate, UpdateSourceTrigger=PropertyChanged}"
+                                                Margin="0,0,0,0"
+                                                Name="DetailedStockStartDatePicker" />
+                        <Label Content="-"
+                               FontWeight="ExtraBold"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               Padding="0"
+                               Margin="10,0,10,0" />
+                        <mahapps:DateTimePicker Grid.Row="2"
+                                                FirstDayOfWeek="Sunday"
+                                                IsTodayHighlighted="True"
+                                                Width="150"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                SelectedDateTime="{Binding SelectedStockReportSecondDate, UpdateSourceTrigger=PropertyChanged}"
+                                                Name="DetailedStockEndDatePicker" />
                     </StackPanel>
-                    <Label Content="Stock quantity is shown both with and without quantity adjustments made due to stock purchase increases" Grid.Row="2" HorizontalAlignment="Center"/>
-                    <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding DetailedStockReport}" IsReadOnly="True" CanUserAddRows="False" 
-                      AutoGenerateColumns="False" CanUserDeleteRows="False" SelectionUnit="FullRow" 
-                      RowHeaderWidth="0" x:Name="DetailedStockReportDataGrid"
-                      d:DataContext="{d:DesignInstance Type={x:Type models:DetailedStockReportInfo}}"
-                        GridLinesVisibility="Vertical"
-                      Background="LightGray" BorderBrush="Gray" BorderThickness="1" VerticalGridLinesBrush="LightGray"
-                      ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                    <Label Content="Stock quantity is shown both with and without quantity adjustments made due to stock purchase increases"
+                           Grid.Row="2"
+                           HorizontalAlignment="Center" />
+                    <DataGrid Grid.Row="3"
+                              Grid.Column="1"
+                              ItemsSource="{Binding DetailedStockReport}"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False"
+                              CanUserDeleteRows="False"
+                              SelectionUnit="FullRow"
+                              RowHeaderWidth="0"
+                              x:Name="DetailedStockReportDataGrid"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:DetailedStockReportInfo}}"
+                              GridLinesVisibility="Vertical"
+                              Background="LightGray"
+                              BorderBrush="Gray"
+                              BorderThickness="1"
+                              VerticalGridLinesBrush="LightGray"
+                              ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
                         <DataGrid.Style>
-                            <Style BasedOn="{StaticResource MetroDataGrid}" TargetType="{x:Type DataGrid}">
-                                <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
+                            <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+                                   TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground"
+                                        Value="{DynamicResource GrayBrush10}" />
                             </Style>
                         </DataGrid.Style>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Item.Name}" SortDirection="Ascending"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Item.Description}"/>
-                            <DataGridTextColumn Header="Start Quantity" Binding="{Binding StartStock}"/>
-                            <DataGridTextColumn Header="End Quantity" Binding="{Binding EndStock}"/>
-                            <DataGridTextColumn Header="Difference" Binding="{Binding DifferenceInStockWithoutPurchaseStockIncrease, Mode=OneWay}"/>
-                            <DataGridTextColumn Header="Start Quantity (With Stock Purchases)" Binding="{Binding StartStockWithPurchaseStockIncrease}"/>
-                            <DataGridTextColumn Header="End Quantity (With Stock Purchases)" Binding="{Binding EndStock}"/>
-                            <DataGridTextColumn Header="Difference (With Stock Purchases)" Binding="{Binding DifferenceInStockWithPurchaseStockIncrease, Mode=OneWay}"/>
+                            <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Item.Name}"
+                                                SortDirection="Ascending" />
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Item.Description}" />
+                            <DataGridTextColumn Header="Start Quantity"
+                                                Binding="{Binding StartStock}" />
+                            <DataGridTextColumn Header="End Quantity"
+                                                Binding="{Binding EndStock}" />
+                            <DataGridTextColumn Header="Difference"
+                                                Binding="{Binding DifferenceInStockWithoutPurchaseStockIncrease, Mode=OneWay}" />
+                            <DataGridTextColumn Header="Start Quantity (With Stock Purchases)"
+                                                Binding="{Binding StartStockWithPurchaseStockIncrease}" />
+                            <DataGridTextColumn Header="End Quantity (With Stock Purchases)"
+                                                Binding="{Binding EndStock}" />
+                            <DataGridTextColumn Header="Difference (With Stock Purchases)"
+                                                Binding="{Binding DifferenceInStockWithPurchaseStockIncrease, Mode=OneWay}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Grid.Row="4" Margin="5" Content="Export Stock Info for Sold Items to Excel" Width="300" Command="{Binding ExportSoldItemStockInfoToExcel}"/>
+                    <Button Grid.Row="4"
+                            Margin="5"
+                            Content="Export Stock Info for Sold Items to Excel"
+                            Width="300"
+                            Command="{Binding ExportSoldItemStockInfoToExcel}" />
                 </Grid>
             </TabItem>
         </TabControl>

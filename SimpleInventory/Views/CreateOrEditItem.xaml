@@ -1,103 +1,240 @@
 ﻿<UserControl x:Class="SimpleInventory.Views.CreateOrEditItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CreateOrEditItemViewModel}}"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="680">
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="680">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="{Binding ScreenTitle}" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" IsTabStop="False"
-                Content="Cancel" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding PopBack}"/>
-        <StackPanel Margin="15,0,0,0" Grid.Row="1" Orientation="Vertical">
-            <Label Content="Item Information" Margin="0,0,10,0" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
+        <Label Grid.Row="0"
+               Content="{Binding ScreenTitle}"
+               FontWeight="Bold"
+               FontSize="16"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"></Label>
+        <Button Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                IsTabStop="False"
+                Content="Cancel"
+                Margin="15,5,5,5"
+                Padding="10"
+                Height="40"
+                Width="150"
+                Command="{Binding PopBack}" />
+        <StackPanel Margin="15,0,0,0"
+                    Grid.Row="1"
+                    Orientation="Vertical">
+            <Label Content="Item Information"
+                   Margin="0,0,10,0"
+                   FontWeight="Bold"
+                   FontSize="18"
+                   VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal">
-                <Label Content="Name" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="300" Text="{Binding Name}" VerticalContentAlignment="Center" FontSize="14"
-                         Name="NameTextBox" TabIndex="0"/>
+                <Label Content="Name"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="300"
+                         Text="{Binding Name}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         Name="NameTextBox"
+                         TabIndex="0" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Description" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="300" Text="{Binding Description}" VerticalContentAlignment="Center" FontSize="14" TabIndex="1"/>
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Description"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="300"
+                         Text="{Binding Description}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         TabIndex="1" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Label Content="Initial Quantity" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="200" Text="{Binding Quantity}" TabIndex="2" mahapps:TextBoxHelper.Watermark="500"
-                         VerticalContentAlignment="Center" FontSize="14"/>
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0"
+                        Visibility="{Binding IsCreating, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Label Content="Initial Quantity"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="200"
+                         Text="{Binding Quantity}"
+                         TabIndex="2"
+                         mahapps:TextBoxHelper.Watermark="500"
+                         VerticalContentAlignment="Center"
+                         FontSize="14" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Item Category" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding ItemTypes}" d:DataContext="{d:DesignInstance Type={x:Type models:ItemType}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedItemTypeIndex}" IsTabStop="False" Width="200">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Item Category"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <ComboBox Margin="5,0,0,0"
+                          ItemsSource="{Binding ItemTypes}"
+                          d:DataContext="{d:DesignInstance Type={x:Type models:ItemType}}"
+                          IsEditable="False"
+                          SelectedIndex="{Binding SelectedItemTypeIndex}"
+                          IsTabStop="False"
+                          Width="200">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding Name}" FontSize="14"/>
+                            <Label Content="{Binding Name}"
+                                   FontSize="14" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Price Paid When Purchasing Pack for Use in Local Store" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="150" Text="{Binding CostToPurchase}" VerticalContentAlignment="Center" FontSize="14" TabIndex="4"/>
-                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedCostToPurchaseCurrencyIndex}" FontSize="14" IsTabStop="False">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Price Paid When Purchasing Pack for Use in Local Store"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="150"
+                         Text="{Binding CostToPurchase}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         TabIndex="4" />
+                <ComboBox Margin="5,0,0,0"
+                          ItemsSource="{Binding Currencies}"
+                          d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
+                          IsEditable="False"
+                          SelectedIndex="{Binding SelectedCostToPurchaseCurrencyIndex}"
+                          FontSize="14"
+                          IsTabStop="False">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding NameWithSymbol}"/>
+                            <Label Content="{Binding NameWithSymbol}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Number of Items in Pack (e.g. 12 water bottles in 1 pack)" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <mahapps:NumericUpDown Width="150" Value="{Binding NumberOfItemsInPack}" VerticalContentAlignment="Center" FontSize="14" TabIndex="1"/>
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Number of Items in Pack (e.g. 12 water bottles in 1 pack)"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <mahapps:NumericUpDown Width="150"
+                                       Value="{Binding NumberOfItemsInPack}"
+                                       VerticalContentAlignment="Center"
+                                       FontSize="14"
+                                       TabIndex="1" />
             </StackPanel>
-            <Rectangle Fill="LightGray" Height="2" Margin="10"/>
-            <Label Content="Local Store Information" Margin="0,0,10,-5" FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Store Sale Price" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="150" Text="{Binding Cost}" VerticalContentAlignment="Center" FontSize="14" TabIndex="3"/>
-                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedCostCurrencyIndex}" IsTabStop="False">
+            <Rectangle Fill="LightGray"
+                       Height="2"
+                       Margin="10" />
+            <Label Content="Local Store Information"
+                   Margin="0,0,10,-5"
+                   FontWeight="Bold"
+                   FontSize="18"
+                   VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Store Sale Price"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="150"
+                         Text="{Binding Cost}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         TabIndex="3" />
+                <ComboBox Margin="5,0,0,0"
+                          ItemsSource="{Binding Currencies}"
+                          d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
+                          IsEditable="False"
+                          SelectedIndex="{Binding SelectedCostCurrencyIndex}"
+                          IsTabStop="False">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding NameWithSymbol}" FontSize="14"/>
+                            <Label Content="{Binding NameWithSymbol}"
+                                   FontSize="14" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Profit / Item" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="150" Text="{Binding ProfitPerItem}" VerticalContentAlignment="Center" FontSize="14" TabIndex="4"/>
-                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedProfitCurrencyIndex}" FontSize="14" IsTabStop="False">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Profit / Item"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="150"
+                         Text="{Binding ProfitPerItem}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         TabIndex="4" />
+                <ComboBox Margin="5,0,0,0"
+                          ItemsSource="{Binding Currencies}"
+                          d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
+                          IsEditable="False"
+                          SelectedIndex="{Binding SelectedProfitCurrencyIndex}"
+                          FontSize="14"
+                          IsTabStop="False">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding NameWithSymbol}"/>
+                            <Label Content="{Binding NameWithSymbol}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <Label Content="Profit = Store sale price - (price paid per pack / number of items in pack)" 
-                       Margin="50,0,10,0" FontSize="14" VerticalAlignment="Center" FontStyle="Italic"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Label Content="Barcode Number" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <TextBox Width="250" Text="{Binding BarcodeNumber}" VerticalContentAlignment="Center" FontSize="14" TabIndex="5"/>
+            <Label Content="Profit = Store sale price - (price paid per pack / number of items in pack)"
+                   Margin="50,0,10,0"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   FontStyle="Italic" />
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,5,0,0">
+                <Label Content="Barcode Number"
+                       Margin="0,0,10,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <TextBox Width="250"
+                         Text="{Binding BarcodeNumber}"
+                         VerticalContentAlignment="Center"
+                         FontSize="14"
+                         TabIndex="5" />
             </StackPanel>
-            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" IsTabStop="False"
-                Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SaveItem}"/>
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Center"
+                    IsTabStop="False"
+                    Content="Save"
+                    Margin="15,5,5,5"
+                    Padding="10"
+                    Height="40"
+                    Width="150"
+                    Command="{Binding SaveItem}" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -9,69 +9,72 @@
     <Application.Resources>
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
-                <views:Login/>
+                <views:Login />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemViewModel}">
-                <views:CreateOrEditItem/>
+                <views:CreateOrEditItem />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ManageItemsViewModel}">
-                <views:ManageItems/>
+                <views:ManageItems />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:HomeScreenViewModel}">
-                <views:HomeScreen/>
+                <views:HomeScreen />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ScanItemsViewModel}">
-                <views:ScanItems/>
+                <views:ScanItems />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:GenerateBarcodesViewModel}">
-                <views:GenerateBarcodes/>
+                <views:GenerateBarcodes />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:AdjustQuantityViewModel}">
-                <views:AdjustQuantity/>
+                <views:AdjustQuantity />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ViewReportsViewModel}">
-                <views:ViewReports/>
+                <views:ViewReports />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ViewItemTypesViewModel}">
-                <views:ViewItemTypes/>
+                <views:ViewItemTypes />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditItemTypeViewModel}">
-                <views:CreateOrEditItemType/>
+                <views:CreateOrEditItemType />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ViewQuantityAdjustmentsViewModel}">
-                <views:ViewQuantityAdjustments/>
+                <views:ViewQuantityAdjustments />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ViewItemSoldInfoViewModel}">
-                <views:ViewItemSoldInfo/>
+                <views:ViewItemSoldInfo />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ManageUsersViewModel}">
-                <views:ManageUsers/>
+                <views:ManageUsers />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:CreateOrEditUserViewModel}">
-                <views:CreateOrEditUser/>
+                <views:CreateOrEditUser />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ChangePasswordViewModel}">
-                <views:ChangePassword/>
+                <views:ChangePassword />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ManageAppSettingsViewModel}">
-                <views:ManageAppSettings/>
+                <views:ManageAppSettings />
             </DataTemplate>
-            <Style TargetType="{x:Type mahapps:WindowButtonCommands}" BasedOn="{StaticResource MahApps.Metro.Styles.WindowButtonCommands.Win10}" />
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}">
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
+            <Style TargetType="{x:Type mahapps:WindowButtonCommands}"
+                   BasedOn="{StaticResource MahApps.Styles.WindowButtonCommands.Win10}" />
+            <Style TargetType="{x:Type Button}"
+                   BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Setter Property="FontSize"
+                        Value="14" />
+                <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing"
+                        Value="Normal" />
             </Style>
-            <Style x:Key="NoCapsColumnHeader" 
-                   BasedOn="{StaticResource MetroDataGridColumnHeader}" 
+            <Style x:Key="NoCapsColumnHeader"
+                   BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}"
                    TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
+                <Setter Property="mahapps:ControlsHelper.ContentCharacterCasing"
+                        Value="Normal" />
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

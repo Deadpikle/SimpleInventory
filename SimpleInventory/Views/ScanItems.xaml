@@ -1,107 +1,213 @@
 ﻿<UserControl x:Class="SimpleInventory.Views.ScanItems"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SimpleInventory.Views"
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ScanItemsViewModel}, IsDesignTimeCreatable=True}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
-                    Content="Return to Main Menu" Margin="15,5,5,5" Padding="10" Height="40" Command="{Binding GoToMainMenu}"/>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Scan Items" FontWeight="Bold" FontSize="16" 
-               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Button Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Content="Return to Main Menu"
+                Margin="15,5,5,5"
+                Padding="10"
+                Height="40"
+                Command="{Binding GoToMainMenu}" />
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Content="Scan Items"
+               FontWeight="Bold"
+               FontSize="16"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
+        <Grid Grid.Row="1"
+              Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
-               Content="Use the barcode scanner or enter in the barcode number manually and click 'Purchase Item'" 
-               FontWeight="Bold" FontSize="16" 
-               HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBox Width="300" Text="{Binding BarcodeNumber, UpdateSourceTrigger=PropertyChanged}" Height="25" FontSize="16" KeyDown="BarcodeScanTextBox_KeyDown"
-                         Name="BarcodeTextBox"/>
-                <Button Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                Content="Purchase Item (1)" Margin="15,5,5,0" Padding="10" Height="40" Width="150" Command="{Binding MarkItemPurchased}"/>
+                   Content="Use the barcode scanner or enter in the barcode number manually and click 'Purchase Item'"
+                   FontWeight="Bold"
+                   FontSize="16"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top" />
+            <StackPanel Grid.Row="1"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBox Width="300"
+                         Text="{Binding BarcodeNumber, UpdateSourceTrigger=PropertyChanged}"
+                         Height="25"
+                         FontSize="16"
+                         KeyDown="BarcodeScanTextBox_KeyDown"
+                         Name="BarcodeTextBox" />
+                <Button Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        Content="Purchase Item (1)"
+                        Margin="15,5,5,0"
+                        Padding="10"
+                        Height="40"
+                        Width="150"
+                        Command="{Binding MarkItemPurchased}" />
             </StackPanel>
-            <Label Grid.Row="2" FontStyle="Italic" Content="{Binding ItemPurchaseStatusMessage}" HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,7"
-                   Foreground="{Binding ItemPurchaseStatusBrush}"/>
+            <Label Grid.Row="2"
+                   FontStyle="Italic"
+                   Content="{Binding ItemPurchaseStatusMessage}"
+                   HorizontalAlignment="Center"
+                   FontSize="16"
+                   Margin="0,0,0,7"
+                   Foreground="{Binding ItemPurchaseStatusBrush}" />
         </Grid>
-        <Rectangle Grid.Row="2" Fill="Gainsboro" Height="10"/>
-        <Grid Grid.Row="3" Grid.Column="0">
+        <Rectangle Grid.Row="2"
+                   Fill="Gainsboro"
+                   Height="10" />
+        <Grid Grid.Row="3"
+              Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Margin="0,5,0,0" Content="Purchase Details" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Vertical" HorizontalAlignment="Left" Margin="5,0,0,0"
+            <Label Grid.Row="0"
+                   Margin="0,5,0,0"
+                   Content="Purchase Details"
+                   FontWeight="Bold"
+                   FontSize="16"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top" />
+            <StackPanel Grid.Row="1"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Left"
+                        Margin="5,0,0,0"
                         Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Label Content="{Binding PurchasedItem.Name}" FontSize="16" FontWeight="Bold"/>
-                <TextBlock Grid.Row="0" Margin="5,5,0,5" FontSize="14">
-                    <Span FontSize="15">Purchased on: <Run FontSize="15" Text="{Binding DateTimePurchased}"/> | <Span 
-                        FontSize="15">Store cost per item: <Run FontSize="15" Text="{Binding PurchasedItem.CostWithCurrency, Mode=OneWay}"/></Span></Span>
+                <Label Content="{Binding PurchasedItem.Name}"
+                       FontSize="16"
+                       FontWeight="Bold" />
+                <TextBlock Grid.Row="0"
+                           Margin="5,5,0,5"
+                           FontSize="14">
+                    <Span FontSize="15">Purchased on: <Run FontSize="15"
+                                                           Text="{Binding DateTimePurchased}" /> | <Span FontSize="15">Store cost per item: <Run FontSize="15"
+                                                                                                                                                 Text="{Binding PurchasedItem.CostWithCurrency, Mode=OneWay}" /></Span></Span>
                 </TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Quantity Purchased" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <mahapps:NumericUpDown Width="150" Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
-                                       TextAlignment="Left"
-                                       VerticalContentAlignment="Center" FontSize="14"/>
-                    <Label FontStyle="Italic" Content="{Binding QuantityErrorMessage}"
-                           HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,7"
-                            Foreground="Red"/>
+                    <Label Content="Quantity Purchased"
+                           Margin="0,0,10,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <mahapps:NumericUpDown Width="150"
+                                           Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                           TextAlignment="Left"
+                                           VerticalContentAlignment="Center"
+                                           FontSize="14" />
+                    <Label FontStyle="Italic"
+                           Content="{Binding QuantityErrorMessage}"
+                           HorizontalAlignment="Center"
+                           FontSize="16"
+                           Margin="0,0,0,7"
+                           Foreground="Red" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <Label Content="Paid" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <TextBox Width="200" Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
-                             VerticalContentAlignment="Center" FontSize="14"/>
-                    <Label Content="Paid Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedPaidCurrencyIndex}">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5,0,0">
+                    <Label Content="Paid"
+                           Margin="0,0,10,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <TextBox Width="200"
+                             Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             FontSize="14" />
+                    <Label Content="Paid Currency"
+                           Margin="0,0,10,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding Currencies}"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
+                              IsEditable="False"
+                              SelectedIndex="{Binding SelectedPaidCurrencyIndex}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <Label Content="{Binding NameWithSymbol}"/>
+                                <Label Content="{Binding NameWithSymbol}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <Label Content="Change Needed" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <Label Content="{Binding ChangeNeeded}" Width="75" VerticalAlignment="Center"/>
-                    <Label Content="Change Currency" Margin="0,0,10,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                    <ComboBox ItemsSource="{Binding Currencies}" d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}" IsEditable="False"
-                          SelectedIndex="{Binding SelectedChangeCurrencyIndex}">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5,0,0">
+                    <Label Content="Change Needed"
+                           Margin="0,0,10,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <Label Content="{Binding ChangeNeeded}"
+                           Width="75"
+                           VerticalAlignment="Center" />
+                    <Label Content="Change Currency"
+                           Margin="0,0,10,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding Currencies}"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:Currency}}"
+                              IsEditable="False"
+                              SelectedIndex="{Binding SelectedChangeCurrencyIndex}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <Label Content="{Binding NameWithSymbol}"/>
+                                <Label Content="{Binding NameWithSymbol}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                    Content="Save" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Command="{Binding SavePurchaseUpdates}"
-                    Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                <Button Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                    Content="Cancel Purchase" Margin="15,5,5,5" Padding="10" Height="40" Width="150" Click="CancelPurchase_Click"
-                    Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <StackPanel Grid.Row="2"
+                        Grid.Column="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        Content="Save"
+                        Margin="15,5,5,5"
+                        Padding="10"
+                        Height="40"
+                        Width="150"
+                        Command="{Binding SavePurchaseUpdates}"
+                        Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        Content="Cancel Purchase"
+                        Margin="15,5,5,5"
+                        Padding="10"
+                        Height="40"
+                        Width="150"
+                        Click="CancelPurchase_Click"
+                        Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
         </Grid>
     </Grid>
