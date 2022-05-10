@@ -157,8 +157,18 @@ namespace SimpleInventory.Models
                 {
                     using (var command = dbHelper.GetSQLiteCommand(conn))
                     {
-                        // move items from this category to the default category
+                        /// set currency to null for items as applicable
                         string updateCommand = "UPDATE InventoryItems SET ItemPurchaseCostCurrencyID = NULL " +
+                            "WHERE ID = @removingID";
+                        command.CommandText = updateCommand;
+                        command.Parameters.AddWithValue("@removingID", ID);
+                        command.ExecuteNonQuery();
+                        updateCommand = "UPDATE InventoryItems SET ProfitPerItemCurrencyID = NULL " +
+                            "WHERE ID = @removingID";
+                        command.CommandText = updateCommand;
+                        command.Parameters.AddWithValue("@removingID", ID);
+                        command.ExecuteNonQuery();
+                        updateCommand = "UPDATE InventoryItems SET CostCurrencyID = NULL " +
                             "WHERE ID = @removingID";
                         command.CommandText = updateCommand;
                         command.Parameters.AddWithValue("@removingID", ID);
