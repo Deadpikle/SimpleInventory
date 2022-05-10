@@ -42,7 +42,7 @@
               Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
@@ -57,16 +57,17 @@
                         HorizontalAlignment="Center">
                 <TextBox Width="300"
                          Text="{Binding BarcodeNumber, UpdateSourceTrigger=PropertyChanged}"
-                         Height="25"
-                         FontSize="16"
+                         Height="30"
+                         VerticalAlignment="Center"
+                         mahapps:TextBoxHelper.Watermark="Item barcode number..."
+                         mahapps:TextBoxHelper.WatermarkAlignment="Center"
                          KeyDown="BarcodeScanTextBox_KeyDown"
                          Name="BarcodeTextBox" />
                 <Button Grid.ColumnSpan="2"
                         HorizontalAlignment="Center"
                         Content="Purchase Item (1)"
-                        Margin="15,5,5,0"
+                        Margin="15,5,5,5"
                         Padding="10"
-                        Height="40"
                         Width="150"
                         Command="{Binding MarkItemPurchased}" />
             </StackPanel>
