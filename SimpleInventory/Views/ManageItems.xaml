@@ -55,7 +55,8 @@
                  Width="250"
                  Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
                  HorizontalAlignment="Left"
-                 VerticalContentAlignment="Top"/>
+                 VerticalContentAlignment="Top"
+                 mahapps:TextBoxHelper.ClearTextButton="True"/>
         <DataGrid Grid.Row="2"
                   Grid.Column="0"
                   Name="ItemsGrid"

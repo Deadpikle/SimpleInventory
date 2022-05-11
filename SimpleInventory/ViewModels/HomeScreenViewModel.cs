@@ -49,6 +49,16 @@ namespace SimpleInventory.ViewModels
             PushViewModel(new ScanItemsViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
         }
 
+        public ICommand MoveToScanAndPurchaseItemsScreen
+        {
+            get { return new RelayCommand(LoadScanAndPurchaseItemsScreen); }
+        }
+
+        private void LoadScanAndPurchaseItemsScreen()
+        {
+            PushViewModel(new ScanAndPurchaseViewModel(ViewModelChanger) { CurrentUser = CurrentUser });
+        }
+
         public ICommand MoveToGenerateBarcodesScreen
         {
             get { return new RelayCommand(LoadGenerateBarcodesScreen); }

@@ -416,7 +416,7 @@ namespace SimpleInventory.Helpers
                             command.Parameters.Clear();
                             goto case 15;
                         case 15:
-                            // add CanEditAppSettings column to UserPermissions
+                            // add CanManageCurrencies column to UserPermissions
                             string addCanEditCurrencies = "" +
                                 "ALTER TABLE UserPermissions " +
                                 "ADD COLUMN CanManageCurrencies INTEGER DEFAULT 0;";
@@ -424,6 +424,38 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             // bump user_version
                             command.CommandText = "PRAGMA user_version = 15;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            goto case 16;
+                        case 16:
+                            string addPurchases = "" +
+                                "CREATE TABLE Purchases (" +
+                                    "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                    "DateTimePurchased TEXT," +
+                                    "TotalCost TEXT," +
+                                    "Name TEXT," +
+                                    "Phone TEXT," +
+                                    "Email TEXT," +
+                                    "UserID INTEGER REFERENCES Users(ID))";
+                            command.CommandText = addPurchases;
+                            command.ExecuteNonQuery();
+                            string addPurchasedItems = "" +
+                                "CREATE TABLE PurchasedItems (" +
+                                    "ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                                    "Quantity INTEGER," +
+                                    "Name TEXT," +
+                                    "Type TEXT," +
+                                    "Cost TEXT," +
+                                    "CostCurrencySymbol TEXT," +
+                                    "CostCurrencyConversionRate TEXT," +
+                                    "Profit TEXT," +
+                                    "ProfitCurrencySymbol TEXT," +
+                                    "ProfitCurrencyConversionRate TEXT," +
+                                    "PurchaseID INTEGER REFERENCES Purchases(ID))";
+                            command.CommandText = addPurchasedItems;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 16;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;

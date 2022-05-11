@@ -1,4 +1,5 @@
 ﻿using SimpleInventory.Helpers;
+using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -8,11 +9,30 @@ using System.Threading.Tasks;
 
 namespace SimpleInventory.Models
 {
-    public class ItemSoldInfo
+    public class ItemSoldInfo : ChangeNotifier
     {
+        private int _quantity;
+
         public int ID { get; set; }
         public DateTime DateTimeSold { get; set; }
-        public int QuantitySold { get; set; } // defaults to 1
+
+        public int QuantitySold // defaults to 1
+        {
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(TotalCost));
+                NotifyPropertyChanged(nameof(TotalCostWithCurrency));
+                NotifyPropertyChanged(nameof(TotalProfit));
+                NotifyPropertyChanged(nameof(TotalProfitWithCurrency));
+                PurchaseInfoChanged?.QuantityChanged(this, value);
+            }
+        }
+
+        public IPurchaseInfoChanged PurchaseInfoChanged { get; set; }
+
         public int InventoryItemID { get; set; }
         public int SoldByUserID { get; set; }
         public string SoldByUserName { get; set; }
@@ -59,6 +79,11 @@ namespace SimpleInventory.Models
             }
         }
 
+        public decimal TotalCost
+        {
+            get => QuantitySold * Cost;
+        }
+
         public string TotalCostWithCurrency
         {
             get
@@ -69,6 +94,11 @@ namespace SimpleInventory.Models
                 }
                 return (Cost * QuantitySold).ToString();
             }
+        }
+
+        public decimal TotalProfit
+        {
+            get => QuantitySold * ProfitPerItem;
         }
 
         public string ProfitWithCurrency

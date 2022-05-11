@@ -74,6 +74,12 @@
                     Command="{Binding MoveToScanItemsScreen}"
                     FontSize="16"
                     Visibility="{Binding CurrentUser.Permissions.CanScanItems, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button Content="Scan Order and Purchase"
+                    Margin="0 0 0 5"
+                    Width="200"
+                    Command="{Binding MoveToScanAndPurchaseItemsScreen}"
+                    FontSize="16"
+                    Visibility="{Binding CurrentUser.Permissions.CanScanItems, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Rectangle Fill="Gray"
                        Width="300"
                        Height="5"
