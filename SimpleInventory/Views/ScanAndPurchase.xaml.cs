@@ -64,7 +64,7 @@ namespace SimpleInventory.Views
 
         private void CancelPurchase_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ScanAndPurchaseViewModel sapvm && sapvm.PurchaseInfo.Count > 0)
+            if (DataContext is ScanAndPurchaseViewModel sapvm && sapvm.PurchasedItems.Count > 0)
             {
                 var result = MessageBox.Show("Are you sure you want to cancel this purchase?", "Cancel Purchase", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)

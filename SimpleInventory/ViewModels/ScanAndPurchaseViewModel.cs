@@ -16,21 +16,18 @@ namespace SimpleInventory.ViewModels
     class ScanAndPurchaseViewModel : BaseViewModel, IPurchaseInfoChanged
     {
         private string _barcodeNumber;
-        private bool _purchaseInfoIsVisible;
 
         private List<Currency> _currencies;
         private Dictionary<int, int> _currencyIDToIndex;
         private string _itemPurchaseStatusMessage;
-        private int _selectedPaidCurrencyIndex;
-        private string _changeNeeded;
-        private int _selectedChangeCurrencyIndex;
         private Brush _itemPurchaseStatusBrush;
 
 
         private SoundPlayer _successSoundPlayer;
         private SoundPlayer _failureSoundPlayer;
 
-        private string _quantityErrorMessage;
+        private string _purchaseErrorMessage;
+        private bool _purchaseErrorMessageIsVisible;
 
         private ObservableCollection<ItemSoldInfo> _purchaseInfo;
 
@@ -43,10 +40,8 @@ namespace SimpleInventory.ViewModels
                 var currency = _currencies[i];
                 _currencyIDToIndex.Add(currency.ID, i);
             }
-            PurchaseInfo = new ObservableCollection<ItemSoldInfo>();
-            PurchaseInfoIsVisible = false;
+            PurchasedItems = new ObservableCollection<ItemSoldInfo>();
             ItemPurchaseStatusMessage = "";
-            SelectedPaidCurrencyIndex = -1;
             ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
             _failureSoundPlayer = new SoundPlayer("Sounds/failure-tbone.wav");
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
@@ -67,16 +62,10 @@ namespace SimpleInventory.ViewModels
             set { _barcodeNumber = value; NotifyPropertyChanged(); }
         }
 
-        public ObservableCollection<ItemSoldInfo> PurchaseInfo
+        public ObservableCollection<ItemSoldInfo> PurchasedItems
         {
             get { return _purchaseInfo; }
             set { _purchaseInfo = value; NotifyPropertyChanged(); }
-        }
-
-        public bool PurchaseInfoIsVisible
-        {
-            get { return _purchaseInfoIsVisible; }
-            set { _purchaseInfoIsVisible = value; NotifyPropertyChanged(); }
         }
 
         public string ItemPurchaseStatusMessage
@@ -91,55 +80,15 @@ namespace SimpleInventory.ViewModels
             set { _itemPurchaseStatusBrush = value; NotifyPropertyChanged(); }
         }
 
-        public string ChangeNeeded
-        {
-            get { return _changeNeeded; }
-            set
-            {
-                _changeNeeded = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public int SelectedPaidCurrencyIndex
-        {
-            get { return _selectedPaidCurrencyIndex; }
-            set
-            {
-                _selectedPaidCurrencyIndex = value;
-                NotifyPropertyChanged();
-                //UpdatePurchaseInfoCurrencies();
-               // UpdateChange();
-            }
-        }
-
-        public int SelectedChangeCurrencyIndex
-        {
-            get { return _selectedChangeCurrencyIndex; }
-            set
-            {
-                _selectedChangeCurrencyIndex = value;
-                NotifyPropertyChanged();
-                //UpdatePurchaseInfoCurrencies();
-               // UpdateChange();
-            }
-        }
-
-        public string QuantityErrorMessage
-        {
-            get { return _quantityErrorMessage; }
-            set { _quantityErrorMessage = value; NotifyPropertyChanged(); }
-        }
-
         public decimal TotalPurchaseCost
         {
             get
             {
-                var currency = Utilities.CurrencyForOrder(PurchaseInfo.ToList());
+                var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
                 if (currency != null)
                 {
                     decimal cost = 0.0m;
-                    foreach (var item in PurchaseInfo)
+                    foreach (var item in PurchasedItems)
                     {
                         if (item.CostCurrency != null)
                         {
@@ -153,7 +102,7 @@ namespace SimpleInventory.ViewModels
                     // convert to USD
                     var usdCurrency = Currency.LoadUSDCurrency();
                     decimal cost = 0.0m;
-                    foreach (var item in PurchaseInfo)
+                    foreach (var item in PurchasedItems)
                     {
                         if (item.CostCurrency != null)
                         {
@@ -169,7 +118,7 @@ namespace SimpleInventory.ViewModels
         {
             get
             {
-                if (PurchaseInfo.Count > 0)
+                if (PurchasedItems.Count > 0)
                 {
                     var totalPurchaseCost = TotalPurchaseCost;
                     var usdCurrency = Currency.LoadUSDCurrency();
@@ -177,7 +126,7 @@ namespace SimpleInventory.ViewModels
                     {
                         return "Error: could not find USD currency";
                     }
-                    var currency = Utilities.CurrencyForOrder(PurchaseInfo.ToList());
+                    var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
                     return currency == null
                         ? totalPurchaseCost.ToString("0.00") + " (" + currency.Symbol + ")"
                         : totalPurchaseCost.ToString("0.00") + " (" + usdCurrency.Symbol + ")";
@@ -194,7 +143,7 @@ namespace SimpleInventory.ViewModels
             get
             {
                 var count = 0;
-                foreach (var item in PurchaseInfo)
+                foreach (var item in PurchasedItems)
                 {
                     count += item.QuantitySold;
                 }
@@ -206,9 +155,9 @@ namespace SimpleInventory.ViewModels
         {
             get 
             {
-                if (PurchaseInfo.Count > 0 && !TotalPurchaseCostWithCurrency.ToLower().Contains("error"))
+                if (PurchasedItems.Count > 0 && !PurchaseErrorMessageIsVisible && !TotalPurchaseCostWithCurrency.ToLower().Contains("error"))
                 {
-                    foreach (var item in PurchaseInfo)
+                    foreach (var item in PurchasedItems)
                     {
                         if (item.QuantitySold > 0)
                         {
@@ -224,9 +173,9 @@ namespace SimpleInventory.ViewModels
         {
             get
             {
-                if (PurchaseInfo.Count > 0)
+                if (PurchasedItems.Count > 0)
                 {
-                    foreach (var item in PurchaseInfo)
+                    foreach (var item in PurchasedItems)
                     {
                         if (item.QuantitySold > 0)
                         {
@@ -238,11 +187,40 @@ namespace SimpleInventory.ViewModels
             }
         }
 
+        public string PurchaseErrorMessage
+        {
+            get { return _purchaseErrorMessage; }
+            set 
+            { 
+                _purchaseErrorMessage = value; 
+                NotifyPropertyChanged(); 
+                NotifyPropertyChanged(nameof(PurchaseErrorMessageIsVisible)); 
+            }
+        }
+
+        public bool PurchaseErrorMessageIsVisible
+        {
+            get => !string.IsNullOrWhiteSpace(PurchaseErrorMessage);
+        }
+
         #endregion
 
         public void QuantityChanged(ItemSoldInfo info, int quantity)
         {
             UpdateTotalsAndFinalizeButtons();
+        }
+
+        private void CheckForQuantityErrors()
+        {
+            PurchaseErrorMessage = "";
+            foreach (var item in PurchasedItems)
+            {
+                if (item.QuantitySold > item.MaxQuantity)
+                {
+                    PurchaseErrorMessage = "Error: Number of items sold for " + item.ItemName + " exceeds maximum of " + item.MaxQuantity;
+                    break;
+                }
+            }
         }
 
         #region ICommands
@@ -273,8 +251,6 @@ namespace SimpleInventory.ViewModels
                     {
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                         ItemPurchaseStatusMessage = "There are no items left to purchase for this item! Barcode: " + BarcodeNumber;
-                        //PurchaseInfoIsVisible = false;
-                        // play failure sound
                         _failureSoundPlayer.Play();
                     }
                     else
@@ -282,10 +258,20 @@ namespace SimpleInventory.ViewModels
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
                         ItemPurchaseStatusMessage = "Item successfully found and added! Barcode: " + BarcodeNumber;
                         // create purchase data object
-                        var existingPurchaseData = PurchaseInfo.Where(x => x.InventoryItemID == item.ID).FirstOrDefault();
+                        var existingPurchaseData = PurchasedItems.Where(x => x.InventoryItemID == item.ID).FirstOrDefault();
                         if (existingPurchaseData != null)
                         {
-                            existingPurchaseData.QuantitySold += 1; // TODO: quantity check -- make sure enough items!
+                            if (existingPurchaseData.QuantitySold + 1 <= item.Quantity)
+                            {
+                                existingPurchaseData.QuantitySold += 1;
+                                _successSoundPlayer.Play();
+                            }
+                            else
+                            {
+                                ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
+                                ItemPurchaseStatusMessage = "The maximum number of items left to purchase for this item has already been reached!";
+                                _failureSoundPlayer.Play();
+                            }
                         }
                         else
                         {
@@ -306,15 +292,10 @@ namespace SimpleInventory.ViewModels
                             purchaseData.ItemName = item.Name;
                             purchaseData.ItemDescription = item.Description;
                             purchaseData.PurchaseInfoChanged = this;
-                            PurchaseInfo.Add(purchaseData);
-                            // show info to the user for possible future editing
-                            ChangeNeeded = "0"; // TODO: update if paid updated -- might want to bind to a different property for set {} updates
-                            SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
-                            SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
-                            //PurchaseInfoIsVisible = true;
+                            purchaseData.MaxQuantity = item.Quantity;
+                            PurchasedItems.Add(purchaseData);
+                            _successSoundPlayer.Play();
                         }
-                        // play success sound
-                        _successSoundPlayer.Play();
                         UpdateTotalsAndFinalizeButtons();
                     }
                 }
@@ -322,13 +303,10 @@ namespace SimpleInventory.ViewModels
                 {
                     ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                     ItemPurchaseStatusMessage = "Item not found! Barcode: " + BarcodeNumber;
-                    //PurchaseInfoIsVisible = false;
-                    // play failure sound
                     _failureSoundPlayer.Play();
                 }
             }
             BarcodeNumber = ""; // empty the field so that something can be scanned again
-            QuantityErrorMessage = "";
         }
 
         public ICommand CancelPurchase
@@ -340,12 +318,13 @@ namespace SimpleInventory.ViewModels
         {
             BarcodeNumber = "";
             ItemPurchaseStatusMessage = "";
-            PurchaseInfo = new ObservableCollection<ItemSoldInfo>();
+            PurchasedItems = new ObservableCollection<ItemSoldInfo>();
             UpdateTotalsAndFinalizeButtons();
         }
 
         private void UpdateTotalsAndFinalizeButtons()
         {
+            CheckForQuantityErrors();
             NotifyPropertyChanged(nameof(TotalPurchaseCostWithCurrency));
             NotifyPropertyChanged(nameof(TotalItemCount));
             NotifyPropertyChanged(nameof(CanFinalize));
@@ -364,7 +343,7 @@ namespace SimpleInventory.ViewModels
 
         public void DeleteItemSoldInfo(ItemSoldInfo info)
         {
-            PurchaseInfo.Remove(info);
+            PurchasedItems.Remove(info);
             ItemPurchaseStatusMessage = "";
             UpdateTotalsAndFinalizeButtons();
         }

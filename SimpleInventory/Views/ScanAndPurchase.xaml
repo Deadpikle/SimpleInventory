@@ -90,6 +90,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
                    Margin="0,5,0,0"
@@ -101,7 +102,7 @@
             <DataGrid Grid.Row="1"
                       Grid.Column="0"
                       Name="ItemsGrid"
-                      ItemsSource="{Binding PurchaseInfo}"
+                      ItemsSource="{Binding PurchasedItems}"
                       d:DataContext="{d:DesignInstance Type={x:Type models:ItemSoldInfo}}"
                       IsReadOnly="True"
                       CanUserAddRows="False"
@@ -135,6 +136,7 @@
                                                        VerticalContentAlignment="Center"
                                                        NumericInputMode="Numbers"
                                                        Minimum="0"
+                                                       Maximum="{Binding MaxQuantity}"
                                                        FontSize="14" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -169,7 +171,15 @@
                        VerticalAlignment="Top">
                 Total Items: <Run Text="{Binding TotalItemCount, Mode=OneWay}" /> | Total Purchase Cost: <Run Text="{Binding TotalPurchaseCostWithCurrency, Mode=OneWay}" />
             </TextBlock>
-            <StackPanel Grid.Row="3"
+            <TextBlock Grid.Row="3"
+                   FontStyle="Italic"
+                   Text="{Binding PurchaseErrorMessage}"
+                   Visibility="{Binding PurchaseErrorMessageIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   HorizontalAlignment="Center"
+                   FontSize="16"
+                   Margin="0,4,0,4"
+                   Foreground="Red" />
+            <StackPanel Grid.Row="4"
                         Grid.Column="0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">

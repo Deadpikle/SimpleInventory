@@ -22,6 +22,10 @@ namespace SimpleInventory.Models
             set
             {
                 _quantity = value;
+                if (value > MaxQuantity)
+                {
+                    value = MaxQuantity >= 0 ? MaxQuantity : 0;
+                }
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(TotalCost));
                 NotifyPropertyChanged(nameof(TotalCostWithCurrency));
@@ -56,6 +60,7 @@ namespace SimpleInventory.Models
 
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }
+        public int MaxQuantity { get; set; }
 
         public string FriendlyTime
         {
