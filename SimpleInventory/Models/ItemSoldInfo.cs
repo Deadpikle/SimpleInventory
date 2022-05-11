@@ -73,7 +73,7 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return Cost.ToString() + " (" + CostCurrency?.Symbol + ")";
+                    return Cost.ToString() + " (" + CostCurrency.Symbol + ")";
                 }
                 return Cost.ToString();
             }
@@ -90,9 +90,9 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return (Cost * QuantitySold).ToString() + " (" + CostCurrency?.Symbol + ")";
+                    return (Cost * QuantitySold).ToString("0.00") + " (" + CostCurrency?.Symbol + ")";
                 }
-                return (Cost * QuantitySold).ToString();
+                return (Cost * QuantitySold).ToString("0.00");
             }
         }
 
@@ -107,9 +107,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitPerItemCurrency != null)
                 {
-                    return ProfitPerItem.ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                    return ProfitPerItem.ToString("0.00") + " (" + ProfitPerItemCurrency?.Symbol + ")";
                 }
-                return ProfitPerItem.ToString();
+                return ProfitPerItem.ToString("0.00");
             }
         }
 
@@ -119,9 +119,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitPerItemCurrency != null)
                 {
-                    return (ProfitPerItem * QuantitySold).ToString() + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                    return (ProfitPerItem * QuantitySold).ToString("0.00") + " (" + ProfitPerItemCurrency?.Symbol + ")";
                 }
-                return (ProfitPerItem * QuantitySold).ToString();
+                return (ProfitPerItem * QuantitySold).ToString("0.00");
             }
         }
 

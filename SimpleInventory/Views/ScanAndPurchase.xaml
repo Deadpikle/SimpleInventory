@@ -165,8 +165,9 @@
                        FontWeight="Bold"
                        FontSize="16"
                        HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
                        VerticalAlignment="Top">
-                Total Purchase Cost: <Run Text="{Binding TotalPurchaseCost, Mode=OneWay}" />
+                Total Items: <Run Text="{Binding TotalItemCount, Mode=OneWay}" /> | Total Purchase Cost: <Run Text="{Binding TotalPurchaseCostWithCurrency, Mode=OneWay}" />
             </TextBlock>
             <StackPanel Grid.Row="3"
                         Grid.Column="0"

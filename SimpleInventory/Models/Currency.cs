@@ -85,6 +85,13 @@ namespace SimpleInventory.Models
             return data.Count > 0 ? data[0] : null;
         }
 
+        public static Currency LoadUSDCurrency()
+        {
+            var data = LoadCurrencies(" WHERE Abbreviation = @abbr",
+                new List<Tuple<string, string>>() { new Tuple<string, string>("@abbr", "USD") });
+            return data.Count > 0 ? data[0] : null;
+        }
+
         public void Create()
         {
             var dbHelper = new DatabaseHelper();

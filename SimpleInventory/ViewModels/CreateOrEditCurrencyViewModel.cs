@@ -130,6 +130,10 @@ namespace SimpleInventory.ViewModels
             if (!IsEditingUSD)
             {
                 currency.Abbreviation = Abbreviation;
+                if (currency.Abbreviation == "USD")
+                {
+                    currency.Abbreviation = "USD-1";
+                }
                 currency.ConversionRateToUSD = ConversionRateToUSD;
                 currency.Symbol = Symbol;
             }

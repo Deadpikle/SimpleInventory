@@ -135,13 +135,70 @@ namespace SimpleInventory.ViewModels
         {
             get
             {
-                // TODO: handle multiple currencies
-                decimal cost = 0.0m;
+                var currency = Utilities.CurrencyForOrder(PurchaseInfo.ToList());
+                if (currency != null)
+                {
+                    decimal cost = 0.0m;
+                    foreach (var item in PurchaseInfo)
+                    {
+                        if (item.CostCurrency != null)
+                        {
+                            cost += item.TotalCost;
+                        }
+                    }
+                    return cost;
+                }
+                else
+                {
+                    // convert to USD
+                    var usdCurrency = Currency.LoadUSDCurrency();
+                    decimal cost = 0.0m;
+                    foreach (var item in PurchaseInfo)
+                    {
+                        if (item.CostCurrency != null)
+                        {
+                            cost += Utilities.ConvertAmount(item.TotalCost, item.CostCurrency, usdCurrency);
+                        }
+                    }
+                    return cost;
+                }
+            }
+        }
+
+        public string TotalPurchaseCostWithCurrency
+        {
+            get
+            {
+                if (PurchaseInfo.Count > 0)
+                {
+                    var totalPurchaseCost = TotalPurchaseCost;
+                    var usdCurrency = Currency.LoadUSDCurrency();
+                    if (usdCurrency == null)
+                    {
+                        return "Error: could not find USD currency";
+                    }
+                    var currency = Utilities.CurrencyForOrder(PurchaseInfo.ToList());
+                    return currency == null
+                        ? totalPurchaseCost.ToString("0.00") + " (" + currency.Symbol + ")"
+                        : totalPurchaseCost.ToString("0.00") + " (" + usdCurrency.Symbol + ")";
+                }
+                else
+                {
+                    return "--";
+                }
+            }
+        }
+
+        public int TotalItemCount
+        {
+            get
+            {
+                var count = 0;
                 foreach (var item in PurchaseInfo)
                 {
-                    cost += item.TotalCost;
+                    count += item.QuantitySold;
                 }
-                return cost;
+                return count;
             }
         }
 
@@ -149,7 +206,7 @@ namespace SimpleInventory.ViewModels
         {
             get 
             {
-                if (PurchaseInfo.Count > 0)
+                if (PurchaseInfo.Count > 0 && !TotalPurchaseCostWithCurrency.ToLower().Contains("error"))
                 {
                     foreach (var item in PurchaseInfo)
                     {
@@ -185,9 +242,7 @@ namespace SimpleInventory.ViewModels
 
         public void QuantityChanged(ItemSoldInfo info, int quantity)
         {
-            NotifyPropertyChanged(nameof(TotalPurchaseCost));
-            NotifyPropertyChanged(nameof(CanFinalize));
-            NotifyPropertyChanged(nameof(CanCancel));
+            UpdateTotalsAndFinalizeButtons();
         }
 
         #region ICommands
@@ -260,9 +315,7 @@ namespace SimpleInventory.ViewModels
                         }
                         // play success sound
                         _successSoundPlayer.Play();
-                        NotifyPropertyChanged(nameof(TotalPurchaseCost));
-                        NotifyPropertyChanged(nameof(CanFinalize));
-                        NotifyPropertyChanged(nameof(CanCancel));
+                        UpdateTotalsAndFinalizeButtons();
                     }
                 }
                 else
@@ -288,7 +341,13 @@ namespace SimpleInventory.ViewModels
             BarcodeNumber = "";
             ItemPurchaseStatusMessage = "";
             PurchaseInfo = new ObservableCollection<ItemSoldInfo>();
-            NotifyPropertyChanged(nameof(TotalPurchaseCost));
+            UpdateTotalsAndFinalizeButtons();
+        }
+
+        private void UpdateTotalsAndFinalizeButtons()
+        {
+            NotifyPropertyChanged(nameof(TotalPurchaseCostWithCurrency));
+            NotifyPropertyChanged(nameof(TotalItemCount));
             NotifyPropertyChanged(nameof(CanFinalize));
             NotifyPropertyChanged(nameof(CanCancel));
         }
@@ -307,9 +366,7 @@ namespace SimpleInventory.ViewModels
         {
             PurchaseInfo.Remove(info);
             ItemPurchaseStatusMessage = "";
-            NotifyPropertyChanged(nameof(TotalPurchaseCost));
-            NotifyPropertyChanged(nameof(CanFinalize));
-            NotifyPropertyChanged(nameof(CanCancel));
+            UpdateTotalsAndFinalizeButtons();
         }
 
         #endregion

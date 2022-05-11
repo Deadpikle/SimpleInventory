@@ -43,11 +43,35 @@ namespace SimpleInventory.Helpers
             {
                 return amount * toCurrency.ConversionRateToUSD;
             }
+            else if (initialCurrency.ID == toCurrency.ID)
+            {
+                return amount;
+            }
             else
             {
                 // / = convert to USD, then convert to other currency
                 return amount / initialCurrency.ConversionRateToUSD * toCurrency.ConversionRateToUSD;
             }
+        }
+
+        public static Currency CurrencyForOrder(List<ItemSoldInfo> items)
+        {
+            Currency currency = null;
+            foreach (var item in items)
+            {
+                if (currency == null)
+                {
+                    currency = item.CostCurrency;
+                }
+                else if (item.CostCurrency != null)
+                {
+                    if (currency.ID != item.CostCurrency.ID)
+                    {
+                        return null; // not all currencies are the same
+                    }
+                }
+            }
+            return currency;
         }
 
         // https://stackoverflow.com/a/819705
