@@ -96,7 +96,7 @@
                        FontSize="16"
                        VerticalAlignment="Center" />
                 <TextBox Width="300"
-                         Text="{Binding User.Name}"
+                         Text="{Binding CustomerName}"
                          VerticalContentAlignment="Center"
                          mahapps:TextBoxHelper.Watermark="My New Friend"
                          FontSize="14"
@@ -108,7 +108,7 @@
                        VerticalAlignment="Center" />
                 <TextBox Width="200"
                          mahapps:TextBoxHelper.Watermark="+855 088 448 1122"
-                         Text="{Binding User.Name}"
+                         Text="{Binding CustomerPhone}"
                          VerticalContentAlignment="Center"
                          FontSize="14"
                          TabIndex="0" />
@@ -121,7 +121,7 @@
                        FontSize="16"
                        VerticalAlignment="Center" />
                 <TextBox Width="300"
-                         Text="{Binding User.Name}"
+                         Text="{Binding CustomerEmail}"
                          VerticalContentAlignment="Center"
                          mahapps:TextBoxHelper.Watermark="somebody@nowhere.com"
                          FontSize="14"
@@ -168,19 +168,19 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <TextBlock Grid.Row="2"
+                           FontSize="14"
+                           Padding="6,4,4,4"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Top">
+                Total to Pay: <Run Text="{Binding OtherPaidAmount, Mode=OneWay}" />
+                </TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Margin="0,5,0,0">
-                <Label Content="Change Needed"
-                       Margin="0,0,10,0"
-                       FontWeight="Bold"
-                       FontSize="16"
-                       VerticalAlignment="Center" />
-                <Label Content="{Binding ChangeNeeded}"
-                       Width="75"
-                       VerticalAlignment="Center" />
                 <Label Content="Change Currency"
-                       Margin="0,0,10,0"
+                       Margin="0,0,4,0"
                        FontWeight="Bold"
                        FontSize="16"
                        VerticalAlignment="Center" />
@@ -194,6 +194,14 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <Label Content="Change Needed"
+                       Margin="10,0,4,0"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+                <Label Content="{Binding ChangeNeeded}"
+                       FontSize="12"
+                       VerticalAlignment="Center" />
             </StackPanel>
             <Button Content="Finish Purchase"
                     Style="{StaticResource MahApps.Styles.Button.Square.Accent}"

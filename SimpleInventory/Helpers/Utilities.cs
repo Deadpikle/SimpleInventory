@@ -39,11 +39,7 @@ namespace SimpleInventory.Helpers
 
         public static decimal ConvertAmount(decimal amount, Currency initialCurrency, Currency toCurrency)
         {
-            if (initialCurrency.ConversionRateToUSD == 1)
-            {
-                return amount * toCurrency.ConversionRateToUSD;
-            }
-            else if (initialCurrency.ID == toCurrency.ID)
+            if (initialCurrency.ID == toCurrency.ID)
             {
                 return amount;
             }

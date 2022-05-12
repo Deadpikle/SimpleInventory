@@ -15,7 +15,7 @@ namespace SimpleInventory.ViewModels
     {
         private List<Currency> _currencies;
         private Dictionary<int, int> _currencyIDToIndex;
-        private ObservableCollection<ItemSoldInfo> _purchaseInfo;
+        private List<ItemSoldInfo> _purchaseInfo;
 
         private string _customerName;
         private string _customerPhone;
@@ -26,8 +26,9 @@ namespace SimpleInventory.ViewModels
         private string _changeNeeded;
         private int _selectedChangeCurrencyIndex;
 
-        public FinalizePurchaseViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
+        public FinalizePurchaseViewModel(IChangeViewModel viewModelChanger, List<ItemSoldInfo> itemsTobeSold) : base(viewModelChanger)
         {
+            PurchasedItems = itemsTobeSold;
             _currencies = Currency.LoadCurrencies();
             _currencyIDToIndex = new Dictionary<int, int>();
             for (int i = 0; i < _currencies.Count; i++)
@@ -35,6 +36,12 @@ namespace SimpleInventory.ViewModels
                 var currency = _currencies[i];
                 _currencyIDToIndex.Add(currency.ID, i);
             }
+            if (PurchaseCurrency != null)
+            {
+                SelectedChangeCurrencyIndex = _currencyIDToIndex[PurchaseCurrency.ID];
+                SelectedPaidCurrencyIndex = _currencyIDToIndex[PurchaseCurrency.ID];
+            }
+            PaidAmount = string.Format("{0:n}", TotalPurchaseCost);
         }
 
         #region Properties
@@ -46,17 +53,26 @@ namespace SimpleInventory.ViewModels
             get { return _currencies; }
         }
 
-        public ObservableCollection<ItemSoldInfo> PurchasedItems
+        public List<ItemSoldInfo> PurchasedItems
         {
             get { return _purchaseInfo; }
             set { _purchaseInfo = value; NotifyPropertyChanged(); }
+        }
+
+        private Currency PurchaseCurrency
+        {
+            get
+            {
+                var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
+                return currency ?? Currency.LoadDefaultCurrency();
+            }
         }
 
         public decimal TotalPurchaseCost
         {
             get
             {
-                var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
+                var currency = PurchaseCurrency;
                 if (currency != null)
                 {
                     decimal cost = 0.0m;
@@ -64,25 +80,12 @@ namespace SimpleInventory.ViewModels
                     {
                         if (item.CostCurrency != null)
                         {
-                            cost += item.TotalCost;
+                            cost += Utilities.ConvertAmount(item.TotalCost, item.CostCurrency, currency);
                         }
                     }
-                    return cost;
+                    return Math.Round(cost, 2);
                 }
-                else
-                {
-                    // convert to USD
-                    var usdCurrency = Currency.LoadUSDCurrency();
-                    decimal cost = 0.0m;
-                    foreach (var item in PurchasedItems)
-                    {
-                        if (item.CostCurrency != null)
-                        {
-                            cost += Utilities.ConvertAmount(item.TotalCost, item.CostCurrency, usdCurrency);
-                        }
-                    }
-                    return cost;
-                }
+                return 0.0m;
             }
         }
 
@@ -93,15 +96,15 @@ namespace SimpleInventory.ViewModels
                 if (PurchasedItems.Count > 0)
                 {
                     var totalPurchaseCost = TotalPurchaseCost;
-                    var usdCurrency = Currency.LoadUSDCurrency();
-                    if (usdCurrency == null)
+                    var defaultCurrency = Currency.LoadDefaultCurrency();
+                    if (defaultCurrency == null)
                     {
-                        return "Error: could not find USD currency";
+                        return "Error: could not find default currency";
                     }
                     var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
-                    return currency == null
-                        ? totalPurchaseCost.ToString("0.00") + " (" + currency.Symbol + ")"
-                        : totalPurchaseCost.ToString("0.00") + " (" + usdCurrency.Symbol + ")";
+                    return currency != null
+                        ? string.Format("{0:n} ({1})", totalPurchaseCost, currency.Symbol)
+                        : string.Format("{0:n} ({1})", totalPurchaseCost, defaultCurrency.Symbol);
                 }
                 else
                 {
@@ -141,6 +144,42 @@ namespace SimpleInventory.ViewModels
             set { _customerEmail = value; NotifyPropertyChanged(); }
         }
 
+        public bool CanFinalize
+        {
+            get
+            {
+                var paidAsDecimal = 0m;
+                if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+                {
+                    paidAsDecimal = 0m;
+                }
+
+                var amountNeededToPay = TotalPurchaseCost;
+                var paidCurrency = _currencies[SelectedPaidCurrencyIndex];
+                var currency = PurchaseCurrency;
+                if (paidCurrency.ID != currency.ID)
+                {
+                    // we want to put things in the change currency's amount
+                    // convert to dollar, then convert to currency
+                    paidAsDecimal /= paidCurrency.ConversionRateToUSD; // convert to USD
+                    paidAsDecimal *= currency.ConversionRateToUSD; // convert to other amount
+                }
+
+                return paidAsDecimal >= amountNeededToPay;
+            }
+        }
+
+        private string _otherPaidAmount = "";
+        public string OtherPaidAmount
+        {
+            get => _otherPaidAmount;
+            set
+            {
+                _otherPaidAmount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public string PaidAmount
         {
             get { return _paidAmount; }
@@ -163,6 +202,7 @@ namespace SimpleInventory.ViewModels
             {
                 _changeNeeded = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(CanFinalize));
             }
         }
 
@@ -173,8 +213,9 @@ namespace SimpleInventory.ViewModels
             {
                 _selectedPaidCurrencyIndex = value;
                 NotifyPropertyChanged();
-                UpdatePurchaseInfoCurrencies();
                 UpdateChange();
+                var cost = Utilities.ConvertAmount(TotalPurchaseCost, PurchaseCurrency, _currencies[value]);
+                OtherPaidAmount = string.Format("{0:n} ({1})", Math.Round(cost, 2), _currencies[value].Symbol);
             }
         }
 
@@ -185,28 +226,53 @@ namespace SimpleInventory.ViewModels
             {
                 _selectedChangeCurrencyIndex = value;
                 NotifyPropertyChanged();
-                UpdatePurchaseInfoCurrencies();
                 UpdateChange();
             }
         }
 
         private void UpdateChange()
         {
-        }
-
-        private void UpdatePurchaseInfoCurrencies()
-        {
-            //if (PurchaseInfo != null)
-            //{
-            //    if (SelectedChangeCurrencyIndex >= 0 && SelectedChangeCurrencyIndex < _currencies.Count)
-            //    {
-            //        PurchaseInfo.ChangeCurrency = _currencies[SelectedChangeCurrencyIndex];
-            //    }
-            //    if (SelectedPaidCurrencyIndex >= 0 && SelectedPaidCurrencyIndex < _currencies.Count)
-            //    {
-            //        PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
-            //    }
-            //}
+            var changeCurrency = _currencies[SelectedChangeCurrencyIndex];
+            var paidCurrency = _currencies[SelectedPaidCurrencyIndex];
+            var paidAsDecimal = 0m;
+            if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+            {
+                paidAsDecimal = 0m;
+            }
+            // see if need to convert to sale currency
+            var currency = PurchaseCurrency;
+            if (paidCurrency.ID != currency.ID)
+            {
+                // convert to dollar, then convert to currency
+                paidAsDecimal /= paidCurrency.ConversionRateToUSD;
+                paidAsDecimal *= currency.ConversionRateToUSD;
+            }
+            var amountNeededToPay = TotalPurchaseCost;
+            // if the amount paid doesn't equal the quantity, the user needs some change!
+            if (paidAsDecimal != amountNeededToPay || paidCurrency.ID != currency.ID)
+            {
+                // we want to put things in the change currency's amount
+                var changeNumber = paidAsDecimal - amountNeededToPay;
+                if (currency.ID != changeCurrency.ID)
+                {
+                    changeNumber /= currency.ConversionRateToUSD;
+                    changeNumber *= changeCurrency.ConversionRateToUSD;
+                }
+                if (changeNumber >= 0)
+                {
+                    ChangeNeeded = string.Format("{0:n} {1}", Math.Round(changeNumber, 2), changeCurrency.Symbol);
+                }
+                else
+                {
+                    ChangeNeeded = "N/A";
+                }
+                //PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
+            }
+            else
+            {
+                ChangeNeeded = "0 " + changeCurrency.Symbol;
+                //PurchaseInfo.Change = 0;
+            }
         }
 
         #endregion

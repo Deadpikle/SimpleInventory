@@ -82,6 +82,10 @@ namespace SimpleInventory.ViewModels
             get
             {
                 var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
+                if (currency == null)
+                {
+                    currency = Currency.LoadDefaultCurrency();
+                }
                 if (currency != null)
                 {
                     decimal cost = 0.0m;
@@ -89,25 +93,12 @@ namespace SimpleInventory.ViewModels
                     {
                         if (item.CostCurrency != null)
                         {
-                            cost += item.TotalCost;
+                            cost += Utilities.ConvertAmount(item.TotalCost, item.CostCurrency, currency);
                         }
                     }
-                    return cost;
+                    return Math.Round(cost, 2);
                 }
-                else
-                {
-                    // convert to USD
-                    var usdCurrency = Currency.LoadUSDCurrency();
-                    decimal cost = 0.0m;
-                    foreach (var item in PurchasedItems)
-                    {
-                        if (item.CostCurrency != null)
-                        {
-                            cost += Utilities.ConvertAmount(item.TotalCost, item.CostCurrency, usdCurrency);
-                        }
-                    }
-                    return cost;
-                }
+                return 0.0m;
             }
         }
 
@@ -118,15 +109,15 @@ namespace SimpleInventory.ViewModels
                 if (PurchasedItems.Count > 0)
                 {
                     var totalPurchaseCost = TotalPurchaseCost;
-                    var usdCurrency = Currency.LoadUSDCurrency();
-                    if (usdCurrency == null)
-                    {
-                        return "Error: could not find USD currency";
-                    }
                     var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
-                    return currency == null
-                        ? totalPurchaseCost.ToString("0.00") + " (" + currency.Symbol + ")"
-                        : totalPurchaseCost.ToString("0.00") + " (" + usdCurrency.Symbol + ")";
+                    var defaultCurrency = Currency.LoadDefaultCurrency();
+                    if (defaultCurrency == null)
+                    {
+                        return "Error: could not find default currency";
+                    }
+                    return currency != null
+                        ? string.Format("{0:n}", totalPurchaseCost) + " (" + currency.Symbol + ")"
+                        : string.Format("{0:n}", totalPurchaseCost) + " (" + defaultCurrency.Symbol + ")";
                 }
                 else
                 {
@@ -352,9 +343,8 @@ namespace SimpleInventory.ViewModels
 
         private void MoveToFinalizePurchaseScreen()
         {
-            PushViewModel(new FinalizePurchaseViewModel(ViewModelChanger)
+            PushViewModel(new FinalizePurchaseViewModel(ViewModelChanger, PurchasedItems.ToList())
             {
-                PurchasedItems = PurchasedItems
             });
         }
 
