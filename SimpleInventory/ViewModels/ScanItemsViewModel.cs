@@ -9,8 +9,6 @@ using System.Windows.Media;
 
 namespace SimpleInventory.ViewModels
 {
-    // TODO: when currencies are different, the +/- sign for change isn't right
-    // TODO: on selected index changed for currencies, update change
     class ScanItemsViewModel : BaseViewModel
     {
         private string _barcodeNumber;
