@@ -128,7 +128,7 @@
                     <DataGridTextColumn Header="Item"
                                         Binding="{Binding ItemName}"
                                         MinWidth="150"
-                                        Width="Auto"/>
+                                        Width="Auto" />
                     <DataGridTemplateColumn Header="Number Purchased">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -172,28 +172,26 @@
                 Total Items: <Run Text="{Binding TotalItemCount, Mode=OneWay}" /> | Total Purchase Cost: <Run Text="{Binding TotalPurchaseCostWithCurrency, Mode=OneWay}" />
             </TextBlock>
             <TextBlock Grid.Row="3"
-                   FontStyle="Italic"
-                   Text="{Binding PurchaseErrorMessage}"
-                   Visibility="{Binding PurchaseErrorMessageIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                   HorizontalAlignment="Center"
-                   FontSize="16"
-                   Margin="0,4,0,4"
-                   Foreground="Red" />
+                       FontStyle="Italic"
+                       Text="{Binding PurchaseErrorMessage}"
+                       Visibility="{Binding PurchaseErrorMessageIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       HorizontalAlignment="Center"
+                       FontSize="16"
+                       Margin="0,4,0,4"
+                       Foreground="Red" />
             <StackPanel Grid.Row="4"
                         Grid.Column="0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <Button HorizontalAlignment="Center"
-                        Content="Finalize Purchase"
+                <Button Content="Finalize Purchase"
                         Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                         mahapps:ControlsHelper.CornerRadius="2"
                         mahapps:ControlsHelper.ContentCharacterCasing="Normal"
                         FontSize="14"
-                        Margin="15,5,5,5"
                         Padding="0"
                         Height="40"
                         Width="150"
-                        Command="{Binding SavePurchaseUpdates}"
+                        Command="{Binding FinalizePurchase}"
                         IsEnabled="{Binding CanFinalize}" />
                 <Button HorizontalAlignment="Center"
                         Content="Cancel Purchase"

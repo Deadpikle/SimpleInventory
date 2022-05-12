@@ -11,8 +11,6 @@ using System.Windows.Media;
 
 namespace SimpleInventory.ViewModels
 {
-    // TODO: when currencies are different, the +/- sign for change isn't right
-    // TODO: on selected index changed for currencies, update change
     class ScanAndPurchaseViewModel : BaseViewModel, IPurchaseInfoChanged
     {
         private string _barcodeNumber;
@@ -27,7 +25,6 @@ namespace SimpleInventory.ViewModels
         private SoundPlayer _failureSoundPlayer;
 
         private string _purchaseErrorMessage;
-        private bool _purchaseErrorMessageIsVisible;
 
         private ObservableCollection<ItemSoldInfo> _purchaseInfo;
 
@@ -153,7 +150,7 @@ namespace SimpleInventory.ViewModels
 
         public bool CanFinalize
         {
-            get 
+            get
             {
                 if (PurchasedItems.Count > 0 && !PurchaseErrorMessageIsVisible && !TotalPurchaseCostWithCurrency.ToLower().Contains("error"))
                 {
@@ -166,7 +163,7 @@ namespace SimpleInventory.ViewModels
                     }
                 }
                 return false;
-            } 
+            }
         }
 
         public bool CanCancel
@@ -190,11 +187,11 @@ namespace SimpleInventory.ViewModels
         public string PurchaseErrorMessage
         {
             get { return _purchaseErrorMessage; }
-            set 
-            { 
-                _purchaseErrorMessage = value; 
-                NotifyPropertyChanged(); 
-                NotifyPropertyChanged(nameof(PurchaseErrorMessageIsVisible)); 
+            set
+            {
+                _purchaseErrorMessage = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(PurchaseErrorMessageIsVisible));
             }
         }
 
@@ -346,6 +343,19 @@ namespace SimpleInventory.ViewModels
             PurchasedItems.Remove(info);
             ItemPurchaseStatusMessage = "";
             UpdateTotalsAndFinalizeButtons();
+        }
+
+        public ICommand FinalizePurchase
+        {
+            get { return new RelayCommand(MoveToFinalizePurchaseScreen); }
+        }
+
+        private void MoveToFinalizePurchaseScreen()
+        {
+            PushViewModel(new FinalizePurchaseViewModel(ViewModelChanger)
+            {
+                PurchasedItems = PurchasedItems
+            });
         }
 
         #endregion
