@@ -132,18 +132,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                             Margin="0,5,0,0">
-                    <Label Content="Paid"
-                           Margin="0,0,10,0"
-                           FontWeight="Bold"
-                           FontSize="16"
-                           VerticalAlignment="Center" />
-                    <TextBox Width="200"
-                             Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             FontSize="14" />
                     <Label Content="Paid Currency"
-                           Margin="0,0,10,0"
+                           Margin="0,0,4,0"
                            FontWeight="Bold"
                            FontSize="16"
                            VerticalAlignment="Center" />
@@ -157,19 +147,29 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,5,0,0">
-                    <Label Content="Change Needed"
-                           Margin="0,0,10,0"
+                    <Label Content="Paid"
+                           Margin="10,0,4,0"
                            FontWeight="Bold"
                            FontSize="16"
                            VerticalAlignment="Center" />
-                    <Label Content="{Binding ChangeNeeded}"
-                           Width="75"
-                           VerticalAlignment="Center" />
+                    <TextBox Width="200"
+                             Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             FontSize="14" />
+                    <TextBlock Grid.Row="2"
+                               FontSize="14"
+                               Padding="6,4,4,4"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap"
+                               VerticalAlignment="Top">
+                        Total to Pay: <Run Text="{Binding OtherPaidAmount, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5,0,0">
                     <Label Content="Change Currency"
-                           Margin="0,0,10,0"
+                           Margin="0,0,4,0"
                            FontWeight="Bold"
                            FontSize="16"
                            VerticalAlignment="Center" />
@@ -183,6 +183,14 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                    <Label Content="Change Needed"
+                           Margin="10,0,4,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <Label Content="{Binding ChangeNeeded}"
+                           FontSize="14"
+                           VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2"
@@ -198,6 +206,7 @@
                         Padding="10"
                         Height="40"
                         Width="150"
+                        IsEnabled="{Binding CanFinalize}"
                         Command="{Binding SavePurchaseUpdates}"
                         Visibility="{Binding PurchaseInfoIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Button Grid.ColumnSpan="2"

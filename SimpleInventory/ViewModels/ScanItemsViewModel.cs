@@ -30,6 +30,7 @@ namespace SimpleInventory.ViewModels
         private string _dateTimePurchased;
         private bool _isChangingPaidFromQuantity;
         private Brush _itemPurchaseStatusBrush;
+        private string _otherPaidAmount = "";
 
         private int _amountInventoryChanged;
 
@@ -108,6 +109,7 @@ namespace SimpleInventory.ViewModels
             {
                 _changeNeeded = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(CanFinalize));
             }
         }
 
@@ -120,6 +122,7 @@ namespace SimpleInventory.ViewModels
                 NotifyPropertyChanged();
                 UpdatePurchaseInfoCurrencies();
                 UpdateChange();
+                NotifyPropertyChanged(nameof(CanFinalize));
             }
         }
 
@@ -132,6 +135,7 @@ namespace SimpleInventory.ViewModels
                 NotifyPropertyChanged();
                 UpdatePurchaseInfoCurrencies();
                 UpdateChange();
+                NotifyPropertyChanged(nameof(CanFinalize));
             }
         }
 
@@ -142,6 +146,10 @@ namespace SimpleInventory.ViewModels
             {
                 _quantity = value;
                 NotifyPropertyChanged();
+                if (PurchaseInfo != null)
+                {
+                    PurchaseInfo.QuantitySold = value;
+                }
                 if (value <= 0)
                 {
                     Quantity = 1; // you can't buy 0 items
@@ -157,6 +165,8 @@ namespace SimpleInventory.ViewModels
                 {
                     UpdateChange();
                 }
+                UpdatePurchaseInfoCurrencies();
+                NotifyPropertyChanged(nameof(CanFinalize));
             }
         }
 
@@ -172,6 +182,17 @@ namespace SimpleInventory.ViewModels
                     _hasPaidAmountChangedForCurrentItem = true;
                 }
                 UpdateChange();
+                NotifyPropertyChanged(nameof(CanFinalize));
+            }
+        }
+
+        public string OtherPaidAmount
+        {
+            get => _otherPaidAmount;
+            set
+            {
+                _otherPaidAmount = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -187,24 +208,32 @@ namespace SimpleInventory.ViewModels
                 {
                     paidAsDecimal = 0;
                 }
-                // if the amount paid doesn't equal the quantity, the user needs some change!
-                if (paidAsDecimal != (PurchaseInfo.Cost * PurchaseInfo.QuantitySold) || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
+                if (paidCurrency.ID != PurchaseInfo.CostCurrency.ID)
                 {
-                    // we want to put things in the change currency's amount
-                    if (paidCurrency.ID != changeCurrency.ID)
-                    {
-                        // convert to dollar, then convert to currency
-                        paidAsDecimal /= paidCurrency.ConversionRateToUSD;
-                        paidAsDecimal *= changeCurrency.ConversionRateToUSD;
-                    }
-                    var amountNeededToPay = PurchaseInfo.Cost * Quantity;
+                    // convert to dollar, then convert to currency
+                    paidAsDecimal /= paidCurrency.ConversionRateToUSD;
+                    paidAsDecimal *= PurchaseInfo.CostCurrency.ConversionRateToUSD;
+                }
+                var amountNeededToPay = Math.Round(PurchaseInfo.TotalCost, 2);
+                var changeNumber = paidAsDecimal - amountNeededToPay;
+                // if the amount paid doesn't equal the quantity, the user needs some change!
+                if (paidAsDecimal != amountNeededToPay || paidCurrency.ID != PurchasedItem.CostCurrency.ID)
+                {
                     if (PurchaseInfo.CostCurrency.ID != changeCurrency.ID)
                     {
-                        amountNeededToPay /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
-                        amountNeededToPay *= changeCurrency.ConversionRateToUSD;
+                        changeNumber /= PurchaseInfo.CostCurrency.ConversionRateToUSD;
+                        changeNumber *= changeCurrency.ConversionRateToUSD;
                     }
-                    ChangeNeeded = (paidAsDecimal - amountNeededToPay).ToString() + " " + changeCurrency.Symbol;
-                    PurchaseInfo.Change = (paidAsDecimal - amountNeededToPay);
+                    if (changeNumber >= 0)
+                    {
+                        PurchaseInfo.Change = Math.Round(changeNumber, 2);
+                        ChangeNeeded = string.Format("{0:n} {1}", PurchaseInfo.Change, changeCurrency.Symbol);
+                    }
+                    else
+                    {
+                        PurchaseInfo.Change = 0.0m;
+                        ChangeNeeded = "N/A";
+                    }
                 }
                 else
                 {
@@ -224,6 +253,34 @@ namespace SimpleInventory.ViewModels
         {
             get { return _quantityErrorMessage; }
             set { _quantityErrorMessage = value; NotifyPropertyChanged(); }
+        }
+
+        public bool CanFinalize
+        {
+            get
+            {
+                if (PurchaseInfo != null && SelectedPaidCurrencyIndex >= 0 && SelectedPaidCurrencyIndex < _currencies.Count)
+                {
+                    var paidAsDecimal = 0m;
+                    if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
+                    {
+                        paidAsDecimal = 0m;
+                    }
+                    var amountNeededToPay = PurchaseInfo.TotalCost;
+                    var paidCurrency = _currencies[SelectedPaidCurrencyIndex];
+                    var currency = PurchaseInfo.CostCurrency;
+                    if (paidCurrency.ID != currency.ID)
+                    {
+                        // we want to put things in the change currency's amount
+                        // convert to dollar, then convert to currency
+                        paidAsDecimal /= paidCurrency.ConversionRateToUSD; // convert to USD
+                        paidAsDecimal *= currency.ConversionRateToUSD; // convert to other amount
+                    }
+
+                    return paidAsDecimal >= amountNeededToPay;
+                }
+                return false;
+            }
         }
 
         #endregion
@@ -295,6 +352,7 @@ namespace SimpleInventory.ViewModels
                         PurchaseInfoIsVisible = true;
                         // play success sound
                         _successSoundPlayer.Play();
+                        UpdatePurchaseInfoCurrencies();
                     }
                 }
                 else
@@ -342,7 +400,16 @@ namespace SimpleInventory.ViewModels
                 }
                 if (SelectedPaidCurrencyIndex >= 0 && SelectedPaidCurrencyIndex < _currencies.Count)
                 {
-                    PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
+                     PurchaseInfo.PaidCurrency = _currencies[SelectedPaidCurrencyIndex];
+                    if (PurchasedItem != null)
+                    {
+                        var cost = Utilities.ConvertAmount(PurchaseInfo.TotalCost, PurchasedItem.CostCurrency, _currencies[SelectedPaidCurrencyIndex]);
+                        OtherPaidAmount = string.Format("{0:n} ({1})", Math.Round(cost, 2), _currencies[SelectedPaidCurrencyIndex].Symbol);
+                    }
+                    else
+                    {
+                        OtherPaidAmount = "";
+                    }
                 }
             }
         }
