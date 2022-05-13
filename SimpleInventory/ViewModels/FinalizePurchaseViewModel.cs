@@ -25,6 +25,7 @@ namespace SimpleInventory.ViewModels
         private int _selectedPaidCurrencyIndex;
         private string _changeNeeded;
         private int _selectedChangeCurrencyIndex;
+        private SoundPlayer _successSoundPlayer;
 
         public FinalizePurchaseViewModel(IChangeViewModel viewModelChanger, List<ItemSoldInfo> itemsTobeSold) : base(viewModelChanger)
         {
@@ -42,9 +43,12 @@ namespace SimpleInventory.ViewModels
                 SelectedPaidCurrencyIndex = _currencyIDToIndex[PurchaseCurrency.ID];
             }
             PaidAmount = string.Format("{0:n}", TotalPurchaseCost);
+            _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
         }
 
         #region Properties
+
+        public IFinishedPurchase FinishedPurchasedListener { get; set; }
 
         public IConfirmDelete<ItemSoldInfo> DeleteItemSoldInfoConfirmer { get; set; }
 
@@ -286,6 +290,47 @@ namespace SimpleInventory.ViewModels
 
         private void PopToPrevious()
         {
+            PopViewModel();
+        }
+
+        public ICommand FinishPurchase
+        {
+            get { return new RelayCommand(FinishPurchaseAndGoBack); }
+        }
+
+        private void FinishPurchaseAndGoBack()
+        {
+            var purchase = new Purchase()
+            {
+                DateTimePurchased = DateTime.Now,
+                TotalCost = TotalPurchaseCost,
+                CostCurrencySymbol = PurchaseCurrency.Symbol,
+                CostCurrencyConversionRate = PurchaseCurrency.ConversionRateToUSD,
+                CustomerName = CustomerName,
+                CustomerEmail = CustomerEmail,
+                CustomerPhone = CustomerPhone,
+                UserID = CurrentUser.ID
+            };
+            purchase.Create();
+            foreach (var item in PurchasedItems)
+            {
+                var purchasedItem = new PurchasedItem()
+                {
+                    Quantity = item.QuantitySold,
+                    Name = item.ItemName,
+                    Type = item.ItemType.Name,
+                    Cost = item.Cost,
+                    CostCurrencySymbol = item.CostCurrency.Symbol,
+                    CostCurrencyConversionRate = item.CostCurrency.ConversionRateToUSD,
+                    Profit = item.TotalProfit,
+                    ProfitCurrencySymbol = item.ProfitPerItemCurrency.Symbol,
+                    ProfitCurrencyConversionRate = item.ProfitPerItemCurrency.ConversionRateToUSD,
+                    PurchaseID = purchase.ID
+                };
+                purchasedItem.Create();
+            }
+            _successSoundPlayer.Play();
+            FinishedPurchasedListener?.FinishedPurchase(purchase);
             PopViewModel();
         }
 

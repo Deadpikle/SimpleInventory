@@ -458,6 +458,19 @@ namespace SimpleInventory.Helpers
                             command.CommandText = "PRAGMA user_version = 16;";
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
+                            goto case 17;
+                        case 17:
+                            string addPurchaseColumns = "" +
+                                "ALTER TABLE Purchases " +
+                                "ADD COLUMN CostCurrencySymbol TEXT DEFAULT '$'; " +
+                                "ALTER TABLE Purchases " +
+                                "ADD COLUMN CostCurrencyConversionRate TEXT DEFAULT '1';";
+                            command.CommandText = addPurchaseColumns;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 17;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
                             break;
                     }
                 }

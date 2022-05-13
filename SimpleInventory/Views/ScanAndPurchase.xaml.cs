@@ -21,7 +21,7 @@ namespace SimpleInventory.Views
     /// <summary>
     /// Interaction logic for ScanItems.xaml
     /// </summary>
-    public partial class ScanAndPurchase : UserControl, IConfirmDelete<ItemSoldInfo>
+    public partial class ScanAndPurchase : UserControl, IConfirmDelete<ItemSoldInfo>, IFinishedPurchase
     {
         public ScanAndPurchase()
         {
@@ -35,6 +35,7 @@ namespace SimpleInventory.Views
             if (DataContext is ScanAndPurchaseViewModel spvm)
             {
                 spvm.DeleteItemSoldInfoConfirmer = this;
+                spvm.FinishedPurchasedListener = this;
             }
         }
 
@@ -72,6 +73,11 @@ namespace SimpleInventory.Views
                     sapvm.CancelPurchase.Execute(null);
                 }
             }
+        }
+
+        public void FinishedPurchase(Purchase purchase)
+        {
+            Keyboard.Focus(BarcodeTextBox);
         }
     }
 }

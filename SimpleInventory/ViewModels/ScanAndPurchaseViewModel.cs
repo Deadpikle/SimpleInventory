@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace SimpleInventory.ViewModels
 {
-    class ScanAndPurchaseViewModel : BaseViewModel, IPurchaseInfoChanged
+    class ScanAndPurchaseViewModel : BaseViewModel, IPurchaseInfoChanged, IFinishedPurchase
     {
         private string _barcodeNumber;
 
@@ -45,6 +45,8 @@ namespace SimpleInventory.ViewModels
         }
 
         #region Properties
+        
+        public IFinishedPurchase FinishedPurchasedListener { get; set; }
 
         public IConfirmDelete<ItemSoldInfo> DeleteItemSoldInfoConfirmer { get; set; }
 
@@ -281,6 +283,7 @@ namespace SimpleInventory.ViewModels
                             purchaseData.ItemDescription = item.Description;
                             purchaseData.PurchaseInfoChanged = this;
                             purchaseData.MaxQuantity = item.Quantity;
+                            purchaseData.ItemType = item.Type;
                             PurchasedItems.Add(purchaseData);
                             _successSoundPlayer.Play();
                         }
@@ -345,7 +348,19 @@ namespace SimpleInventory.ViewModels
         {
             PushViewModel(new FinalizePurchaseViewModel(ViewModelChanger, PurchasedItems.ToList())
             {
+                FinishedPurchasedListener = this,
+                CurrentUser = CurrentUser
             });
+        }
+
+        public void FinishedPurchase(Purchase purchase)
+        {
+            PurchasedItems.Clear();
+            ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Green);
+            ItemPurchaseStatusMessage = "Purchase successfully completed!";
+            BarcodeNumber = "";
+            UpdateTotalsAndFinalizeButtons();
+            FinishedPurchasedListener?.FinishedPurchase(purchase);
         }
 
         #endregion
