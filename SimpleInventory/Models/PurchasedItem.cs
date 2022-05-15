@@ -136,6 +136,16 @@ namespace SimpleInventory.Models
             return purchasedItems;
         }
 
+        public static List<PurchasedItem> LoadPurchasedItemsForPurchaseIDs(List<int> purchaseIDs)
+        {
+            if (purchaseIDs.Count == 0)
+            {
+                return new List<PurchasedItem>();
+            }
+            string whereClause = string.Format(" WHERE PurchaseID IN ({0}) ", string.Join(",", purchaseIDs));
+            return LoadPurchasedItems(whereClause);
+        }
+
         public void Create()
         {
             var dbHelper = new DatabaseHelper();

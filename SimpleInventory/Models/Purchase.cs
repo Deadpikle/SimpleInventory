@@ -1,6 +1,7 @@
 ﻿using SimpleInventory.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.SQLite;
 
 namespace SimpleInventory.Models
@@ -19,6 +20,13 @@ namespace SimpleInventory.Models
         private string _customerPhone;
         private string _customerEmail;
         private int _userID;
+
+        private ObservableCollection<PurchasedItem> _items;
+
+        public Purchase()
+        {
+            Items = new ObservableCollection<PurchasedItem>();
+        }
 
         public int ID
         {
@@ -74,6 +82,22 @@ namespace SimpleInventory.Models
             set { _userID = value; NotifyPropertyChanged(); }
         }
 
+        public ObservableCollection<PurchasedItem> Items
+        {
+            get => _items;
+            set { _items = value; NotifyPropertyChanged(); }
+        }
+
+        public bool HasSingleItem
+        {
+            get => Items.Count == 1 && Items[0] != null;
+        }
+
+        public PurchasedItem FirstItem
+        {
+            get => Items[0];
+        }
+
         public static List<Purchase> LoadPurchases(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var purchases = new List<Purchase>();
@@ -83,6 +107,8 @@ namespace SimpleInventory.Models
                 "FROM Purchases " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
                 "ORDER BY DateTimePurchased DESC";
+            var purchaseIDs = new List<int>();
+            var purchaseIDToPurchase = new Dictionary<int, Purchase>();
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
@@ -102,6 +128,7 @@ namespace SimpleInventory.Models
                         {
                             var purchase = new Purchase();
                             purchase.ID = dbHelper.ReadInt(reader, "ID");
+                            purchaseIDs.Add(purchase.ID);
                             var dateTimePurchased = dbHelper.ReadString(reader, "DateTimePurchased");
                             purchase.DateTimePurchased = Convert.ToDateTime(dateTimePurchased);
                             purchase.TotalCost = dbHelper.ReadDecimal(reader, "TotalCost");
@@ -111,13 +138,33 @@ namespace SimpleInventory.Models
                             purchase.CustomerPhone = dbHelper.ReadString(reader, "CustomerPhone");
                             purchase.CustomerEmail = dbHelper.ReadString(reader, "CustomerEmail");
                             purchases.Add(purchase);
+                            purchaseIDToPurchase.Add(purchase.ID, purchase);
                         }
                         reader.Close();
                     }
                 }
                 conn.Close();
             }
+            var purchasedItems = PurchasedItem.LoadPurchasedItemsForPurchaseIDs(purchaseIDs);
+            foreach (var purchasedItem in purchasedItems)
+            {
+                if (purchaseIDToPurchase.ContainsKey(purchasedItem.PurchaseID))
+                {
+                    purchaseIDToPurchase[purchasedItem.PurchaseID].Items.Add(purchasedItem);
+                }
+            }
             return purchases;
+        }
+
+
+        public static List<Purchase> LoadInfoForDate(DateTime date, int userID = -1)
+        {
+            string whereClause = "WHERE DateTimePurchased LIKE '" + date.ToString(Utilities.DateTimeToDateOnlyStringFormat()) + "%' ";
+            if (userID != -1)
+            {
+                whereClause += " AND Purchases.UserID = " + userID + " ";
+            }
+            return LoadPurchases(whereClause);
         }
 
         public void Create()
@@ -163,5 +210,9 @@ namespace SimpleInventory.Models
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
     }
 }
