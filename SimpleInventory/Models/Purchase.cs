@@ -177,9 +177,9 @@ namespace SimpleInventory.Models
                             purchase.TotalCost = dbHelper.ReadDecimal(reader, "TotalCost");
                             purchase.CostCurrencySymbol = dbHelper.ReadString(reader, "CostCurrencySymbol");
                             purchase.CostCurrencyConversionRate = dbHelper.ReadDecimal(reader, "CostCurrencyConversionRate");
-                            purchase.CustomerName = dbHelper.ReadString(reader, "CustomerName");
-                            purchase.CustomerPhone = dbHelper.ReadString(reader, "CustomerPhone");
-                            purchase.CustomerEmail = dbHelper.ReadString(reader, "CustomerEmail");
+                            purchase.CustomerName = dbHelper.ReadString(reader, "Name");
+                            purchase.CustomerPhone = dbHelper.ReadString(reader, "Phone");
+                            purchase.CustomerEmail = dbHelper.ReadString(reader, "Email");
                             purchase.UserID = dbHelper.ReadInt(reader, "UserID");
                             purchases.Add(purchase);
                             userIDs.Add(purchase.UserID);
