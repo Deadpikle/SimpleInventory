@@ -147,5 +147,21 @@ namespace SimpleInventory.Models
                 conn.Close();
             }
         }
+
+        public void Delete()
+        {
+            foreach (var item in Items)
+            {
+                item.Delete();
+            }
+            var dbHelper = new DatabaseHelper();
+            using (var conn = dbHelper.GetDatabaseConnection())
+            {
+                using (var command = dbHelper.GetSQLiteCommand(conn))
+                {
+                    string query = "DELETE FROM Purchases WHERE ID = @id";
+                    command.CommandText = query;
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.ExecuteNonQuery();
     }
 }
