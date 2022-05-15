@@ -328,6 +328,8 @@ namespace SimpleInventory.ViewModels
                     PurchaseID = purchase.ID
                 };
                 purchasedItem.Create();
+                var inventoryItem = InventoryItem.LoadItemByID(item.InventoryItemID);
+                inventoryItem.AdjustQuantityByAmount(-item.QuantitySold);
             }
             _successSoundPlayer.Play();
             FinishedPurchasedListener?.FinishedPurchase(purchase);
