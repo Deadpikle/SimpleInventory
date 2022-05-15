@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleInventory.Models
 {
-    public class ItemSoldInfo : ChangeNotifier
+    public class ItemSoldInfo : ChangeNotifier, IItemSoldInfo
     {
         private int _quantity;
 

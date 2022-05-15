@@ -284,6 +284,10 @@ namespace SimpleInventory.Models
                         "   (SELECT IFNULL(SUM(isi.QuantitySold), 0) " +
                         "    FROM ItemsSoldInfo isi " +
                         "    WHERE isi.InventoryItemID = @itemID AND isi.DateTimeSold < @date)" +
+                        " - " +
+                        "   (SELECT IFNULL(SUM(pi.Quantity), 0) " +
+                        "    FROM PurchasedItems pi JOIN Purchases p ON pi.PurchaseID = p.ID " +
+                        "    WHERE pi.InventoryItemID = @itemID AND p.DateTimePurchased < @date)" +
                         "AS CurrentStock";
 
                     foreach (InventoryItem item in items)

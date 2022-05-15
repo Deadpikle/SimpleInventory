@@ -15,7 +15,7 @@ namespace SimpleInventory.ViewModels
     {
         private int _inventoryItemID;
         private InventoryItem _item;
-        private ObservableCollection<ItemSoldInfo> _itemSoldInfo;
+        private ObservableCollection<IItemSoldInfo> _itemSoldInfo;
         private DateTime _startDate;
         private DateTime? _endDate;
 
@@ -51,19 +51,35 @@ namespace SimpleInventory.ViewModels
             int userID = _userToFilterBy == null ? -1 : _userToFilterBy.ID;
             if (_endDate != null && _endDate > _startDate && _startDate.Date != _endDate?.Date)
             {
-                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, _endDate.Value, 
+                var itemSoldList = new List<IItemSoldInfo>();
+                itemSoldList.AddRange(ItemSoldInfo.LoadInfoForDateAndItemUntilDate(_startDate, _endDate.Value,
                     _inventoryItemID, userID));
+                var purchases = Purchase.LoadInfoForDateAndItemUntilDate(_startDate, _endDate.Value,
+                    _inventoryItemID, userID);
+                foreach (var purchase in purchases)
+                {
+                    itemSoldList.AddRange(purchase.Items);
+                }
+                ItemSoldInfoData = new ObservableCollection<IItemSoldInfo>(itemSoldList);
+                
             }
             else
             {
-                ItemSoldInfoData = new ObservableCollection<ItemSoldInfo>(ItemSoldInfo.LoadInfoForDateAndItem(_startDate, _inventoryItemID, userID));
+                var itemSoldList = new List<IItemSoldInfo>();
+                itemSoldList.AddRange(ItemSoldInfo.LoadInfoForDateAndItem(_startDate, _inventoryItemID, userID));
+                var purchases = Purchase.LoadInfoForDateAndItem(_startDate, _inventoryItemID, userID);
+                foreach (var purchase in purchases)
+                {
+                    itemSoldList.AddRange(purchase.Items);
+                }
+                ItemSoldInfoData = new ObservableCollection<IItemSoldInfo>(itemSoldList);
             }
         }
 
-        public IConfirmDelete<ItemSoldInfo> DeleteItemSoldInfoConfirmer { get; set; }
+        public IConfirmDelete<IItemSoldInfo> DeleteItemSoldInfoConfirmer { get; set; }
         public IDeletedItemSoldInfo DeletedItemSoldInfoListener { get; set; }
 
-        public ObservableCollection<ItemSoldInfo> ItemSoldInfoData
+        public ObservableCollection<IItemSoldInfo> ItemSoldInfoData
         {
             get { return _itemSoldInfo; }
             set { _itemSoldInfo = value; NotifyPropertyChanged(); }
@@ -116,24 +132,45 @@ namespace SimpleInventory.ViewModels
         
         public ICommand ConfirmDeleteItemSoldInfo
         {
-            get { return new RelayCommand<ItemSoldInfo>(item => CheckBeforeDeletingItemSoldInfo(item)); }
+            get { return new RelayCommand<IItemSoldInfo>(item => CheckBeforeDeletingItemSoldInfo(item)); }
         }
 
-        private void CheckBeforeDeletingItemSoldInfo(ItemSoldInfo item)
+        private void CheckBeforeDeletingItemSoldInfo(IItemSoldInfo item)
         {
             DeleteItemSoldInfoConfirmer?.ConfirmDelete(item);
         }
 
-        public void DeleteItemSoldInfo(ItemSoldInfo info)
+        public void DeleteItemSoldInfo(IItemSoldInfo info)
         {
-            var item = InventoryItem.LoadItemByID(info.InventoryItemID);
-            item.AdjustQuantityByAmount(info.QuantitySold);
-            info.Delete();
-            ItemSoldInfoData.Remove(info);
-            ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(info);
-            if (ReportForItem == null)
+            if (info is ItemSoldInfo isi)
             {
-                PopViewModel();
+                var item = InventoryItem.LoadItemByID(isi.InventoryItemID);
+                item.AdjustQuantityByAmount(isi.QuantitySold);
+                isi.Delete();
+                ItemSoldInfoData.Remove(isi);
+                ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(isi);
+                if (ReportForItem == null)
+                {
+                    PopViewModel();
+                }
+            }
+            else if (info is PurchasedItem pitem)
+            {
+                var item = InventoryItem.LoadItemByID(pitem.InventoryItemID);
+                item.AdjustQuantityByAmount(pitem.QuantitySold);
+                pitem.Delete();
+                var purchase = Purchase.LoadPurchaseByID(pitem.PurchaseID);
+                if (purchase != null && purchase.Items.Count == 0)
+                {
+                    // nothing left.
+                    purchase.Delete();
+                }
+                ItemSoldInfoData.Remove(pitem);
+                ReportForItem = DeletedItemSoldInfoListener?.ItemSoldInfoWasDeleted(pitem);
+                if (ReportForItem == null)
+                {
+                    PopViewModel();
+                }
             }
         }
     }

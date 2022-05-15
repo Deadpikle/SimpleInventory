@@ -314,10 +314,14 @@
                                                 Binding="{Binding TotalProfitWithCurrency}" />
                             <DataGridTemplateColumn Header=""
                                                     CanUserResize="False"
-                                                    Width="125">
+                                                    Width="*"
+                                                    CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="View Details"
+                                                Width="125"
+                                                HorizontalAlignment="Left"
+                                                Margin="5,0,0,0"
                                                 Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding ElementName=ReportsUserControl, 

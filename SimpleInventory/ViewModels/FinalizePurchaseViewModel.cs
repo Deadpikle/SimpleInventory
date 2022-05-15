@@ -300,12 +300,15 @@ namespace SimpleInventory.ViewModels
 
         private void FinishPurchaseAndGoBack()
         {
+            var changeCurrency = _currencies[SelectedChangeCurrencyIndex];
             var purchase = new Purchase()
             {
                 DateTimePurchased = DateTime.Now,
                 TotalCost = TotalPurchaseCost,
                 CostCurrencySymbol = PurchaseCurrency.Symbol,
                 CostCurrencyConversionRate = PurchaseCurrency.ConversionRateToUSD,
+                ChangeCurrencySymbol = changeCurrency.Symbol,
+                ChangeCurrencyConversionRate = changeCurrency.ConversionRateToUSD,
                 CustomerName = CustomerName,
                 CustomerEmail = CustomerEmail,
                 CustomerPhone = CustomerPhone,
@@ -325,7 +328,8 @@ namespace SimpleInventory.ViewModels
                     Profit = item.TotalProfit,
                     ProfitCurrencySymbol = item.ProfitPerItemCurrency.Symbol,
                     ProfitCurrencyConversionRate = item.ProfitPerItemCurrency.ConversionRateToUSD,
-                    PurchaseID = purchase.ID
+                    PurchaseID = purchase.ID,
+                    InventoryItemID = item.InventoryItemID
                 };
                 purchasedItem.Create();
                 var inventoryItem = InventoryItem.LoadItemByID(item.InventoryItemID);

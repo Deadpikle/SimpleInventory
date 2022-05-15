@@ -472,6 +472,21 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 18:
+                            string addMorePurchaseColumns = "" +
+                                "ALTER TABLE PurchasedItems " +
+                                "ADD COLUMN InventoryItemID INTEGER REFERENCES InventoryItems(ID); " +
+                                "ALTER TABLE Purchases " +
+                                "ADD COLUMN ChangeCurrencySymbol TEXT DEFAULT '$';" +
+                                "ALTER TABLE Purchases " +
+                                "ADD COLUMN ChangeCurrencyConversionRate TEXT DEFAULT '1';";
+                            command.CommandText = addMorePurchaseColumns;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 18;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else

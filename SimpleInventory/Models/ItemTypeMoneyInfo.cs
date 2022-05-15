@@ -32,9 +32,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return TotalIncome.ToString() + " (" + Currency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", TotalIncome, Currency?.Symbol);
                 }
-                return TotalIncome.ToString();
+                return string.Format("{0:n}", TotalIncome);
             }
         }
 
@@ -44,9 +44,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return TotalProfit.ToString() + " (" + Currency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", TotalProfit, Currency?.Symbol);
                 }
-                return TotalProfit.ToString();
+                return string.Format("{0:n}", TotalProfit);
             }
         }
     }

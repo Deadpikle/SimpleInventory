@@ -21,7 +21,7 @@ namespace SimpleInventory.Views
     /// <summary>
     /// Interaction logic for ViewItemSoldInfo.xaml
     /// </summary>
-    public partial class ViewItemSoldInfo : UserControl, IConfirmDelete<ItemSoldInfo>
+    public partial class ViewItemSoldInfo : UserControl, IConfirmDelete<IItemSoldInfo>
     {
         public ViewItemSoldInfo()
         {
@@ -37,7 +37,7 @@ namespace SimpleInventory.Views
             }
         }
 
-        public void ConfirmDelete(ItemSoldInfo item)
+        public void ConfirmDelete(IItemSoldInfo item)
         {
             var result = MessageBox.Show("Are you sure you want to delete this info on an item being sold? You CANNOT undo this action, and YOU are responsible for making " +
                 "sure that this action is correct!", "Delete Info", MessageBoxButton.YesNoCancel);

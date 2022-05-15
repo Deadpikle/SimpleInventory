@@ -50,6 +50,12 @@ namespace SimpleInventory.Helpers
             }
         }
 
+        public static decimal ConvertAmountWithRates(decimal amount, decimal initialCurrencyConversion, decimal toCurrencyConversion)
+        {
+            // / = convert to USD, then convert to other currency
+            return amount / initialCurrencyConversion * toCurrencyConversion;
+        }
+
         public static Currency CurrencyForOrder(List<ItemSoldInfo> items)
         {
             Currency currency = null;

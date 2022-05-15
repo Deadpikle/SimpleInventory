@@ -14,6 +14,6 @@ namespace SimpleInventory.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        ReportItemSold ItemSoldInfoWasDeleted(ItemSoldInfo model);
+        ReportItemSold ItemSoldInfoWasDeleted(IItemSoldInfo model);
     }
 }

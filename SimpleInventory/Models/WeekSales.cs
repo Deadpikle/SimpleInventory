@@ -36,9 +36,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return TotalIncome.ToString() + " (" + Currency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", TotalIncome, Currency?.Symbol);
                 }
-                return TotalIncome.ToString();
+                return string.Format("{0:n}", TotalIncome);
             }
         }
 
@@ -48,9 +48,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return TotalProfit.ToString() + " (" + Currency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", TotalProfit, Currency?.Symbol);
                 }
-                return TotalProfit.ToString();
+                return string.Format("{0:n}", TotalProfit);
             }
         }
 
@@ -74,23 +74,8 @@ namespace SimpleInventory.Models
             {
                 DaySales sales = DaySales.GenerateDataForSingleDay(date.AddDays(i), userID);
                 weekSales.AllDaySales.Add(sales);
-                if (weekSales.Currency.ID == sales.Currency.ID)
-                {
-                    weekSales.TotalIncome += sales.TotalIncome;
-                }
-                else
-                {
-                    weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
-                }
-
-                if (weekSales.Currency.ID == sales.Currency.ID)
-                {
-                    weekSales.TotalProfit += sales.TotalProfit;
-                }
-                else
-                {
-                    weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
-                }
+                weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
                 // must add up item type category incomes & profits now
@@ -107,22 +92,8 @@ namespace SimpleInventory.Models
                     var moneyInfoToAdjust = weekSales.ItemTypeIDToMoneyInfo[moneyInfo.Type.ID];
                     moneyInfoToAdjust.TotalItemsSold += moneyInfo.TotalItemsSold;
                     // need to add in the income and profit
-                    if (weekSales.Currency.ID == sales.Currency.ID)
-                    {
-                        moneyInfoToAdjust.TotalIncome += moneyInfo.TotalIncome;
-                    }
-                    else
-                    {
-                        moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(moneyInfo.TotalIncome, sales.Currency, weekSales.Currency);
-                    }
-                    if (weekSales.Currency.ID == sales.Currency.ID)
-                    {
-                        moneyInfoToAdjust.TotalProfit += moneyInfo.TotalProfit;
-                    }
-                    else
-                    {
-                        moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(moneyInfo.TotalProfit, sales.Currency, weekSales.Currency);
-                    }
+                    moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(moneyInfo.TotalIncome, sales.Currency, weekSales.Currency);
+                    moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(moneyInfo.TotalProfit, sales.Currency, weekSales.Currency);
                 }
             }
             // now we need to set up the AllItemsSold array
@@ -138,24 +109,12 @@ namespace SimpleInventory.Models
                 {
                     ReportItemSold allItemsSoldData = itemIDToReportSold[singleItemSoldReport.InventoryItemID];
                     allItemsSoldData.QuantityPurchased += singleItemSoldReport.QuantityPurchased;
-                    if (allItemsSoldData.CostCurrency.ID == singleItemSoldReport.CostCurrency.ID)
-                    {
-                        allItemsSoldData.TotalCost += singleItemSoldReport.QuantityPurchased * singleItemSoldReport.CostPerItem;
-                    }
-                    else
-                    {
-                        allItemsSoldData.TotalCost += singleItemSoldReport.QuantityPurchased *
-                            Utilities.ConvertAmount(singleItemSoldReport.CostPerItem, singleItemSoldReport.CostCurrency, allItemsSoldData.CostCurrency);
-                    }
-                    if (allItemsSoldData.ProfitCurrency.ID == singleItemSoldReport.ProfitCurrency.ID)
-                    {
-                        allItemsSoldData.TotalProfit += singleItemSoldReport.QuantityPurchased * singleItemSoldReport.ProfitPerItem;
-                    }
-                    else
-                    {
-                        allItemsSoldData.TotalProfit += singleItemSoldReport.QuantityPurchased *
-                            Utilities.ConvertAmount(singleItemSoldReport.ProfitPerItem, singleItemSoldReport.ProfitCurrency, allItemsSoldData.ProfitCurrency);
-                    }
+                    allItemsSoldData.TotalCost +=
+                        Utilities.ConvertAmount(singleItemSoldReport.QuantityPurchased * singleItemSoldReport.CostPerItem,
+                        singleItemSoldReport.CostCurrency, allItemsSoldData.CostCurrency);
+                    allItemsSoldData.TotalProfit +=
+                        Utilities.ConvertAmount(singleItemSoldReport.QuantityPurchased * singleItemSoldReport.ProfitPerItem,
+                        singleItemSoldReport.ProfitCurrency, allItemsSoldData.ProfitCurrency);
                 }
             }
             // sort final arrays for nice display

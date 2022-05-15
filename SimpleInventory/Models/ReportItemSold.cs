@@ -52,9 +52,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitCurrency != null)
                 {
-                    return ProfitPerItem.ToString() + " (" + ProfitCurrency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", ProfitPerItem, ProfitCurrency?.Symbol);
                 }
-                return ProfitPerItem.ToString();
+                return string.Format("{0:n}", ProfitPerItem);
             }
         }
 
@@ -64,9 +64,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitCurrency != null)
                 {
-                    return TotalProfit.ToString() + " (" + ProfitCurrency?.Symbol + ")";
+                    return string.Format("{0:n} ({1})", TotalProfit, ProfitCurrency?.Symbol);
                 }
-                return TotalProfit.ToString();
+                return string.Format("{0:n}", TotalProfit);
             }
         }
     }

@@ -96,6 +96,16 @@ namespace SimpleInventory.Models
             return users;
         }
 
+        public static List<User> LoadUsersWithIDs(List<int> userIDs)
+        {
+            if (userIDs.Count == 0)
+            {
+                return new List<User>();
+            }
+            string whereClause = string.Format(" WHERE u.ID IN ({0}) ", string.Join(",", userIDs));
+            return LoadUsers(whereClause);
+        }
+
         public void Create(string password)
         {
             var dbHelper = new DatabaseHelper();

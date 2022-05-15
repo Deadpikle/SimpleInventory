@@ -294,7 +294,7 @@ namespace SimpleInventory.ViewModels
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public ReportItemSold ItemSoldInfoWasDeleted(ItemSoldInfo model)
+        public ReportItemSold ItemSoldInfoWasDeleted(IItemSoldInfo model)
         {
             // need to rerun all reports!!
             RunDayReport();
@@ -341,6 +341,7 @@ namespace SimpleInventory.ViewModels
                 try
                 {
                     var soldItemIDs = ItemSoldInfo.LoadItemIDsSoldBetweenDateAndItemUntilDate(SelectedStockReportFirstDate, SelectedStockReportSecondDate);
+                    soldItemIDs.AddRange(Purchase.LoadItemIDsSoldBetweenDateAndItemUntilDate(SelectedStockReportFirstDate, SelectedStockReportSecondDate));
                     // we only want items in the excel sheet that have been sold in between the two dates
                     var soldItemIDHashSet = new HashSet<int>(soldItemIDs);
                     var itemsToExport = DetailedStockReport.Where(x => soldItemIDHashSet.Contains(x.Item.ID));

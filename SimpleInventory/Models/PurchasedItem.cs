@@ -1,4 +1,5 @@
 ﻿using SimpleInventory.Helpers;
+using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -8,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace SimpleInventory.Models
 {
-    public class PurchasedItem : ChangeNotifier
+    public class PurchasedItem : ChangeNotifier, IItemSoldInfo
     {
         private int _id;
         private int _quantity;
+        private int _inventoryItemID;
         private string _name;
         private string _type;
         private decimal _cost;
@@ -21,6 +23,7 @@ namespace SimpleInventory.Models
         private string _profitCurrencySymbol;
         private decimal _profitCurrencyConversionRate;
         private int _purchaseID;
+        private ItemType _itemType;
 
         public int ID
         {
@@ -32,6 +35,12 @@ namespace SimpleInventory.Models
         {
             get => _quantity;
             set { _quantity = value; NotifyPropertyChanged(); }
+        }
+
+        public int InventoryItemID
+        {
+            get => _inventoryItemID;
+            set { _inventoryItemID = value; NotifyPropertyChanged(); }
         }
 
         public string Name
@@ -46,6 +55,9 @@ namespace SimpleInventory.Models
             set { _type = value; NotifyPropertyChanged(); }
         }
 
+        /// <summary>
+        /// This is cost per item~
+        /// </summary>
         public decimal Cost
         {
             get => _cost;
@@ -64,6 +76,9 @@ namespace SimpleInventory.Models
             set { _costCurrencyConversionRate = value; NotifyPropertyChanged(); }
         }
 
+        /// <summary>
+        /// This is total profit
+        /// </summary>
         public decimal Profit
         {
             get => _profit;
@@ -88,15 +103,51 @@ namespace SimpleInventory.Models
             set { _purchaseID = value; NotifyPropertyChanged(); }
         }
 
+        public ItemType ItemType
+        {
+            get => _itemType;
+            set { _itemType = value; NotifyPropertyChanged(); }
+        }
+
+        public DateTime? DateTimePurchased { get; set; }
+
+        public string SoldByUserName { get; set; }
+
+        public string FriendlyDateTime => DateTimePurchased?.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()) ?? "";
+
+        public int QuantitySold => Quantity;
+
+        public string TotalCostWithCurrency
+        {
+            get
+            {
+                return (Cost * Quantity).ToString() + " (" + CostCurrencySymbol + ")";
+            }
+        }
+
+        public string TotalProfitWithCurrency
+        {
+            get
+            {
+                return (Profit * Quantity).ToString() + " (" + ProfitCurrencySymbol + ")";
+            }
+        }
+
         public static List<PurchasedItem> LoadPurchasedItems(string whereClause = "", List<Tuple<string, string>> whereParams = null)
         {
             var purchasedItems = new List<PurchasedItem>();
             string query = "" +
-                "SELECT ID, Quantity, Name, Type, Cost, CostCurrencySymbol, CostCurrencyConversionRate, Profit, " +
-                "ProfitCurrencySymbol, ProfitCurrencyConversionRate, PurchaseID " +
+                "SELECT PurchasedItems.ID AS PurchasedItemID, PurchasedItems.Quantity, " +
+                "PurchasedItems.InventoryItemID, PurchasedItems.Name, Type, PurchasedItems.Cost, " +
+                "CostCurrencySymbol, CostCurrencyConversionRate, PurchasedItems.Profit, " +
+                    "ProfitCurrencySymbol, ProfitCurrencyConversionRate, PurchaseID, " +
+                    "it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
+                    "it.IsDefault AS ItemTypeIsDefault " +
                 "FROM PurchasedItems " +
+                "   JOIN InventoryItems i ON PurchasedItems.InventoryItemID = i.ID" +
+                "   LEFT JOIN ItemTypes it ON i.ItemTypeID = it.ID " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
-                "ORDER BY Name DESC, Quantity ASC";
+                "ORDER BY PurchasedItems.Name DESC, PurchasedItems.Quantity ASC";
             var dbHelper = new DatabaseHelper();
             using (var conn = dbHelper.GetDatabaseConnection())
             {
@@ -115,8 +166,14 @@ namespace SimpleInventory.Models
                         while (reader.Read())
                         {
                             var purchasedItem = new PurchasedItem();
-                            purchasedItem.ID = dbHelper.ReadInt(reader, "ID");
+                            purchasedItem.ID = dbHelper.ReadInt(reader, "PurchasedItemID");
                             purchasedItem.Quantity = dbHelper.ReadInt(reader, "Quantity");
+                            purchasedItem.InventoryItemID = dbHelper.ReadInt(reader, "InventoryItemID");
+                            purchasedItem.ItemType = new ItemType(
+                                dbHelper.ReadInt(reader, "ItemTypeID"),
+                                dbHelper.ReadString(reader, "ItemTypeName"),
+                                dbHelper.ReadString(reader, "ItemTypeDescription"),
+                                dbHelper.ReadBool(reader, "ItemTypeIsDefault"));
                             purchasedItem.Name = dbHelper.ReadString(reader, "Name");
                             purchasedItem.Type = dbHelper.ReadString(reader, "Type");
                             purchasedItem.Cost = dbHelper.ReadDecimal(reader, "Cost");
@@ -155,12 +212,13 @@ namespace SimpleInventory.Models
                 {
                     string insert = "" +
                         "INSERT INTO PurchasedItems " +
-                        "(Quantity, Name, Type, Cost, CostCurrencySymbol, CostCurrencyConversionRate, Profit, " +
+                        "(Quantity, InventoryItemID, Name, Type, Cost, CostCurrencySymbol, CostCurrencyConversionRate, Profit, " +
                             "ProfitCurrencySymbol, ProfitCurrencyConversionRate, PurchaseID) " +
-                        "VALUES (@quantity, @name, @type, @cost, @costSymbol, @costConversion," +
+                        "VALUES (@quantity, @itemID, @name, @type, @cost, @costSymbol, @costConversion," +
                             "@profit, @profitSymbol, @profitConversion, @purchaseID)";
                     command.CommandText = insert;
                     command.Parameters.AddWithValue("@quantity", Quantity);
+                    command.Parameters.AddWithValue("@itemID", InventoryItemID);
                     command.Parameters.AddWithValue("@name", Name);
                     command.Parameters.AddWithValue("@type", Type);
                     command.Parameters.AddWithValue("@cost", Cost);
