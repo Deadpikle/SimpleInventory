@@ -4,6 +4,7 @@ using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,12 @@ namespace SimpleInventory.ViewModels
         private bool _canGenerateDailyPDFReports;
         private bool _canGenerateWeeklyPDFReports;
 
+
+        private List<Purchase> _purchaseReport;
+        private int _purchaseReportUserChoiceIndex;
+        private DateTime _selectedPurchaseReportDate;
+
+
         public ViewReportsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             SelectedDailyReportDate = DateTime.Now;
@@ -47,6 +54,7 @@ namespace SimpleInventory.ViewModels
             SelectedInventoryStockDate = DateTime.Now;
             SelectedStockReportFirstDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday);
             SelectedStockReportSecondDate = DateTime.Now;
+            SelectedPurchaseReportDate = DateTime.Now;
             _isViewingDailyReportInfo = false;
             _users = User.LoadUsers();
             _users.Sort((left, right) => left.Name.ToLower().CompareTo(right.Name.ToLower()));
@@ -55,6 +63,7 @@ namespace SimpleInventory.ViewModels
             _userChoiceList.AddRange(_users.Select(x => x.Name));
             _dailyReportUserChoiceIndex = 0;
             _weeklyReportUserChoiceIndex = 0;
+            _purchaseReportUserChoiceIndex = 0;
             _canGenerateDailyPDFReports = true;
             _canGenerateWeeklyPDFReports = true;
         }
@@ -83,10 +92,22 @@ namespace SimpleInventory.ViewModels
             set { _selectedStockReportFirstDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
         }
 
-        public DateTime SelectedStockReportSecondDate
+        public List<Purchase> PurchaseReport
         {
-            get { return _selectedStockReportSecondDate; }
-            set { _selectedStockReportSecondDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
+            get => _purchaseReport;
+            set { _purchaseReport = value; NotifyPropertyChanged(); }
+        }
+
+        public int PurchaseReportUserChoiceIndex
+        {
+            get => _purchaseReportUserChoiceIndex;
+            set { _purchaseReportUserChoiceIndex = value; NotifyPropertyChanged(); }
+        }
+
+        public DateTime SelectedPurchaseReportDate
+        {
+            get { return _selectedPurchaseReportDate; }
+            set { _selectedPurchaseReportDate = value; NotifyPropertyChanged(); RunPurchaseReport(); }
         }
 
         public List<DetailedStockReportInfo> DetailedStockReport
@@ -152,6 +173,13 @@ namespace SimpleInventory.ViewModels
         {
             get { return _canGenerateWeeklyPDFReports; }
             set { _canGenerateWeeklyPDFReports = value; NotifyPropertyChanged(); }
+        }
+
+
+        public DateTime SelectedStockReportSecondDate
+        {
+            get { return _selectedStockReportSecondDate; }
+            set { _selectedStockReportSecondDate = value; NotifyPropertyChanged(); RunDetailedStockReport(); }
         }
 
         // for some reason, binding this property fixes an issue where if you leave the screen
@@ -300,6 +328,7 @@ namespace SimpleInventory.ViewModels
             RunDayReport();
             RunWeeklyReport();
             RunStockReport();
+            RunPurchaseReport();
             ReportItemSold report = null;
             var reportList = _isViewingDailyReportInfo ? CurrentDaySalesReport.ItemsSold : CurrentWeeklySalesReport.AllItemsSold;
             foreach (ReportItemSold itemReport in reportList)
@@ -311,6 +340,12 @@ namespace SimpleInventory.ViewModels
                 }
             }
             return report;
+        }
+
+        private void RunPurchaseReport()
+        {
+            var userToFilterBy = PurchaseReportUserChoiceIndex == 0 ? null : _users[PurchaseReportUserChoiceIndex - 1];
+            PurchaseReport = Purchase.LoadInfoForDate(SelectedPurchaseReportDate, userToFilterBy?.ID ?? -1);
         }
 
         private void RunDetailedStockReport()

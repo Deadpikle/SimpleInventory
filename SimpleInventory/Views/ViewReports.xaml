@@ -538,6 +538,123 @@
                             Command="{Binding ExportSoldItemStockInfoToExcel}" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Purchase Report">
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"
+                           Grid.Column="1"
+                           Content="Purchase Report"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,5">
+                        <DatePicker FirstDayOfWeek="Sunday"
+                                    IsTodayHighlighted="True"
+                                    Width="150"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    SelectedDate="{Binding SelectedPurchaseReportDate, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:dd-MM-yyyy}}"
+                                    Margin="5">
+                            <DatePicker.Resources>
+                                <Style TargetType="DatePickerTextBox"
+                                       BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBox x:Name="PART_TextBox"
+                                                         Style="{StaticResource MahApps.Styles.TextBox}"
+                                                         Text="{Binding Path=SelectedDate, StringFormat = {}{0:dd/MM/yyyy}, 
+                                             RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DatePicker.Resources>
+                        </DatePicker>
+                        <ComboBox Margin="5,0,0,0"
+                                  ItemsSource="{Binding UserChoiceList}"
+                                  IsEditable="False"
+                                  SelectedIndex="{Binding PurchaseReportUserChoiceIndex}"
+                                  FontSize="14"
+                                  IsTabStop="False">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <DataGrid Grid.Row="2"
+                              Grid.Column="1"
+                              ItemsSource="{Binding PurchaseReport}"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              AutoGenerateColumns="False"
+                              CanUserDeleteRows="False"
+                              SelectionUnit="FullRow"
+                              RowHeaderWidth="0"
+                              d:DataContext="{d:DesignInstance Type={x:Type models:Purchase}}"
+                              Background="LightGray"
+                              BorderBrush="Gray"
+                              BorderThickness="1"
+                              ColumnHeaderStyle="{StaticResource NoCapsColumnHeader}">
+                        <DataGrid.Style>
+                            <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+                                   TargetType="{x:Type DataGrid}">
+                                <Setter Property="AlternatingRowBackground"
+                                        Value="{DynamicResource GrayBrush10}" />
+                            </Style>
+                        </DataGrid.Style>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date Purchased"
+                                                Binding="{Binding DateTimePurchased}"
+                                                SortDirection="Ascending" />
+                            <DataGridTextColumn Header="Number of Items"
+                                                Binding="{Binding TotalNumberOfItemsSold}" />
+                            <DataGridTextColumn Header="Sold By"
+                                                Binding="{Binding SoldByUserName}" />
+                            <DataGridTextColumn Header="Total Cost"
+                                                Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Customer Name"
+                                                Binding="{Binding CustomerName}" />
+                            <DataGridTextColumn Header="Customer Phone"
+                                                Binding="{Binding CustomerPhone}" />
+                            <DataGridTextColumn Header="Customer Email"
+                                                Binding="{Binding CustomerEmail}" />
+                            <!--<DataGridTemplateColumn Header=""
+                                                    CanUserResize="False"
+                                                    Width="*"
+                                                    CanUserSort="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="View Details"
+                                                Width="125"
+                                                HorizontalAlignment="Left"
+                                                Margin="5,0,0,0"
+                                                Command="{Binding ElementName=ReportsUserControl, Path=DataContext.ViewPurchaseDetailsForWeek}"
+                                                CommandParameter="{Binding}"
+                                                Visibility="{Binding ElementName=ReportsUserControl, 
+                                                    Path=DataContext.CurrentUser.Permissions.CanViewDetailedItemSoldInfo, 
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

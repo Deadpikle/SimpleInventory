@@ -49,6 +49,14 @@ namespace SimpleInventory.Models
             set { _totalCost = value; NotifyPropertyChanged(); }
         }
 
+        public string TotalCostWithCurrency
+        {
+            get
+            {
+                return TotalCost.ToString("0.00") + " (" + CostCurrencySymbol + ")";
+            }
+        }
+
         public string CostCurrencySymbol
         {
             get => _costCurrencySymbol;
@@ -117,6 +125,19 @@ namespace SimpleInventory.Models
         public PurchasedItem FirstItem
         {
             get => Items[0];
+        }
+
+        public int TotalNumberOfItemsSold
+        {
+            get
+            {
+                var count = 0;
+                foreach (var item in Items)
+                {
+                    count += item.Quantity;
+                }
+                return count;
+            }
         }
 
         public static List<Purchase> LoadPurchases(string whereClause = "", List<Tuple<string, string>> whereParams = null)
