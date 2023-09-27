@@ -487,6 +487,19 @@ namespace SimpleInventory.Helpers
                             command.ExecuteNonQuery();
                             command.Parameters.Clear();
                             break;
+                        case 19:
+                            string addPurchaseMethodColumn = "" +
+                                "ALTER TABLE Purchases " +
+                                "ADD COLUMN PurchaseMethod INTEGER DEFAULT 1; " +
+                                "ALTER TABLE ItemsSoldInfo " +
+                                "ADD COLUMN PurchaseMethod INTEGER DEFAULT 1; ";
+                            command.CommandText = addPurchaseMethodColumn;
+                            command.ExecuteNonQuery();
+                            // bump user_version
+                            command.CommandText = "PRAGMA user_version = 19;";
+                            command.ExecuteNonQuery();
+                            command.Parameters.Clear();
+                            break;
                     }
                 }
                 else

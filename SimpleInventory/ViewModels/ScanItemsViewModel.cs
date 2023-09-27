@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using SimpleInventory.Enums;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
@@ -37,6 +38,8 @@ namespace SimpleInventory.ViewModels
 
         private string _quantityErrorMessage;
 
+        private PurchaseMethod _purchaseMethod;
+
         public ScanItemsViewModel(IChangeViewModel viewModelChanger) : base(viewModelChanger)
         {
             _currencies = Currency.LoadCurrencies();
@@ -53,6 +56,7 @@ namespace SimpleInventory.ViewModels
             ItemPurchaseStatusMessage = "";
             SelectedPaidCurrencyIndex = -1;
             ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
+            PurchaseMethod = PurchaseMethod.Cash;
             _failureSoundPlayer = new SoundPlayer("Sounds/failure-tbone.wav");
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
         }
@@ -80,6 +84,12 @@ namespace SimpleInventory.ViewModels
         {
             get { return _itemSoldInfo; }
             set { _itemSoldInfo = value; NotifyPropertyChanged(); }
+        }
+
+        public PurchaseMethod PurchaseMethod
+        {
+            get { return _purchaseMethod; }
+            set { _purchaseMethod = value; NotifyPropertyChanged(); }
         }
 
         public bool PurchaseInfoIsVisible
@@ -337,6 +347,7 @@ namespace SimpleInventory.ViewModels
                         purchaseData.ChangeCurrency = item.CostCurrency;
                         purchaseData.ProfitPerItem = item.ProfitPerItem;
                         purchaseData.ProfitPerItemCurrency = item.ProfitPerItemCurrency;
+                        purchaseData.PurchaseMethod = PurchaseMethod.Cash;
                         purchaseData.CreateNewSoldInfo();
                         PurchaseInfo = purchaseData;
                         // decrease quantity by 1
@@ -347,6 +358,7 @@ namespace SimpleInventory.ViewModels
                         SelectedChangeCurrencyIndex = _currencyIDToIndex[purchaseData.ChangeCurrency.ID];
                         SelectedPaidCurrencyIndex = _currencyIDToIndex[purchaseData.PaidCurrency.ID];
                         Quantity = 1;
+                        PurchaseMethod = PurchaseMethod.Cash;
                         PurchaseInfoIsVisible = true;
                         // play success sound
                         _successSoundPlayer.Play();
@@ -380,6 +392,7 @@ namespace SimpleInventory.ViewModels
                 PurchaseInfoIsVisible = false;
                 BarcodeNumber = "";
                 ItemPurchaseStatusMessage = "";
+                PurchaseMethod = PurchaseMethod.Cash;
             }
         }
 
@@ -427,6 +440,7 @@ namespace SimpleInventory.ViewModels
                 {
                     QuantityErrorMessage = "";
                     PurchaseInfo.QuantitySold = Quantity;
+                    PurchaseInfo.PurchaseMethod = PurchaseMethod;
                     var paidAsDecimal = 0m;
                     if (!decimal.TryParse(PaidAmount, out paidAsDecimal))
                     {

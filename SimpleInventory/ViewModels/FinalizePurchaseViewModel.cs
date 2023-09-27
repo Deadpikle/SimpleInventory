@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using SimpleInventory.Enums;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using SimpleInventory.Models;
 using System;
@@ -26,6 +27,7 @@ namespace SimpleInventory.ViewModels
         private string _changeNeeded;
         private int _selectedChangeCurrencyIndex;
         private SoundPlayer _successSoundPlayer;
+        private PurchaseMethod _purchaseMethod;
 
         public FinalizePurchaseViewModel(IChangeViewModel viewModelChanger, List<ItemSoldInfo> itemsTobeSold) : base(viewModelChanger)
         {
@@ -44,6 +46,7 @@ namespace SimpleInventory.ViewModels
             }
             PaidAmount = string.Format("{0:n}", TotalPurchaseCost);
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
+            PurchaseMethod = PurchaseMethod.Cash;
         }
 
         #region Properties
@@ -146,6 +149,12 @@ namespace SimpleInventory.ViewModels
         {
             get => _customerEmail;
             set { _customerEmail = value; NotifyPropertyChanged(); }
+        }
+
+        public PurchaseMethod PurchaseMethod
+        {
+            get { return _purchaseMethod; }
+            set { _purchaseMethod = value; NotifyPropertyChanged(); }
         }
 
         public bool CanFinalize
@@ -312,7 +321,8 @@ namespace SimpleInventory.ViewModels
                 CustomerName = CustomerName,
                 CustomerEmail = CustomerEmail,
                 CustomerPhone = CustomerPhone,
-                UserID = CurrentUser.ID
+                UserID = CurrentUser.ID,
+                PurchaseMethod = PurchaseMethod
             };
             purchase.Create();
             foreach (var item in PurchasedItems)

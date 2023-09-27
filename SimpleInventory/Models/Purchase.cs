@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using SimpleInventory.Enums;
+using SimpleInventory.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,7 @@ namespace SimpleInventory.Models
         private string _customerEmail;
         private int _userID; // user who sold the item / made the sale
         private string _soldByUserName;
+        private PurchaseMethod _purchaseMethod;
 
         private ObservableCollection<PurchasedItem> _items;
 
@@ -111,6 +113,12 @@ namespace SimpleInventory.Models
             set { _soldByUserName = value; NotifyPropertyChanged(); }
         }
 
+        public PurchaseMethod PurchaseMethod
+        {
+            get => _purchaseMethod;
+            set { _purchaseMethod = value; NotifyPropertyChanged(); }
+        }
+
         public ObservableCollection<PurchasedItem> Items
         {
             get => _items;
@@ -145,7 +153,8 @@ namespace SimpleInventory.Models
             var purchases = new List<Purchase>();
             string query = "" +
                 "SELECT ID, DateTimePurchased, TotalCost, Name, Phone, Email, UserID, " +
-                    "CostCurrencySymbol, CostCurrencyConversionRate, ChangeCurrencySymbol, ChangeCurrencyConversionRate " +
+                    "CostCurrencySymbol, CostCurrencyConversionRate, ChangeCurrencySymbol, ChangeCurrencyConversionRate, " +
+                    "PurchaseMethod " +
                 "FROM Purchases " +
                 (string.IsNullOrEmpty(whereClause) ? "" : whereClause) + " " +
                 "ORDER BY DateTimePurchased DESC";
@@ -181,6 +190,9 @@ namespace SimpleInventory.Models
                             purchase.CustomerPhone = dbHelper.ReadString(reader, "Phone");
                             purchase.CustomerEmail = dbHelper.ReadString(reader, "Email");
                             purchase.UserID = dbHelper.ReadInt(reader, "UserID");
+                            var didParsePurchaseMethod = Enum.TryParse(dbHelper.ReadInt(reader, "PurchaseMethod").ToString(),
+                                true, out PurchaseMethod resultingPurchaseMethod);
+                            purchase.PurchaseMethod = didParsePurchaseMethod ? resultingPurchaseMethod : PurchaseMethod.Cash;
                             purchases.Add(purchase);
                             userIDs.Add(purchase.UserID);
                             purchaseIDToPurchase.Add(purchase.ID, purchase);
@@ -326,9 +338,10 @@ namespace SimpleInventory.Models
                     string insert = "" +
                         "INSERT INTO Purchases " +
                         "(DateTimePurchased, TotalCost, Name, Phone, Email, UserID," +
-                            "CostCurrencySymbol, CostCurrencyConversionRate, ChangeCurrencySymbol, ChangeCurrencyConversionRate) " +
+                            "CostCurrencySymbol, CostCurrencyConversionRate, ChangeCurrencySymbol, ChangeCurrencyConversionRate," +
+                            "PurchaseMethod) " +
                         "VALUES (@dateTime, @totalCost, @name, @phone, @email, @userID, @costSymbol, @costConversion," +
-                        "@changeSymbol, @changeConversion)";
+                        "@changeSymbol, @changeConversion, @purchaseMethod)";
                     command.CommandText = insert;
                     command.Parameters.AddWithValue("@dateTime", DateTimePurchased);
                     command.Parameters.AddWithValue("@totalCost", TotalCost);
@@ -336,6 +349,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@costConversion", CostCurrencyConversionRate);
                     command.Parameters.AddWithValue("@changeSymbol", ChangeCurrencySymbol);
                     command.Parameters.AddWithValue("@changeConversion", ChangeCurrencyConversionRate);
+                    command.Parameters.AddWithValue("@purchaseMethod", PurchaseMethod);
                     command.Parameters.AddWithValue("@name", CustomerName);
                     command.Parameters.AddWithValue("@phone", CustomerPhone);
                     command.Parameters.AddWithValue("@email", CustomerEmail);

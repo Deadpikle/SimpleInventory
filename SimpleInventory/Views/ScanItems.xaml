@@ -7,12 +7,15 @@
              xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:SimpleInventory.Models"
              xmlns:viewModels="clr-namespace:SimpleInventory.ViewModels"
+             xmlns:enums="clr-namespace:SimpleInventory.Enums"
+             xmlns:converters="clr-namespace:SimpleInventory.Converters"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ScanItemsViewModel}, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:ComparisonConverter x:Key="ComparisonConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -87,6 +90,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
@@ -192,8 +196,23 @@
                            FontSize="14"
                            VerticalAlignment="Center" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="2">
+                    <Label Content="Purchase Method"
+                           Margin="0,0,4,0"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center" />
+                    <RadioButton Content="Cash"
+                                 GroupName="PurchaseMethod"
+                                 IsChecked="{Binding Path=PurchaseMethod, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:PurchaseMethod.Cash}}" />
+                    <RadioButton Content="QR Code"
+                                 GroupName="PurchaseMethod"
+                                 IsChecked="{Binding Path=PurchaseMethod, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:PurchaseMethod.QRCode}}"
+                                 Margin="10,0,0,0" />
+                </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="3"
                         Grid.Column="0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">

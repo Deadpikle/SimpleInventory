@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using SimpleInventory.Enums;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,12 @@ namespace SimpleInventory.Models
     public class ItemSoldInfo : ChangeNotifier, IItemSoldInfo
     {
         private int _quantity;
+
+        public ItemSoldInfo()
+        {
+            _quantity = 1;
+            PurchaseMethod = PurchaseMethod.Cash;
+        }
 
         public int ID { get; set; }
         public DateTime DateTimeSold { get; set; }
@@ -61,6 +68,7 @@ namespace SimpleInventory.Models
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }
         public int MaxQuantity { get; set; }
+        public PurchaseMethod PurchaseMethod { get; set; }
 
         public string FriendlyTime
         {
@@ -142,6 +150,7 @@ namespace SimpleInventory.Models
                     string query = "" +
                         "SELECT isi.ID, DateTimeSold, QuantitySold, isi.Cost, isi.CostCurrencyID, isi.ProfitPerItem, isi.ProfitPerItemCurrencyID, " +
                         "       isi.InventoryItemID, isi.SoldByUserID, i.Name, i.Description, isi.Paid, isi.PaidCurrencyID, isi.Change, isi.ChangeCurrencyID, " +
+                        "       isi.PurchaseMethod, " + 
                         "       it.ID AS ItemTypeID, it.Name AS ItemTypeName, it.Description AS ItemTypeDescription," +
                         "       it.IsDefault AS ItemTypeIsDefault, u.Name AS UserName " +
                         "FROM ItemsSoldInfo isi JOIN InventoryItems i ON isi.InventoryItemID = i.ID " +
@@ -192,6 +201,10 @@ namespace SimpleInventory.Models
                             item.Change = dbHelper.ReadDecimal(reader, "Change");
                             var changeCurrencyID = dbHelper.ReadInt(reader, "ChangeCurrencyID");
                             item.ChangeCurrency = currencies.ContainsKey(changeCurrencyID) ? currencies[changeCurrencyID] : null;
+
+                            var didParsePurchaseMethod = Enum.TryParse(dbHelper.ReadInt(reader, "PurchaseMethod").ToString(),
+                                true, out PurchaseMethod resultingPurchaseMethod);
+                            item.PurchaseMethod = didParsePurchaseMethod ? resultingPurchaseMethod : PurchaseMethod.Cash;
 
                             items.Add(item);
                         }
@@ -277,9 +290,10 @@ namespace SimpleInventory.Models
                 using (var command = dbHelper.GetSQLiteCommand(conn))
                 {
                     string query = "INSERT INTO ItemsSoldInfo (DateTimeSold, QuantitySold, Cost, CostCurrencyID, " +
-                        "Paid, PaidCurrencyID, Change, ChangeCurrencyID, ProfitPerItem, ProfitPerItemCurrencyID, InventoryItemID, SoldByUserID) " +
+                        "Paid, PaidCurrencyID, Change, ChangeCurrencyID, ProfitPerItem, ProfitPerItemCurrencyID, InventoryItemID, SoldByUserID," +
+                        "PurchaseMethod) " +
                         " VALUES (@dateTime, @quantity, @cost, @costCurrency, @paid, @paidCurrency, @change, @changeCurrency, @profit, " +
-                        "@profitCurrency, @inventoryID, @userID) ";
+                        "@profitCurrency, @inventoryID, @userID, @purchaseMethod) ";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@dateTime", DateTimeSold.ToString(Utilities.DateTimeToStringFormat()));
                     command.Parameters.AddWithValue("@quantity", QuantitySold);
@@ -293,6 +307,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@profitCurrency", ProfitPerItemCurrency?.ID);
                     command.Parameters.AddWithValue("@inventoryID", InventoryItemID);
                     command.Parameters.AddWithValue("@userID", SoldByUserID);
+                    command.Parameters.AddWithValue("@purchaseMethod", PurchaseMethod);
                     command.ExecuteNonQuery();
                     ID = (int)conn.LastInsertRowId;
                     conn.Close();
@@ -310,7 +325,7 @@ namespace SimpleInventory.Models
                     string query = "UPDATE ItemsSoldInfo SET DateTimeSold = @dateTime, QuantitySold = @quantity, Cost = @cost, " +
                         "CostCurrencyID = @costCurrency, Paid = @paid, PaidCurrencyID = @paidCurrency, Change = @change, " +
                         "ChangeCurrencyID = @changeCurrency, ProfitPerItem = @profit, ProfitPerItemCurrencyID = @profitCurrency, " +
-                        "InventoryItemID = @inventoryID, SoldByUserID = @userID " +
+                        "InventoryItemID = @inventoryID, SoldByUserID = @userID, PurchaseMethod = @purchaseMethod " +
                         " WHERE ID = @id";
                     command.CommandText = query;
                     command.Parameters.AddWithValue("@dateTime", DateTimeSold.ToString(Utilities.DateTimeToStringFormat()));
@@ -325,6 +340,7 @@ namespace SimpleInventory.Models
                     command.Parameters.AddWithValue("@profitCurrency", ProfitPerItemCurrency?.ID);
                     command.Parameters.AddWithValue("@inventoryID", InventoryItemID);
                     command.Parameters.AddWithValue("@userID", SoldByUserID);
+                    command.Parameters.AddWithValue("@purchaseMethod", PurchaseMethod);
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
                     conn.Close();
