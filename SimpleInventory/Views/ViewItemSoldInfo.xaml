@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Button Grid.Row="0"
                 Grid.Column="0"
@@ -120,6 +121,13 @@
             </DataGrid.Columns>
         </DataGrid>
         <TextBlock Grid.Row="4"
+                   FontSize="14"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,5">
+                        <Span xml:space="preserve">Total Cash income: <Run Text="{Binding ReportForItem.TotalCashCostWithCurrency, Mode=OneWay}" />  |  </Span> 
+                        <Span>Total QR Code income: <Run Text="{Binding ReportForItem.TotalQRCodeCostWithCurrency, Mode=OneWay}" /></Span>
+        </TextBlock>
+        <TextBlock Grid.Row="5"
                    FontSize="14"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"

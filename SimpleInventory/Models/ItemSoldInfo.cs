@@ -90,9 +90,9 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return Cost.ToString() + " (" + CostCurrency.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", Cost, CostCurrency?.Symbol);
                 }
-                return Cost.ToString();
+                return string.Format("{0:#,#0.##}", Cost);
             }
         }
 
@@ -107,9 +107,9 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return (Cost * QuantitySold).ToString("0.00") + " (" + CostCurrency?.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", Cost * QuantitySold, CostCurrency?.Symbol);
                 }
-                return (Cost * QuantitySold).ToString("0.00");
+                return string.Format("{0:#,#0.##}", Cost * QuantitySold);
             }
         }
 
@@ -124,9 +124,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitPerItemCurrency != null)
                 {
-                    return ProfitPerItem.ToString("0.00") + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", ProfitPerItem, ProfitPerItemCurrency?.Symbol);
                 }
-                return ProfitPerItem.ToString("0.00");
+                return string.Format("{0:#,#0.##}", ProfitPerItem);
             }
         }
 
@@ -136,9 +136,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitPerItemCurrency != null)
                 {
-                    return (ProfitPerItem * QuantitySold).ToString("0.00") + " (" + ProfitPerItemCurrency?.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", ProfitPerItem * QuantitySold, ProfitPerItemCurrency?.Symbol);
                 }
-                return (ProfitPerItem * QuantitySold).ToString("0.00");
+                return string.Format("{0:#,#0.##}", ProfitPerItem * QuantitySold);
             }
         }
 

@@ -61,7 +61,6 @@ namespace SimpleInventory.ViewModels
                     itemSoldList.AddRange(purchase.Items);
                 }
                 ItemSoldInfoData = new ObservableCollection<IItemSoldInfo>(itemSoldList);
-                
             }
             else
             {

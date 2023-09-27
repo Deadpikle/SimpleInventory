@@ -13,6 +13,8 @@ namespace SimpleInventory.Models
         public List<ReportItemSold> ItemsSold { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalIncome { get; set; }
+        public decimal TotalCashIncome { get; set; }
+        public decimal TotalQRCodeIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
@@ -32,9 +34,33 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return string.Format("{0:n} ({1})", TotalIncome, Currency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", TotalIncome, Currency?.Symbol);
                 }
-                return string.Format("{0:n}", TotalIncome);
+                return string.Format("{0:#,#0.##}", TotalIncome);
+            }
+        }
+
+        public string TotalCashIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalCashIncome, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalCashIncome);
+            }
+        }
+
+        public string TotalQRCodeIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalQRCodeIncome, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalQRCodeIncome);
             }
         }
 
@@ -44,9 +70,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return string.Format("{0:n} ({1})", TotalProfit, Currency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", TotalProfit, Currency?.Symbol);
                 }
-                return string.Format("{0:n}", TotalProfit);
+                return string.Format("{0:#,#0.##}", TotalProfit);
             }
         }
 
@@ -86,14 +112,18 @@ namespace SimpleInventory.Models
                     itemSold.ProfitPerItem = singleItemInfo.ProfitPerItem; // TODO: should be handled as an average!
                     itemSold.ProfitCurrency = singleItemInfo.ProfitPerItemCurrency;
                     itemSold.TotalProfit = 0;
+                    itemSold.CashPurchases = 0;
+                    itemSold.QRCodePurchases = 0;
                     itemIDToReportSold[singleItemInfo.InventoryItemID] = itemSold;
                     totalDaySaleInfo.ItemsSold.Add(itemSold);
                 }
                 ReportItemSold itemSoldData = itemIDToReportSold[singleItemInfo.InventoryItemID];
                 itemSoldData.QuantityPurchased += singleItemInfo.QuantitySold;
                 totalDaySaleInfo.TotalItemsSold += singleItemInfo.QuantitySold;
-                itemSoldData.TotalCost +=
-                    Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.Cost, singleItemInfo.CostCurrency, itemSoldData.CostCurrency);
+                var purchaseAmount = Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                itemSoldData.TotalCost += purchaseAmount;
+                itemSoldData.CashPurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
+                itemSoldData.QRCodePurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
                 itemSoldData.TotalProfit +=
                     Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem,
                     singleItemInfo.ProfitPerItemCurrency, itemSoldData.ProfitCurrency);
@@ -118,9 +148,13 @@ namespace SimpleInventory.Models
                     Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.Cost,
                     singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
                 totalDaySaleInfo.TotalIncome += amountIncrease;
+                totalDaySaleInfo.TotalCashIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? amountIncrease : 0;
+                totalDaySaleInfo.TotalQRCodeIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? amountIncrease : 0;
                 if (moneyInfo != null)
                 {
                     moneyInfo.TotalIncome += amountIncrease;
+                    moneyInfo.TotalCashIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? amountIncrease : 0;
+                    moneyInfo.TotalQRCodeIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? amountIncrease : 0;
                 }
                 // calc profit
                 amountIncrease =
@@ -146,6 +180,8 @@ namespace SimpleInventory.Models
                         itemSold.Name = item.Name;
                         itemSold.Description = "";
                         itemSold.QuantityPurchased = 0;
+                        itemSold.CashPurchases = 0;
+                        itemSold.QRCodePurchases = 0;
                         itemSold.CostPerItem = item.Cost / item.Quantity;
                         itemSold.CostCurrency = new Currency()
                         {
@@ -166,7 +202,11 @@ namespace SimpleInventory.Models
                     ReportItemSold itemSoldData = itemIDToReportSold[item.InventoryItemID];
                     itemSoldData.QuantityPurchased += item.Quantity;
                     totalDaySaleInfo.TotalItemsSold += item.Quantity;
-                    itemSoldData.TotalCost += item.Cost * item.Quantity; // I don't think this needs a currency conversion...
+                    var purchaseAmount = Utilities.ConvertAmountWithRates(item.Cost * item.Quantity, 
+                        item.CostCurrencyConversionRate, totalDaySaleInfo.Currency.ConversionRateToUSD);
+                    itemSoldData.TotalCost       += purchaseAmount;
+                    itemSoldData.CashPurchases   += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
+                    itemSoldData.QRCodePurchases += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
                     itemSoldData.TotalProfit += item.Profit;
                     // now add to total income/profit after finding item type money info
                     ItemTypeMoneyInfo moneyInfo = null;
@@ -185,15 +225,17 @@ namespace SimpleInventory.Models
                     {
                         moneyInfo.TotalItemsSold += item.Quantity;
                     }
-                    var amountIncrease = Utilities.ConvertAmountWithRates(item.Cost * item.Quantity, item.CostCurrencyConversionRate,
-                        totalDaySaleInfo.Currency.ConversionRateToUSD);
-                    totalDaySaleInfo.TotalIncome += amountIncrease;
+                    totalDaySaleInfo.TotalIncome += purchaseAmount;
+                    totalDaySaleInfo.TotalCashIncome += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
+                    totalDaySaleInfo.TotalQRCodeIncome += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
                     if (moneyInfo != null)
                     {
-                        moneyInfo.TotalIncome += amountIncrease;
+                        moneyInfo.TotalIncome += purchaseAmount;
+                        moneyInfo.TotalCashIncome += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
+                        moneyInfo.TotalQRCodeIncome += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
                     }
                     // calc profit
-                    amountIncrease = Utilities.ConvertAmountWithRates(item.Profit, item.ProfitCurrencyConversionRate,
+                    var amountIncrease = Utilities.ConvertAmountWithRates(item.Profit, item.ProfitCurrencyConversionRate,
                         totalDaySaleInfo.Currency.ConversionRateToUSD);
                     totalDaySaleInfo.TotalProfit += amountIncrease;
                     if (moneyInfo != null)

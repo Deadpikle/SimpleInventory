@@ -55,7 +55,7 @@ namespace SimpleInventory.Models
         {
             get
             {
-                return TotalCost.ToString("0.00") + " (" + CostCurrencySymbol + ")";
+                return TotalCost.ToString("0.0.##") + " (" + CostCurrencySymbol + ")";
             }
         }
 
@@ -218,6 +218,7 @@ namespace SimpleInventory.Models
             {
                 if (purchaseIDToPurchase.ContainsKey(purchasedItem.PurchaseID))
                 {
+                    purchasedItem.PurchaseMethod = purchaseIDToPurchase[purchasedItem.PurchaseID].PurchaseMethod;
                     purchasedItem.PurchaseMethodString = purchaseIDToPurchase[purchasedItem.PurchaseID].PurchaseMethodString;
                     purchaseIDToPurchase[purchasedItem.PurchaseID].Items.Add(purchasedItem);
                     purchasedItem.DateTimePurchased = purchaseIDToPurchase[purchasedItem.PurchaseID].DateTimePurchased;

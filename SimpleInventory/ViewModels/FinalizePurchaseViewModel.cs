@@ -44,7 +44,7 @@ namespace SimpleInventory.ViewModels
                 SelectedChangeCurrencyIndex = _currencyIDToIndex[PurchaseCurrency.ID];
                 SelectedPaidCurrencyIndex = _currencyIDToIndex[PurchaseCurrency.ID];
             }
-            PaidAmount = string.Format("{0:n}", TotalPurchaseCost);
+            PaidAmount = string.Format("{0:#,#0.##}", TotalPurchaseCost);
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
             PurchaseMethod = PurchaseMethod.Cash;
         }
@@ -110,8 +110,8 @@ namespace SimpleInventory.ViewModels
                     }
                     var currency = Utilities.CurrencyForOrder(PurchasedItems.ToList());
                     return currency != null
-                        ? string.Format("{0:n} ({1})", totalPurchaseCost, currency.Symbol)
-                        : string.Format("{0:n} ({1})", totalPurchaseCost, defaultCurrency.Symbol);
+                        ? string.Format("{0:#,#0.##} ({1})", totalPurchaseCost, currency.Symbol)
+                        : string.Format("{0:#,#0.##} ({1})", totalPurchaseCost, defaultCurrency.Symbol);
                 }
                 else
                 {
@@ -228,7 +228,7 @@ namespace SimpleInventory.ViewModels
                 NotifyPropertyChanged();
                 UpdateChange();
                 var cost = Utilities.ConvertAmount(TotalPurchaseCost, PurchaseCurrency, _currencies[value]);
-                OtherPaidAmount = string.Format("{0:n} ({1})", Math.Round(cost, 2), _currencies[value].Symbol);
+                OtherPaidAmount = string.Format("{0:#,#0.##} ({1})", Math.Round(cost, 2), _currencies[value].Symbol);
             }
         }
 
@@ -273,7 +273,7 @@ namespace SimpleInventory.ViewModels
                 }
                 if (changeNumber >= 0)
                 {
-                    ChangeNeeded = string.Format("{0:n} {1}", Math.Round(changeNumber, 2), changeCurrency.Symbol);
+                    ChangeNeeded = string.Format("{0:#,#0.##} {1}", Math.Round(changeNumber, 2), changeCurrency.Symbol);
                 }
                 else
                 {

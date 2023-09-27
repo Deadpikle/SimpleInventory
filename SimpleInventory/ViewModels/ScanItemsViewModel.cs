@@ -235,7 +235,7 @@ namespace SimpleInventory.ViewModels
                     if (changeNumber >= 0)
                     {
                         PurchaseInfo.Change = Math.Round(changeNumber, 2);
-                        ChangeNeeded = string.Format("{0:n} {1}", PurchaseInfo.Change, changeCurrency.Symbol);
+                        ChangeNeeded = string.Format("{0:#,#0.##} {1}", PurchaseInfo.Change, changeCurrency.Symbol);
                     }
                     else
                     {
@@ -415,7 +415,7 @@ namespace SimpleInventory.ViewModels
                     if (PurchasedItem != null)
                     {
                         var cost = Utilities.ConvertAmount(PurchaseInfo.TotalCost, PurchasedItem.CostCurrency, _currencies[SelectedPaidCurrencyIndex]);
-                        OtherPaidAmount = string.Format("{0:n} ({1})", Math.Round(cost, 2), _currencies[SelectedPaidCurrencyIndex].Symbol);
+                        OtherPaidAmount = string.Format("{0:#,#0.##} ({1})", Math.Round(cost, 2), _currencies[SelectedPaidCurrencyIndex].Symbol);
                     }
                     else
                     {

@@ -118,8 +118,8 @@ namespace SimpleInventory.ViewModels
                         return "Error: could not find default currency";
                     }
                     return currency != null
-                        ? string.Format("{0:n}", totalPurchaseCost) + " (" + currency.Symbol + ")"
-                        : string.Format("{0:n}", totalPurchaseCost) + " (" + defaultCurrency.Symbol + ")";
+                        ? string.Format("{0:#,#0.##}", totalPurchaseCost) + " (" + currency.Symbol + ")"
+                        : string.Format("{0:#,#0.##}", totalPurchaseCost) + " (" + defaultCurrency.Symbol + ")";
                 }
                 else
                 {

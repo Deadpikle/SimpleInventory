@@ -1,4 +1,5 @@
-﻿using SimpleInventory.Helpers;
+﻿using SimpleInventory.Enums;
+using SimpleInventory.Helpers;
 using SimpleInventory.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -113,7 +114,8 @@ namespace SimpleInventory.Models
 
         public string SoldByUserName { get; set; }
 
-        public string PurchaseMethodString { get; set; }
+        public PurchaseMethod PurchaseMethod { get; set; } // not saved to db as it's on the purchase obj
+        public string PurchaseMethodString { get; set; } // not saved to db as it's on the purchase obj
 
         public string FriendlyDateTime => DateTimePurchased?.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()) ?? "";
 
@@ -123,7 +125,7 @@ namespace SimpleInventory.Models
         {
             get
             {
-                return (Cost * Quantity).ToString() + " (" + CostCurrencySymbol + ")";
+                return string.Format("{0:#,#0.##} ({1})", (Cost * Quantity), CostCurrencySymbol);
             }
         }
 
@@ -131,7 +133,7 @@ namespace SimpleInventory.Models
         {
             get
             {
-                return (Profit * Quantity).ToString() + " (" + ProfitCurrencySymbol + ")";
+                return string.Format("{0:#,#0.##} ({1})", Profit, ProfitCurrencySymbol);
             }
         }
 

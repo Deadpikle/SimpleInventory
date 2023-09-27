@@ -70,6 +70,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0"
                            Grid.Column="1"
@@ -155,6 +156,10 @@
                                                 Binding="{Binding QuantityPurchased}" />
                             <DataGridTextColumn Header="Total Income"
                                                 Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total Cash"
+                                                Binding="{Binding TotalCashCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total QR Code"
+                                                Binding="{Binding TotalQRCodeCostWithCurrency}" />
                             <DataGridTextColumn Header="Total Profit"
                                                 Binding="{Binding TotalProfitWithCurrency}" />
                             <DataGridTemplateColumn Header=""
@@ -195,6 +200,14 @@
                     </ItemsControl>
                     <TextBlock Grid.Row="4"
                                FontSize="14"
+                               HorizontalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,5,0,5">
+                        <Span xml:space="preserve">Total Cash income: <Run Text="{Binding CurrentDaySalesReport.TotalCashIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
+                        <Span>Total QR Code income: <Run Text="{Binding CurrentDaySalesReport.TotalQRCodeIncomeWithCurrency, Mode=OneWay}" /></Span>
+                    </TextBlock>
+                    <TextBlock Grid.Row="5"
+                               FontSize="14"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
                                Grid.Column="1"
@@ -202,7 +215,7 @@
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentDaySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentDaySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5"
+                    <Button Grid.Row="6"
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             IsEnabled="{Binding CanGenerateDailyPDFReports}"
@@ -221,6 +234,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -310,6 +324,10 @@
                                                 Binding="{Binding QuantityPurchased}" />
                             <DataGridTextColumn Header="Total Income"
                                                 Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total Cash"
+                                                Binding="{Binding TotalCashCostWithCurrency}" />
+                            <DataGridTextColumn Header="Total QR Code"
+                                                Binding="{Binding TotalQRCodeCostWithCurrency}" />
                             <DataGridTextColumn Header="Total Profit"
                                                 Binding="{Binding TotalProfitWithCurrency}" />
                             <DataGridTemplateColumn Header=""
@@ -347,6 +365,14 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <TextBlock Grid.Row="4"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="0,5,0,5">
+                        <Span xml:space="preserve">Total Cash income: <Run Text="{Binding CurrentWeeklySalesReport.TotalCashIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
+                        <Span>Total QR Code income: <Run Text="{Binding CurrentWeeklySalesReport.TotalQRCodeIncomeWithCurrency, Mode=OneWay}" /></Span>
+                    </TextBlock>
+                    <TextBlock Grid.Row="5"
                                Grid.Column="1"
                                FontSize="14"
                                FontWeight="Bold"
@@ -355,7 +381,7 @@
                         <Span xml:space="preserve">Total income: <Run Text="{Binding CurrentWeeklySalesReport.TotalIncomeWithCurrency, Mode=OneWay}" />  |  </Span> 
                         <Span>Total profit: <Run Text="{Binding CurrentWeeklySalesReport.TotalProfitWithCurrency, Mode=OneWay}" /></Span>
                     </TextBlock>
-                    <Button Grid.Row="5"
+                    <Button Grid.Row="6"
                             Grid.Column="1"
                             Grid.ColumnSpan="2"
                             HorizontalAlignment="Center"

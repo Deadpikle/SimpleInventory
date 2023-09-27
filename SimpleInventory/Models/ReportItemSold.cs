@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleInventory.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace SimpleInventory.Models
         public decimal QuantityPurchased { get; set; }
         public decimal CostPerItem { get; set; } // in theory, should be an average, as this could change over time
         public Currency CostCurrency { get; set; }
+        public decimal CashPurchases { get; set; }
+        public decimal QRCodePurchases { get; set; }
 
         public string CostWithCurrency
         {
@@ -22,9 +25,9 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return CostPerItem.ToString() + " (" + CostCurrency?.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", CostPerItem, CostCurrency?.Symbol);
                 }
-                return CostPerItem.ToString();
+                return string.Format("{0:#,#0.##}", CostPerItem);
             }
         }
 
@@ -36,9 +39,33 @@ namespace SimpleInventory.Models
             {
                 if (CostCurrency != null)
                 {
-                    return TotalCost.ToString() + " (" + CostCurrency?.Symbol + ")";
+                    return string.Format("{0:#,#0.##} ({1})", TotalCost, CostCurrency?.Symbol);
                 }
-                return TotalCost.ToString();
+                return string.Format("{0:#,#0.##}", TotalCost);
+            }
+        }
+
+        public string TotalCashCostWithCurrency
+        {
+            get
+            {
+                if (CostCurrency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", CashPurchases, CostCurrency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", CashPurchases);
+            }
+        }
+
+        public string TotalQRCodeCostWithCurrency
+        {
+            get
+            {
+                if (CostCurrency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", QRCodePurchases, CostCurrency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", QRCodePurchases);
             }
         }
 
@@ -52,9 +79,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitCurrency != null)
                 {
-                    return string.Format("{0:n} ({1})", ProfitPerItem, ProfitCurrency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", ProfitPerItem, ProfitCurrency?.Symbol);
                 }
-                return string.Format("{0:n}", ProfitPerItem);
+                return string.Format("{0:#,#0.##}", ProfitPerItem);
             }
         }
 
@@ -64,9 +91,9 @@ namespace SimpleInventory.Models
             {
                 if (ProfitCurrency != null)
                 {
-                    return string.Format("{0:n} ({1})", TotalProfit, ProfitCurrency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", TotalProfit, ProfitCurrency?.Symbol);
                 }
-                return string.Format("{0:n}", TotalProfit);
+                return string.Format("{0:#,#0.##}", TotalProfit);
             }
         }
     }

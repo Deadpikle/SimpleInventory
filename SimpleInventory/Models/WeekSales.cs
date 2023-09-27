@@ -13,6 +13,8 @@ namespace SimpleInventory.Models
         public List<DaySales> AllDaySales { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalIncome { get; set; }
+        public decimal TotalCashIncome { get; set; }
+        public decimal TotalQRCodeIncome { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
@@ -36,9 +38,33 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return string.Format("{0:n} ({1})", TotalIncome, Currency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", TotalIncome, Currency?.Symbol);
                 }
-                return string.Format("{0:n}", TotalIncome);
+                return string.Format("{0:#,#0.##}", TotalIncome);
+            }
+        }
+
+        public string TotalCashIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalCashIncome, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalCashIncome);
+            }
+        }
+
+        public string TotalQRCodeIncomeWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalQRCodeIncome, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalQRCodeIncome);
             }
         }
 
@@ -48,9 +74,9 @@ namespace SimpleInventory.Models
             {
                 if (Currency != null)
                 {
-                    return string.Format("{0:n} ({1})", TotalProfit, Currency?.Symbol);
+                    return string.Format("{0:#,#0.##} ({1})", TotalProfit, Currency?.Symbol);
                 }
-                return string.Format("{0:n}", TotalProfit);
+                return string.Format("{0:#,#0.##}", TotalProfit);
             }
         }
 
@@ -75,6 +101,8 @@ namespace SimpleInventory.Models
                 DaySales sales = DaySales.GenerateDataForSingleDay(date.AddDays(i), userID);
                 weekSales.AllDaySales.Add(sales);
                 weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
+                weekSales.TotalCashIncome += Utilities.ConvertAmount(sales.TotalCashIncome, sales.Currency, weekSales.Currency);
+                weekSales.TotalQRCodeIncome += Utilities.ConvertAmount(sales.TotalQRCodeIncome, sales.Currency, weekSales.Currency);
                 weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
@@ -93,6 +121,8 @@ namespace SimpleInventory.Models
                     moneyInfoToAdjust.TotalItemsSold += moneyInfo.TotalItemsSold;
                     // need to add in the income and profit
                     moneyInfoToAdjust.TotalIncome += Utilities.ConvertAmount(moneyInfo.TotalIncome, sales.Currency, weekSales.Currency);
+                    moneyInfoToAdjust.TotalQRCodeIncome += Utilities.ConvertAmount(moneyInfo.TotalQRCodeIncome, sales.Currency, weekSales.Currency);
+                    moneyInfoToAdjust.TotalCashIncome += Utilities.ConvertAmount(moneyInfo.TotalCashIncome, sales.Currency, weekSales.Currency);
                     moneyInfoToAdjust.TotalProfit += Utilities.ConvertAmount(moneyInfo.TotalProfit, sales.Currency, weekSales.Currency);
                 }
             }
@@ -109,6 +139,7 @@ namespace SimpleInventory.Models
                 {
                     ReportItemSold allItemsSoldData = itemIDToReportSold[singleItemSoldReport.InventoryItemID];
                     allItemsSoldData.QuantityPurchased += singleItemSoldReport.QuantityPurchased;
+                    // TODO: do we need to add qr/cash totals? need to check actual report output here
                     allItemsSoldData.TotalCost +=
                         Utilities.ConvertAmount(singleItemSoldReport.QuantityPurchased * singleItemSoldReport.CostPerItem,
                         singleItemSoldReport.CostCurrency, allItemsSoldData.CostCurrency);
