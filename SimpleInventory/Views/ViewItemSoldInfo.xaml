@@ -91,6 +91,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Header="Purchase Method"
+                                    Binding="{Binding PurchaseMethodString}" />
                 <DataGridTextColumn Header="Income"
                                     Binding="{Binding TotalCostWithCurrency}" />
                 <DataGridTextColumn Header="Profit"

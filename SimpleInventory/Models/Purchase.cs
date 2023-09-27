@@ -218,6 +218,7 @@ namespace SimpleInventory.Models
             {
                 if (purchaseIDToPurchase.ContainsKey(purchasedItem.PurchaseID))
                 {
+                    purchasedItem.PurchaseMethodString = purchaseIDToPurchase[purchasedItem.PurchaseID].PurchaseMethodString;
                     purchaseIDToPurchase[purchasedItem.PurchaseID].Items.Add(purchasedItem);
                     purchasedItem.DateTimePurchased = purchaseIDToPurchase[purchasedItem.PurchaseID].DateTimePurchased;
                     if (userIDtoUsers.ContainsKey(purchaseIDToPurchase[purchasedItem.PurchaseID].UserID))

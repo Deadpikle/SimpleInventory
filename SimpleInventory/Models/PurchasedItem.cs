@@ -113,6 +113,8 @@ namespace SimpleInventory.Models
 
         public string SoldByUserName { get; set; }
 
+        public string PurchaseMethodString { get; set; }
+
         public string FriendlyDateTime => DateTimePurchased?.ToString(Utilities.DateTimeToFriendlyFullDateTimeStringFormat()) ?? "";
 
         public int QuantitySold => Quantity;

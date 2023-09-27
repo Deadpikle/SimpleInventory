@@ -13,5 +13,6 @@ namespace SimpleInventory.Interfaces
         string TotalCostWithCurrency { get; }
         string TotalProfitWithCurrency { get; }
         string SoldByUserName { get; }
+        string PurchaseMethodString { get; }
     }
 }
