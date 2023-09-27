@@ -627,6 +627,8 @@
                                                 Binding="{Binding SoldByUserName}" />
                             <DataGridTextColumn Header="Total Cost"
                                                 Binding="{Binding TotalCostWithCurrency}" />
+                            <DataGridTextColumn Header="Purchase Method"
+                                                Binding="{Binding PurchaseMethodString}" />
                             <DataGridTextColumn Header="Customer Name"
                                                 Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="Customer Phone"

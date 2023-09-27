@@ -119,6 +119,11 @@ namespace SimpleInventory.Models
             set { _purchaseMethod = value; NotifyPropertyChanged(); }
         }
 
+        public string PurchaseMethodString
+        {
+            get => PurchaseMethod.ToHumanReadableString();
+        }
+
         public ObservableCollection<PurchasedItem> Items
         {
             get => _items;

@@ -69,6 +69,10 @@ namespace SimpleInventory.Models
         public string ItemDescription { get; set; }
         public int MaxQuantity { get; set; }
         public PurchaseMethod PurchaseMethod { get; set; }
+        public string PurchaseMethodString
+        {
+            get => PurchaseMethod.ToHumanReadableString();
+        }
 
         public string FriendlyTime
         {
