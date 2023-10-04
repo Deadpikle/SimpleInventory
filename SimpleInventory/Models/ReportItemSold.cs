@@ -18,6 +18,8 @@ namespace SimpleInventory.Models
         public Currency CostCurrency { get; set; }
         public decimal CashPurchases { get; set; }
         public decimal QRCodePurchases { get; set; }
+        public int NumCashPurchases { get; set; }
+        public int NumQRCodePurchases { get; set; }
 
         public string CostWithCurrency
         {

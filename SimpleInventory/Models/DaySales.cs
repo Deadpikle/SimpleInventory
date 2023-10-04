@@ -15,6 +15,8 @@ namespace SimpleInventory.Models
         public decimal TotalIncome { get; set; }
         public decimal TotalCashIncome { get; set; }
         public decimal TotalQRCodeIncome { get; set; }
+        public int TotalNumCashSales { get; set; }
+        public int TotalNumQRCodeSales { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
@@ -84,6 +86,8 @@ namespace SimpleInventory.Models
             totalDaySaleInfo.TotalProfit = 0;
             totalDaySaleInfo.ItemsSold = new List<ReportItemSold>();
             totalDaySaleInfo.TotalItemsSold = 0;
+            totalDaySaleInfo.TotalNumCashSales = 0;
+            totalDaySaleInfo.TotalNumQRCodeSales = 0;
             var currencies = Currency.LoadCurrencies();
             foreach (Currency currency in currencies)
             {
@@ -114,6 +118,8 @@ namespace SimpleInventory.Models
                     itemSold.TotalProfit = 0;
                     itemSold.CashPurchases = 0;
                     itemSold.QRCodePurchases = 0;
+                    itemSold.NumCashPurchases = 0;
+                    itemSold.NumQRCodePurchases = 0;
                     itemIDToReportSold[singleItemInfo.InventoryItemID] = itemSold;
                     totalDaySaleInfo.ItemsSold.Add(itemSold);
                 }
@@ -124,6 +130,8 @@ namespace SimpleInventory.Models
                 itemSoldData.TotalCost += purchaseAmount;
                 itemSoldData.CashPurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
                 itemSoldData.QRCodePurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
+                itemSoldData.NumCashPurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? singleItemInfo.QuantitySold : 0;
+                itemSoldData.NumQRCodePurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? singleItemInfo.QuantitySold : 0;
                 itemSoldData.TotalProfit +=
                     Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.ProfitPerItem,
                     singleItemInfo.ProfitPerItemCurrency, itemSoldData.ProfitCurrency);
@@ -150,6 +158,8 @@ namespace SimpleInventory.Models
                 totalDaySaleInfo.TotalIncome += amountIncrease;
                 totalDaySaleInfo.TotalCashIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? amountIncrease : 0;
                 totalDaySaleInfo.TotalQRCodeIncome += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? amountIncrease : 0;
+                totalDaySaleInfo.TotalNumCashSales += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? singleItemInfo.QuantitySold : 0;
+                totalDaySaleInfo.TotalNumQRCodeSales += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? singleItemInfo.QuantitySold: 0;
                 if (moneyInfo != null)
                 {
                     moneyInfo.TotalIncome += amountIncrease;
@@ -182,6 +192,8 @@ namespace SimpleInventory.Models
                         itemSold.QuantityPurchased = 0;
                         itemSold.CashPurchases = 0;
                         itemSold.QRCodePurchases = 0;
+                        itemSold.NumCashPurchases = 0;
+                        itemSold.NumQRCodePurchases = 0;
                         itemSold.CostPerItem = item.Cost / item.Quantity;
                         itemSold.CostCurrency = new Currency()
                         {
@@ -207,6 +219,8 @@ namespace SimpleInventory.Models
                     itemSoldData.TotalCost       += purchaseAmount;
                     itemSoldData.CashPurchases   += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
                     itemSoldData.QRCodePurchases += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
+                    itemSoldData.NumCashPurchases += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? item.Quantity : 0;
+                    itemSoldData.NumQRCodePurchases += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? item.Quantity : 0;
                     itemSoldData.TotalProfit += item.Profit;
                     // now add to total income/profit after finding item type money info
                     ItemTypeMoneyInfo moneyInfo = null;
@@ -228,6 +242,8 @@ namespace SimpleInventory.Models
                     totalDaySaleInfo.TotalIncome += purchaseAmount;
                     totalDaySaleInfo.TotalCashIncome += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
                     totalDaySaleInfo.TotalQRCodeIncome += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
+                    totalDaySaleInfo.TotalNumCashSales += item.PurchaseMethod == Enums.PurchaseMethod.Cash ? item.Quantity : 0;
+                    totalDaySaleInfo.TotalNumQRCodeSales += item.PurchaseMethod == Enums.PurchaseMethod.QRCode ? item.Quantity : 0;
                     if (moneyInfo != null)
                     {
                         moneyInfo.TotalIncome += purchaseAmount;
@@ -286,6 +302,11 @@ namespace SimpleInventory.Models
         {
             return ItemTypeMoneyBreakdown;
         }
+
+        public string GetTotalCashIncomeWithCurrency() => TotalCashIncomeWithCurrency;
+        public string GetTotalQRCodeIncomeWithCurrency() => TotalQRCodeIncomeWithCurrency;
+        public int GetTotalNumCashSales() => TotalNumCashSales;
+        public int GetTotalNumQRCodeSales() => TotalNumQRCodeSales;
 
         #endregion
     }

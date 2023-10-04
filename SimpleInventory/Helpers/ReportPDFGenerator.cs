@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using SimpleInventory.Models;
 using SimpleInventory.Interfaces;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace SimpleInventory.Helpers
 {
@@ -57,6 +58,40 @@ namespace SimpleInventory.Helpers
             gfx.DrawString("-" + number.ToString() + "-", headerFont, XBrushes.Black, new XRect(0, page.Height - margin, page.Width, margin), XStringFormats.Center);
         }
 
+        private void AddPageIfNeeded(ref XUnit yCoord, ref PdfPage page, ref XGraphics gfx, XUnit margin, PdfDocument document, 
+            IItemsSoldReportData salesReport, ref int pageNumber)
+        {
+            if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
+            {
+                // GOTTA AADDDDDD A NEWWWW PAGEEE....
+                page = document.AddPage();
+                page.Size = PdfSharp.PageSize.A4;
+                gfx = XGraphics.FromPdfPage(page);
+                AddTitle(salesReport, margin, page, gfx);
+                DrawPageNumber(++pageNumber, margin, page, gfx);
+                yCoord = margin + XUnit.FromInch(1.3);
+                DrawHeaders(yCoord, margin, gfx);
+            }
+        }
+
+        private void WriteDataInColumns(ref XUnit yCoord, ref XUnit xCoord, PdfPage page, XUnit margin, 
+            XFont firstColumnFont, XFont otherColumnFont, XGraphics gfx,
+            string firstCol, string secondCol, string thirdCol, string fourthCol)
+        {
+            yCoord += XUnit.FromInch(0.5);
+            xCoord = margin;
+            gfx.DrawString(firstCol, firstColumnFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
+            xCoord += XUnit.FromInch(2.5);
+            gfx.DrawString(secondCol, otherColumnFont, XBrushes.Black,
+                        new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
+            xCoord += XUnit.FromInch(1.5);
+            gfx.DrawString(thirdCol, otherColumnFont, XBrushes.Black,
+                        new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
+            xCoord += XUnit.FromInch(1.5);
+            gfx.DrawString(fourthCol, otherColumnFont, XBrushes.Black,
+                        new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+        }
+
         public void GeneratePDF(IItemsSoldReportData sales, string outputPath)
         {
             PdfDocument document = new PdfDocument();
@@ -84,18 +119,9 @@ namespace SimpleInventory.Helpers
             //for (int i = 0; i < 40; i++) // for creating lots of PDF dummy data
             //{
             foreach (ReportItemSold itemSold in sales.GetItemsSold())
-                {
-                    if (yCoord + XUnit.FromInch(0.6) >= page.Height - margin)
-                    {
-                        page = document.AddPage();
-                        page.Size = PdfSharp.PageSize.A4;
-                        gfx = XGraphics.FromPdfPage(page);
-                        AddTitle(sales, margin, page, gfx);
-                        DrawPageNumber(++pageNumber, margin, page, gfx);
-                        yCoord = margin + XUnit.FromInch(1.3);
-                        DrawHeaders(yCoord, margin, gfx);
-                    }
-                    yCoord += XUnit.FromInch(0.5);
+            {
+                AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
+                yCoord += XUnit.FromInch(0.5);
                     xCoord = margin;
                     // these could be centered nicely or something, but *shrug*
                     if (string.IsNullOrWhiteSpace(itemSold.Description))
@@ -129,62 +155,33 @@ namespace SimpleInventory.Helpers
             yCoord += XUnit.FromInch(0.15);
             // print category totals
             var itemTypeMoneyInfoList = sales.GetItemTypeMoneyInfo();
+            XFont totalCategoryFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
+            XFont totalCategoryDataFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
             foreach (var moneyInfo in itemTypeMoneyInfoList)
             {
-                if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
-                {
-                    // GOTTA AADDDDDD A NEWWWW PAGEEE....
-                    page = document.AddPage();
-                    page.Size = PdfSharp.PageSize.A4;
-                    gfx = XGraphics.FromPdfPage(page);
-                    AddTitle(sales, margin, page, gfx);
-                    DrawPageNumber(++pageNumber, margin, page, gfx);
-                    yCoord = margin + XUnit.FromInch(1.3);
-                    DrawHeaders(yCoord, margin, gfx);
-                }
-                yCoord += XUnit.FromInch(0.5);
-                XFont totalCategoryFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
-                XFont totalCategoryDataFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
-                xCoord = margin;
-                gfx.DrawString(moneyInfo.Type.Name + " total", totalCategoryFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
-                xCoord += XUnit.FromInch(2.5);
-                gfx.DrawString(moneyInfo.TotalItemsSold.ToString(), totalCategoryDataFont, XBrushes.Black,
-                            new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
-                xCoord += XUnit.FromInch(1.5);
-                gfx.DrawString(moneyInfo.TotalIncomeWithCurrency.ToString(), totalCategoryDataFont, XBrushes.Black,
-                            new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
-                xCoord += XUnit.FromInch(1.5);
-                gfx.DrawString(moneyInfo.TotalProfitWithCurrency.ToString(), totalCategoryDataFont, XBrushes.Black,
-                            new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
+                AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
+                WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalCategoryFont, totalCategoryDataFont, gfx,
+                    moneyInfo.Type.Name + " total", moneyInfo.TotalItemsSold.ToString(), 
+                    moneyInfo.TotalIncomeWithCurrency.ToString(), moneyInfo.TotalProfitWithCurrency.ToString());
             }
-            // print totals
-            if (yCoord + XUnit.FromInch(0.5) >= page.Height - margin)
-            {
-                // GOTTA AADDDDDD A NEWWWW PAGEEE....
-                page = document.AddPage();
-                page.Size = PdfSharp.PageSize.A4;
-                gfx = XGraphics.FromPdfPage(page);
-                AddTitle(sales, margin, page, gfx);
-                DrawPageNumber(++pageNumber, margin, page, gfx);
-                yCoord = margin + XUnit.FromInch(1.3);
-                DrawHeaders(yCoord, margin, gfx);
-            }
-            yCoord += XUnit.FromInch(0.5);
+            // print the total items
             XFont totalFont = new XFont("Segoe UI", 16, XFontStyle.Bold);
             XFont totalDataFont = new XFont("Segoe UI", 14, XFontStyle.Bold);
-            xCoord = margin;
-            gfx.DrawString("TOTAL", totalFont, XBrushes.Black, new XPoint(xCoord, yCoord), XStringFormats.CenterLeft);
-            xCoord += XUnit.FromInch(2.5);
-            gfx.DrawString(sales.GetTotalItemsSold().ToString(), totalDataFont, XBrushes.Black,
-                        new XPoint(xCoord + XUnit.FromInch(0.65), yCoord), XStringFormats.CenterRight);
-            xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.GetTotalIncomeWithCurrency(), totalDataFont, XBrushes.Black,
-                        new XPoint(xCoord + XUnit.FromInch(0.85), yCoord), XStringFormats.CenterRight);
-            xCoord += XUnit.FromInch(1.5);
-            gfx.DrawString(sales.GetTotalProfitWithCurrency(), totalDataFont, XBrushes.Black,
-                        new XPoint(page.Width - margin - XUnit.FromInch(0.05), yCoord), XStringFormats.CenterRight);
-
-
+            // print cash totals
+            AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
+            XUnit lineYDistance = XUnit.FromInch(0.38);
+            gfx.DrawLine(XPens.Black, margin, yCoord + lineYDistance, page.Width - margin, yCoord + lineYDistance);
+            yCoord += XUnit.FromInch(0.20);
+            WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalDataFont, totalDataFont, gfx,
+                "Total Cash Sales", sales.GetTotalNumCashSales().ToString(), sales.GetTotalCashIncomeWithCurrency(), "");
+            // print qr code totals
+            AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
+            WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalDataFont, totalDataFont, gfx,
+                "Total QR Code Sales", sales.GetTotalNumQRCodeSales().ToString(), sales.GetTotalQRCodeIncomeWithCurrency(), "");
+            // print totals
+            AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
+            WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalFont, totalDataFont, gfx,
+                "TOTAL", sales.GetTotalItemsSold().ToString(), sales.GetTotalIncomeWithCurrency(), sales.GetTotalProfitWithCurrency());
             // save the document and start the process for viewing the pdf
             document.Save(outputPath);
             Process.Start(outputPath);

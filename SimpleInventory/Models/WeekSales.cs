@@ -15,6 +15,8 @@ namespace SimpleInventory.Models
         public decimal TotalIncome { get; set; }
         public decimal TotalCashIncome { get; set; }
         public decimal TotalQRCodeIncome { get; set; }
+        public int TotalNumCashSales { get; set; }
+        public int TotalNumQRCodeSales { get; set; }
         public decimal TotalProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
@@ -30,6 +32,8 @@ namespace SimpleInventory.Models
             ItemTypeIDToMoneyInfo = new Dictionary<int, ItemTypeMoneyInfo>();
             AllDaySales = new List<DaySales>();
             AllItemsSold = new List<ReportItemSold>();
+            TotalNumCashSales = 0;
+            TotalNumQRCodeSales = 0;
         }
 
         public string TotalIncomeWithCurrency
@@ -103,6 +107,8 @@ namespace SimpleInventory.Models
                 weekSales.TotalIncome += Utilities.ConvertAmount(sales.TotalIncome, sales.Currency, weekSales.Currency);
                 weekSales.TotalCashIncome += Utilities.ConvertAmount(sales.TotalCashIncome, sales.Currency, weekSales.Currency);
                 weekSales.TotalQRCodeIncome += Utilities.ConvertAmount(sales.TotalQRCodeIncome, sales.Currency, weekSales.Currency);
+                weekSales.TotalNumCashSales += sales.TotalNumCashSales;
+                weekSales.TotalNumQRCodeSales += sales.TotalNumQRCodeSales;
                 weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
@@ -190,6 +196,11 @@ namespace SimpleInventory.Models
         {
             return ItemTypeMoneyBreakdown;
         }
+
+        public string GetTotalCashIncomeWithCurrency() => TotalCashIncomeWithCurrency;
+        public string GetTotalQRCodeIncomeWithCurrency() => TotalQRCodeIncomeWithCurrency;
+        public int GetTotalNumCashSales() => TotalNumCashSales;
+        public int GetTotalNumQRCodeSales() => TotalNumQRCodeSales;
 
         #endregion
     }
