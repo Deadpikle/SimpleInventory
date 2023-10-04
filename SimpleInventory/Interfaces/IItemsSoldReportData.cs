@@ -15,6 +15,8 @@ namespace SimpleInventory.Interfaces
         int GetTotalItemsSold();
         string GetTotalIncomeWithCurrency();
         string GetTotalProfitWithCurrency();
+        string GetTotalCashProfitWithCurrency();
+        string GetTotalQRCodeProfitWithCurrency();
         List<ItemTypeMoneyInfo> GetItemTypeMoneyInfo();
         string GetTotalCashIncomeWithCurrency();
         string GetTotalQRCodeIncomeWithCurrency();

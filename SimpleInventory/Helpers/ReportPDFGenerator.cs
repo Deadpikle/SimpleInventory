@@ -173,11 +173,11 @@ namespace SimpleInventory.Helpers
             gfx.DrawLine(XPens.Black, margin, yCoord + lineYDistance, page.Width - margin, yCoord + lineYDistance);
             yCoord += XUnit.FromInch(0.20);
             WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalDataFont, totalDataFont, gfx,
-                "Total Cash Sales", sales.GetTotalNumCashSales().ToString(), sales.GetTotalCashIncomeWithCurrency(), "");
+                "Total Cash Sales", sales.GetTotalNumCashSales().ToString(), sales.GetTotalCashIncomeWithCurrency(), sales.GetTotalCashProfitWithCurrency());
             // print qr code totals
             AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
             WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalDataFont, totalDataFont, gfx,
-                "Total QR Code Sales", sales.GetTotalNumQRCodeSales().ToString(), sales.GetTotalQRCodeIncomeWithCurrency(), "");
+                "Total QR Code Sales", sales.GetTotalNumQRCodeSales().ToString(), sales.GetTotalQRCodeIncomeWithCurrency(), sales.GetTotalQRCodeProfitWithCurrency());
             // print totals
             AddPageIfNeeded(ref yCoord, ref page, ref gfx, margin, document, sales, ref pageNumber);
             WriteDataInColumns(ref yCoord, ref xCoord, page, margin, totalFont, totalDataFont, gfx,

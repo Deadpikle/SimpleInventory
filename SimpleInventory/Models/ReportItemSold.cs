@@ -74,6 +74,8 @@ namespace SimpleInventory.Models
         public decimal ProfitPerItem { get; set; } // in theory, should be an average, as this could change over time
         public Currency ProfitCurrency { get; set; }
         public decimal TotalProfit { get; set; }
+        public decimal TotalCashProfit { get; set; }
+        public decimal TotalQRCodeProfit { get; set; }
 
         public string ProfitWithCurrency
         {
@@ -96,6 +98,30 @@ namespace SimpleInventory.Models
                     return string.Format("{0:#,#0.##} ({1})", TotalProfit, ProfitCurrency?.Symbol);
                 }
                 return string.Format("{0:#,#0.##}", TotalProfit);
+            }
+        }
+
+        public string TotalCashProfitWithCurrency
+        {
+            get
+            {
+                if (ProfitCurrency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalCashProfit, ProfitCurrency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalCashProfit);
+            }
+        }
+
+        public string TotalQRCodeProfitWithCurrency
+        {
+            get
+            {
+                if (ProfitCurrency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalQRCodeProfit, ProfitCurrency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalQRCodeProfit);
             }
         }
     }

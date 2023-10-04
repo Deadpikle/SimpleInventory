@@ -18,6 +18,8 @@ namespace SimpleInventory.Models
         public int TotalNumCashSales { get; set; }
         public int TotalNumQRCodeSales { get; set; }
         public decimal TotalProfit { get; set; }
+        public decimal TotalCashProfit { get; set; }
+        public decimal TotalQRCodeProfit { get; set; }
         public Currency Currency { get; set; }
         public int TotalItemsSold { get; set; }
 
@@ -84,6 +86,30 @@ namespace SimpleInventory.Models
             }
         }
 
+        public string TotalCashProfitWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalCashProfit, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalCashProfit);
+            }
+        }
+
+        public string TotalQRCodeProfitWithCurrency
+        {
+            get
+            {
+                if (Currency != null)
+                {
+                    return string.Format("{0:#,#0.##} ({1})", TotalQRCodeProfit, Currency?.Symbol);
+                }
+                return string.Format("{0:#,#0.##}", TotalQRCodeProfit);
+            }
+        }
+
         public static WeekSales GenerateDataForWeek(DateTime date, int userID = -1)
         {
             WeekSales weekSales = new WeekSales();
@@ -110,6 +136,8 @@ namespace SimpleInventory.Models
                 weekSales.TotalNumCashSales += sales.TotalNumCashSales;
                 weekSales.TotalNumQRCodeSales += sales.TotalNumQRCodeSales;
                 weekSales.TotalProfit += Utilities.ConvertAmount(sales.TotalProfit, sales.Currency, weekSales.Currency);
+                weekSales.TotalCashProfit += Utilities.ConvertAmount(sales.TotalCashProfit, sales.Currency, weekSales.Currency);
+                weekSales.TotalQRCodeProfit += Utilities.ConvertAmount(sales.TotalQRCodeProfit, sales.Currency, weekSales.Currency);
                 weekSales.TotalItemsSold += sales.TotalItemsSold;
                 allItemsSoldReports.AddRange(sales.ItemsSold);
                 // must add up item type category incomes & profits now
@@ -146,6 +174,7 @@ namespace SimpleInventory.Models
                     ReportItemSold allItemsSoldData = itemIDToReportSold[singleItemSoldReport.InventoryItemID];
                     allItemsSoldData.QuantityPurchased += singleItemSoldReport.QuantityPurchased;
                     // TODO: do we need to add qr/cash totals? need to check actual report output here
+                    // it's not used for actual report output I think but eventually we should probably add those calculations in
                     allItemsSoldData.TotalCost +=
                         Utilities.ConvertAmount(singleItemSoldReport.QuantityPurchased * singleItemSoldReport.CostPerItem,
                         singleItemSoldReport.CostCurrency, allItemsSoldData.CostCurrency);
@@ -201,6 +230,8 @@ namespace SimpleInventory.Models
         public string GetTotalQRCodeIncomeWithCurrency() => TotalQRCodeIncomeWithCurrency;
         public int GetTotalNumCashSales() => TotalNumCashSales;
         public int GetTotalNumQRCodeSales() => TotalNumQRCodeSales;
+        public string GetTotalCashProfitWithCurrency() => TotalCashProfitWithCurrency;
+        public string GetTotalQRCodeProfitWithCurrency() => TotalQRCodeProfitWithCurrency;
 
         #endregion
     }
