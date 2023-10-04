@@ -152,7 +152,8 @@ namespace SimpleInventory.Models
                 ReportItemSold itemSoldData = itemIDToReportSold[singleItemInfo.InventoryItemID];
                 itemSoldData.QuantityPurchased += singleItemInfo.QuantitySold;
                 totalDaySaleInfo.TotalItemsSold += singleItemInfo.QuantitySold;
-                var purchaseAmount = Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.Cost, singleItemInfo.CostCurrency, totalDaySaleInfo.Currency);
+                var purchaseAmount = Utilities.ConvertAmount(singleItemInfo.QuantitySold * singleItemInfo.Cost, 
+                    singleItemInfo.CostCurrency, itemSoldData.CostCurrency);
                 itemSoldData.TotalCost += purchaseAmount;
                 itemSoldData.CashPurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.Cash ? purchaseAmount : 0;
                 itemSoldData.QRCodePurchases += singleItemInfo.PurchaseMethod == Enums.PurchaseMethod.QRCode ? purchaseAmount : 0;
