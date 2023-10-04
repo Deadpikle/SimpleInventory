@@ -30,6 +30,7 @@ namespace SimpleInventory.ViewModels
         private bool _isChangingPaidFromQuantity;
         private Brush _itemPurchaseStatusBrush;
         private string _otherPaidAmount = "";
+        private bool _isSavedMessageShown = false;
 
         private int _amountInventoryChanged;
 
@@ -56,6 +57,7 @@ namespace SimpleInventory.ViewModels
             ItemPurchaseStatusMessage = "";
             SelectedPaidCurrencyIndex = -1;
             ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Black);
+            IsSavedMessageShown = false;
             PurchaseMethod = PurchaseMethod.Cash;
             _failureSoundPlayer = new SoundPlayer("Sounds/failure-tbone.wav");
             _successSoundPlayer = new SoundPlayer("Sounds/success.wav");
@@ -89,7 +91,12 @@ namespace SimpleInventory.ViewModels
         public PurchaseMethod PurchaseMethod
         {
             get { return _purchaseMethod; }
-            set { _purchaseMethod = value; NotifyPropertyChanged(); }
+            set 
+            { 
+                _purchaseMethod = value; 
+                NotifyPropertyChanged();
+                IsSavedMessageShown = false;
+            }
         }
 
         public bool PurchaseInfoIsVisible
@@ -110,6 +117,12 @@ namespace SimpleInventory.ViewModels
             set { _itemPurchaseStatusBrush = value; NotifyPropertyChanged(); }
         }
 
+        public bool IsSavedMessageShown
+        {
+            get => _isSavedMessageShown;
+            set { _isSavedMessageShown = value; NotifyPropertyChanged(); }
+        }
+
         public string ChangeNeeded
         {
             get { return _changeNeeded; }
@@ -118,6 +131,7 @@ namespace SimpleInventory.ViewModels
                 _changeNeeded = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(CanFinalize));
+                IsSavedMessageShown = false;
             }
         }
 
@@ -131,6 +145,7 @@ namespace SimpleInventory.ViewModels
                 UpdatePurchaseInfoCurrencies();
                 UpdateChange();
                 NotifyPropertyChanged(nameof(CanFinalize));
+                IsSavedMessageShown = false;
             }
         }
 
@@ -144,6 +159,7 @@ namespace SimpleInventory.ViewModels
                 UpdatePurchaseInfoCurrencies();
                 UpdateChange();
                 NotifyPropertyChanged(nameof(CanFinalize));
+                IsSavedMessageShown = false;
             }
         }
 
@@ -175,6 +191,7 @@ namespace SimpleInventory.ViewModels
                 }
                 UpdatePurchaseInfoCurrencies();
                 NotifyPropertyChanged(nameof(CanFinalize));
+                IsSavedMessageShown = false;
             }
         }
 
@@ -191,6 +208,7 @@ namespace SimpleInventory.ViewModels
                 }
                 UpdateChange();
                 NotifyPropertyChanged(nameof(CanFinalize));
+                IsSavedMessageShown = false;
             }
         }
 
@@ -201,6 +219,7 @@ namespace SimpleInventory.ViewModels
             {
                 _otherPaidAmount = value;
                 NotifyPropertyChanged();
+                IsSavedMessageShown = false;
             }
         }
 
@@ -248,6 +267,7 @@ namespace SimpleInventory.ViewModels
                     ChangeNeeded = "0 " + changeCurrency.Symbol;
                     PurchaseInfo.Change = 0;
                 }
+                IsSavedMessageShown = false;
             }
         }
 
@@ -322,6 +342,7 @@ namespace SimpleInventory.ViewModels
                         ItemPurchaseStatusBrush = new SolidColorBrush(Colors.Red);
                         ItemPurchaseStatusMessage = "There are no items left to purchase for this item! Barcode: " + BarcodeNumber;
                         PurchaseInfoIsVisible = false;
+                        IsSavedMessageShown = false;
                         // play failure sound
                         _failureSoundPlayer.Play();
                     }
@@ -363,6 +384,7 @@ namespace SimpleInventory.ViewModels
                         // play success sound
                         _successSoundPlayer.Play();
                         UpdatePurchaseInfoCurrencies();
+                        IsSavedMessageShown = false;
                     }
                 }
                 else
@@ -393,6 +415,7 @@ namespace SimpleInventory.ViewModels
                 BarcodeNumber = "";
                 ItemPurchaseStatusMessage = "";
                 PurchaseMethod = PurchaseMethod.Cash;
+                IsSavedMessageShown = false;
             }
         }
 
@@ -435,6 +458,7 @@ namespace SimpleInventory.ViewModels
                     // too much!! can't buy this many. :(
                     _failureSoundPlayer.Play();
                     QuantityErrorMessage = "Quantity to purchase is higher than the number of available items";
+                    IsSavedMessageShown = false;
                 }
                 else
                 {
@@ -460,6 +484,7 @@ namespace SimpleInventory.ViewModels
                         _amountInventoryChanged = Quantity;
                     }
                     PurchaseInfo.SaveUpdates();
+                    IsSavedMessageShown = true;
                 }
             }
         }

@@ -212,6 +212,15 @@
                                  Margin="10,0,0,0" />
                 </StackPanel>
             </StackPanel>
+            <Label Grid.Row="2"
+                   Margin="0,5,0,0"
+                   Content="Item data saved successfully!"
+                   FontWeight="Bold"
+                   FontSize="14"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Visibility="{Binding IsSavedMessageShown, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Foreground="Green"/>
             <StackPanel Grid.Row="3"
                         Grid.Column="0"
                         Orientation="Horizontal"
